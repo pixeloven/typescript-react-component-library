@@ -1,0 +1,29 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "interface-name": [true, "never-prefix"],
+    "max-line-length": [false],
+    "no-consecutive-blank-lines": [true, 2],
+    "member-access": [
+      false
+    ],
+    "ordered-imports": [
+      false
+    ],
+    "no-console": [
+      false
+    ],
+    "no-var-requires": false
+  },
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts"
+    ]
+  }
+}
