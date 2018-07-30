@@ -1,7 +1,8 @@
 import * as React from 'react';
-import './App.css';
 import { Button } from 'semantic-ui-react';
-import logo from './logo.svg';
+import './assets/App.css';
+
+import logo from './assets/logo.svg';
 
 class App extends React.Component {
     public render() {

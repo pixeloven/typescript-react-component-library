@@ -5603,10 +5603,6 @@ jest@22.4.2:
     import-local "^1.0.0"
     jest-cli "^22.4.2"
 
-jquery@x.*:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
-
 js-base64@^2.1.8, js-base64@^2.1.9:
   version "2.4.8"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.8.tgz#57a9b130888f956834aa40c5b165ba59c758f033"
@@ -8427,12 +8423,6 @@ selfsigned@^1.9.1:
   resolved "https://registry.yarnpkg.com/selfsigned/-/selfsigned-1.10.3.tgz#d628ecf9e3735f84e8bafba936b3cf85bea43823"
   dependencies:
     node-forge "0.7.5"
-
-semantic-ui-less@^2.3.3:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/semantic-ui-less/-/semantic-ui-less-2.3.3.tgz#5e2d7763fbd9526ed6d84001dfd5668e28763ba4"
-  dependencies:
-    jquery x.*
 
 semantic-ui-react@^0.82.1:
   version "0.82.1"
