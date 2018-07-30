@@ -20,7 +20,7 @@ describe("HeaderMenu component", () => {
         const wrapper = shallow(
             <HeaderMenu
                 items={items}
-                pathname="/plop"
+                currentPath="/plop"
                 onClick={onClickStub}
             />,
         );
@@ -31,8 +31,8 @@ describe("HeaderMenu component", () => {
         const wrapper = shallow(
             <HeaderMenu
                 items={items}
-                pathname="/about/"
-                onClick={onClickStub} />,
+                currentPath="/about/"
+                onChange={onClickStub} />,
         );
         expect(wrapper.find({ name: "About" }).prop("active")).toBeTruthy();
     });
@@ -41,23 +41,23 @@ describe("HeaderMenu component", () => {
         const wrapper = shallow(
             <HeaderMenu
                 items={items}
-                pathname="/blog/toto"
-                onClick={onClickStub}
+                currentPath="/blog/toto"
+                onChange={onClickStub}
             />,
         );
         expect(wrapper.find({ name: "Blog" }).prop("active")).toBeTruthy();
     });
 
-    it("should have inverted style", () => {
+    it("should be fixed to top", () => {
         const wrapper = shallow(
             <HeaderMenu
                 items={items}
-                pathname="/blog/toto"
-                onClick={onClickStub}
-                inverted={true}
+                currentPath="/blog/toto"
+                onChange={onClickStub}
+                fixed={"top"}
             />,
         );
-        expect(wrapper.find({ inverted: true }).length).toBe(1);
+        expect(wrapper.find({ inverted: "top" }).length).toBe(1);
     });
 
     it("should dispatch the correct message on burger click", () => {
@@ -65,10 +65,10 @@ describe("HeaderMenu component", () => {
         const wrapper = shallow(
             <HeaderMenu
                 items={items}
-                pathname=""
-                onClick={onClickMock} />,
+                currentPath=""
+                onChange={onClickMock} />,
         );
-        wrapper.find(".mobile .only").simulate("click");
+        wrapper.find({ name: "Blog" }).simulate("click");
         expect(onClickMock.mock.calls.length).toBe(1);
     });
 

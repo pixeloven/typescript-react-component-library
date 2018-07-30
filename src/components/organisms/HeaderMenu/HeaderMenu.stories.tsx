@@ -5,13 +5,13 @@ const HeaderMenuReadme = require("./README.md");
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import { withKnobs, text, boolean } from "@storybook/addon-knobs";
+import { withKnobs, text } from "@storybook/addon-knobs";
 import HeaderMenu from "./HeaderMenu";
 
 const items = [
     { name: "Home", path: "/", exact: true },
-    { name: "About", path: "/about/", exact: true },
-    { name: "Blog", path: "/blog/", exact: false },
+    { name: "About", path: "/about", exact: true },
+    { name: "Blog", path: "/blog", exact: false },
 ];
 
 const onClickStub = (a: any) => action(a.type)(a) && a;
@@ -20,10 +20,12 @@ storiesOf("HeaderMenu", module)
     .addDecorator(withKnobs)
     .addDecorator(withReadme(HeaderMenuReadme))
     .add("default", () => {
-        const pathname = text("pathname", "/");
-        const inverted = boolean("inverted", false);
-
+        const currentPath = text("currentPath", "/");
         return (
-            <HeaderMenu items={items} pathname={pathname} inverted={inverted} onClick={onClickStub} />
+            <HeaderMenu
+                fixed={'top'}
+                items={items}
+                currentPath={currentPath}
+                onChange={onClickStub} />
         );
     });
