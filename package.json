@@ -55,7 +55,7 @@
     "build": "npm-run-all build-css build-js",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "storybook": "start-storybook -p 9001 -c .storybook",
-    "storybook:build": "build-storybook -c .storybook -o public/docs"
+    "storybook": "yarn build-css && start-storybook -p 9001 -c .storybook",
+    "storybook:build": "yarn build-css && build-storybook -c .storybook -o public/docs"
   }
 }
