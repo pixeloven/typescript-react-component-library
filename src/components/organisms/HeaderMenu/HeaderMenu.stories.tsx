@@ -5,7 +5,7 @@ const HeaderMenuReadme = require("./README.md");
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import { withKnobs, text } from "@storybook/addon-knobs";
+import { withKnobs, boolean, text } from "@storybook/addon-knobs";
 import HeaderMenu from "./HeaderMenu";
 
 const items = [
@@ -20,10 +20,12 @@ storiesOf("HeaderMenu", module)
     .addDecorator(withKnobs)
     .addDecorator(withReadme(HeaderMenuReadme))
     .add("default", () => {
+        // 'left' | 'right' | 'bottom' | 'top'
+        const value = boolean('fixed', true);
         const currentPath = text("currentPath", "/");
         return (
             <HeaderMenu
-                fixed={'top'}
+                fixed={value}
                 items={items}
                 currentPath={currentPath}
                 onChange={onClickStub} />

@@ -21,7 +21,7 @@ describe("HeaderMenu component", () => {
             <HeaderMenu
                 items={items}
                 currentPath="/plop"
-                onClick={onClickStub}
+                onChange={onClickStub}
             />,
         );
         expect(wrapper.find({ active: true }).length).toBe(0);
@@ -54,7 +54,7 @@ describe("HeaderMenu component", () => {
                 items={items}
                 currentPath="/blog/toto"
                 onChange={onClickStub}
-                fixed={"top"}
+                fixed={true}
             />,
         );
         expect(wrapper.find({ inverted: "top" }).length).toBe(1);

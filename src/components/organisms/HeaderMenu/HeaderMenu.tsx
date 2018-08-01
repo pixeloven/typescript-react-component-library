@@ -1,12 +1,15 @@
 import * as React from "react";
 import { Button, Container, Menu, MenuProps, MenuItemProps } from "semantic-ui-react";
 
-export interface MenuItemInterface extends MenuItemProps {
-    exact?: boolean,
-    path: string
+export interface MenuItemInterface {
+    name: string,
+    path: string,
+    exact?: boolean
 }
 
-export interface MenuInterface extends MenuProps {
+export interface MenuInterface {
+    fixed?: boolean,
+    items?: MenuItemInterface[],
     currentPath?: string,
     onChange?: (event: React.SyntheticEvent) => void
 }
@@ -14,6 +17,7 @@ export interface MenuInterface extends MenuProps {
 export default class HeaderMenu extends React.Component<MenuInterface> {
 
     static defaultProps = {
+        fixed: true,
         size: 'large',
     };
 
@@ -29,20 +33,21 @@ export default class HeaderMenu extends React.Component<MenuInterface> {
         }
     };
 
+    // TODO add login state
     render() {
-        const { fixed, size, items, currentPath } = this.props;
+        const { fixed, items, currentPath } = this.props;
+        const menuProps: MenuProps = {
+            inverted: !fixed,
+            pointing: !fixed,
+            secondary: !fixed
+        };
+        if (fixed) {
+            menuProps.fixed = 'top';
+        }
         return (
-            <Menu
-                fixed={fixed}
-                inverted={!fixed}
-                pointing={!fixed}
-                secondary={!fixed}
-                size={size}
-            >
+            <Menu {...menuProps} >
                 <Container>
                     {!!items && items.map((item: MenuItemInterface) => {
-                        console.log(currentPath);
-                        console.log(item.path);
                         const active = (item.exact) ? currentPath === item.path : !!currentPath && currentPath.startsWith(item.path);
                         return <Menu.Item
                             as='a'

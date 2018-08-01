@@ -8,7 +8,7 @@ export interface PostInterface {
     excerpt: string,
     slug: string,
     author: {
-        name: string;
+        name: string,
     };
     avatar?: {
         src: string,
