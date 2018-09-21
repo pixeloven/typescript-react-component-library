@@ -5,6 +5,7 @@ import "./Ring.css"
 // TODO should redo classes and make more configurable
 // TODO Need to write tests
 // TODO clean up css
+// TODO see if we can animate the font awesome icons with semantic instead of creating our own
 export interface RingProps extends React.HTMLProps<HTMLDivElement> {
     status?: string
 }
