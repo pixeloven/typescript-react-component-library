@@ -13,13 +13,6 @@ module.exports = (baseConfig, env, defaultConfig) => {
     });
     defaultConfig.resolve.extensions.push(".ts", ".tsx");
 
-    // Add markdown loader
-    defaultConfig.module.rules.push({
-        test: /\.md$/,
-        include: path.resolve(__dirname, "../src/components"),
-        loader: require.resolve("raw-loader")
-    });
-    defaultConfig.resolve.extensions.push(".md");
-
     return defaultConfig;
 };
+

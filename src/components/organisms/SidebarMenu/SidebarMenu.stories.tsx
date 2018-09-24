@@ -1,10 +1,10 @@
 /* tslint:disable no-var-requires */
 const withReadme = (require("storybook-readme/with-readme") as any).default;
-const SidebarMenuReadme = require("./README.md");
+const readme = require("./README.md");
 
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
-import { withKnobs, text } from "@storybook/addon-knobs";
+import { text } from "@storybook/addon-knobs";
 import SidebarMenu from "./SidebarMenu";
 
 const items = [
@@ -14,8 +14,7 @@ const items = [
 ];
 
 storiesOf("SidebarMenu", module)
-    .addDecorator(withKnobs)
-    .addDecorator(withReadme(SidebarMenuReadme))
+    .addDecorator(withReadme(readme))
     .add("default", () => {
         const pathname = text("pathname", "/");
 

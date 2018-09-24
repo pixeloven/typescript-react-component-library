@@ -1,10 +1,18 @@
-import { configure } from "@storybook/react";
+import { configure, addDecorator } from "@storybook/react";
 import { setOptions } from "@storybook/addon-options";
+import { withKnobs } from "@storybook/addon-knobs";
+import '../src/assets/semantic.css';
+import './index.css';
 
 setOptions({
-    name: 'My website',
+    name: 'TypeScript React',
+    goFullScreen: false,
+    showLeftPanel: true,
+    showDownPanel: true,
+    showSearchBox: false,
     downPanelInRight: true
 });
+addDecorator(withKnobs);
 
 // Stories loader
 const req = require.context("../src/components", true, /.stories.[jt]sx?$/);

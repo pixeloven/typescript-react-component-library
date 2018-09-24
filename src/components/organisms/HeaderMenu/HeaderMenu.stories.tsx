@@ -1,26 +1,21 @@
 /* tslint:disable no-var-requires */
 const withReadme = (require("storybook-readme/with-readme") as any).default;
-const HeaderMenuReadme = require("./README.md");
+const readme = require("./README.md");
 
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
-import { withKnobs, boolean, text } from "@storybook/addon-knobs";
-import HeaderMenu from "./HeaderMenu";
+import { boolean, text } from "@storybook/addon-knobs";
+import HeaderMenu, {MenuItem} from "./HeaderMenu";
 
-const items = [
+const items: MenuItem[] = [
     { name: "Home", path: "/", exact: true },
-    { name: "About", path: "/about", exact: true },
-    { name: "Blog", path: "/blog", exact: false },
+    { name: "About", path: "/about/", exact: true },
+    { name: "Blog", path: "/blog/", exact: false },
 ];
 
-const onClickStub = (a: any) => action(a.type)(a) && a;
-
-storiesOf("HeaderMenu", module)
-    .addDecorator(withKnobs)
-    .addDecorator(withReadme(HeaderMenuReadme))
-    .add("default", () => {
-        // 'left' | 'right' | 'bottom' | 'top'
+storiesOf('HeaderMenu', module)
+    .addDecorator(withReadme(readme))
+    .add('default', () => {
         const value = boolean('fixed', true);
         const currentPath = text("currentPath", "/");
         return (
@@ -28,6 +23,7 @@ storiesOf("HeaderMenu", module)
                 fixed={value}
                 items={items}
                 currentPath={currentPath}
-                onChange={onClickStub} />
+            />
         );
     });
+

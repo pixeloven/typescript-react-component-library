@@ -1,19 +1,17 @@
 import { shallow, configure } from "enzyme";
 import "jest";
 import * as React from "react";
-import HeaderMenu from "./HeaderMenu";
+import HeaderMenu, { MenuItem } from "./HeaderMenu";
 
 // Configure enzyme with react 16 adapter
 const Adapter: any = require("enzyme-adapter-react-16");
 configure({ adapter: new Adapter() });
 
-const items = [
+const items: MenuItem[] = [
     { name: "Home", path: "/", exact: true },
     { name: "About", path: "/about/", exact: true },
     { name: "Blog", path: "/blog/", exact: false },
 ];
-
-const onClickStub = (a: any) => a;
 
 describe("HeaderMenu component", () => {
     it("should nothing active", () => {
@@ -21,7 +19,6 @@ describe("HeaderMenu component", () => {
             <HeaderMenu
                 items={items}
                 currentPath="/plop"
-                onChange={onClickStub}
             />,
         );
         expect(wrapper.find({ active: true }).length).toBe(0);
@@ -32,7 +29,7 @@ describe("HeaderMenu component", () => {
             <HeaderMenu
                 items={items}
                 currentPath="/about/"
-                onChange={onClickStub} />,
+            />
         );
         expect(wrapper.find({ name: "About" }).prop("active")).toBeTruthy();
     });
@@ -42,7 +39,6 @@ describe("HeaderMenu component", () => {
             <HeaderMenu
                 items={items}
                 currentPath="/blog/toto"
-                onChange={onClickStub}
             />,
         );
         expect(wrapper.find({ name: "Blog" }).prop("active")).toBeTruthy();
@@ -53,23 +49,9 @@ describe("HeaderMenu component", () => {
             <HeaderMenu
                 items={items}
                 currentPath="/blog/toto"
-                onChange={onClickStub}
                 fixed={true}
             />,
         );
-        expect(wrapper.find({ inverted: "top" }).length).toBe(1);
+        expect(wrapper.find({ fixed: "top" }).length).toBe(1);
     });
-
-    it("should dispatch the correct message on burger click", () => {
-        const onClickMock: any = jest.fn();
-        const wrapper = shallow(
-            <HeaderMenu
-                items={items}
-                currentPath=""
-                onChange={onClickMock} />,
-        );
-        wrapper.find({ name: "Blog" }).simulate("click");
-        expect(onClickMock.mock.calls.length).toBe(1);
-    });
-
 });

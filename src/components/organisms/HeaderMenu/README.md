@@ -4,7 +4,7 @@ Header menu component.
 
 ## Source
 
-    <HeaderMenu items={items}  pathname={pathname} inverted={inverted} />
+    <HeaderMenu as={'a'} items={items} currentPath={'/blog'} fixed />
 
 ## Example of items
 

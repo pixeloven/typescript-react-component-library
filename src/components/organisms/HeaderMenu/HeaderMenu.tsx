@@ -1,74 +1,106 @@
 import * as React from "react";
-import { Button, Container, Menu, MenuProps, MenuItemProps } from "semantic-ui-react";
+import {Menu, Input, MenuItemProps, Container} from "semantic-ui-react";
 
-export interface MenuItemInterface {
-    name: string,
-    path: string,
-    exact?: boolean
+const menuStyle = {
+    border: "none",
+    boxShadow: "none",
+    marginBottom: "1em",
+    marginTop: "1em",
+};
+
+const fixedMenuStyle = {
+    border: "none",
+    boxShadow: "none",
+};
+
+// TODO Move
+export type MenuItem = {
+    name: string;
+    path: string;
+    exact?: boolean;
+};
+
+interface DefaultProps {
+    as: string;
+    enableSearch: boolean;
 }
 
-export interface MenuInterface {
-    fixed?: boolean,
-    items?: MenuItemInterface[],
-    currentPath?: string,
-    onChange?: (event: React.SyntheticEvent) => void
+interface Props {
+    as?: any;
+    enableSearch?: boolean;
+    fixed?: boolean;
+    items: MenuItem[];
+    currentPath: string;
 }
 
-export default class HeaderMenu extends React.Component<MenuInterface> {
+interface State {
+    activeItem?: string;
+}
 
-    static defaultProps = {
-        fixed: true,
-        size: 'large',
+// TODO redo tests and implementation
+// TODO handle mobile and remove sidebar menu
+// TODO should add redux form for the search?
+class HeaderMenu extends React.PureComponent<Props, State> {
+
+    public static defaultProps: DefaultProps = {
+        as: 'a',
+        enableSearch: false,
     };
 
-    /**
-     * On click change active state
-     * @param event
-     * @param props
-     */
-    handleItemClick = (event: React.SyntheticEvent, props: MenuItemProps): void =>  {
-        event.preventDefault();
-        if (this.props.onChange) {
-            this.props.onChange(event);
-        }
+    public state: State = {
+        activeItem: '',
     };
 
-    // TODO add login state
-    render() {
-        const { fixed, items, currentPath } = this.props;
-        const menuProps: MenuProps = {
-            inverted: !fixed,
-            pointing: !fixed,
-            secondary: !fixed
-        };
-        if (fixed) {
-            menuProps.fixed = 'top';
-        }
-        return (
-            <Menu {...menuProps} >
-                <Container>
-                    {!!items && items.map((item: MenuItemInterface) => {
-                        const active = (item.exact) ? currentPath === item.path : !!currentPath && currentPath.startsWith(item.path);
-                        return <Menu.Item
-                            as='a'
-                            className="mobile hidden"
-                            name={item.name}
-                            to={item.path}
-                            key={item.path}
-                            active={active}
-                            onClick={this.handleItemClick}
-                        />;
+    public handleItemClick = (event: React.MouseEvent<HTMLAnchorElement>, item: MenuItemProps): void => {
+        this.setState({
+            activeItem: item.name
+        });
+    }
+
+    public componentDidMount(): void {
+        const {items, currentPath} = this.props;
+        const activeItem = items.filter((item: MenuItem) => {
+            return (item.exact) ? currentPath === item.path : currentPath.startsWith(item.path);
+        }).pop();
+        this.setState({
+            activeItem: activeItem ? activeItem.name : '',
+        });
+    }
+
+    public render(): React.ReactNode {
+        const {as, enableSearch, fixed, items} = this.props;
+        const {activeItem} = this.state;
+        const menuStyles = fixed
+            ? fixedMenuStyle
+            : menuStyle;
+        return(
+            <Menu
+                borderless
+                style={menuStyles}
+                {...fixed && { fixed: "top" }}
+            >
+                <Container text>
+                    {items.map((item: MenuItem, index: number) => {
+                        return (<div key={index}>
+                            <Menu.Item
+                                as={as}
+                                to={item.path}
+                                name={item.name}
+                                active={activeItem === item.name}
+                                onClick={this.handleItemClick}
+                            />
+                        </div>);
                     })}
-                    <Menu.Item position='right'>
-                        <Button as='a' inverted={!fixed}>
-                            Log in
-                        </Button>
-                        <Button as='a' inverted={!fixed} primary={!!fixed} style={{ marginLeft: '0.5em' }}>
-                            Sign Up
-                        </Button>
-                    </Menu.Item>
+                    {enableSearch &&
+                    <Menu.Menu position="right">
+                        <Menu.Item>
+                            <Input icon="search" placeholder="Search..." />
+                        </Menu.Item>
+                    </Menu.Menu>}
                 </Container>
             </Menu>
-        )
+        );
     }
 }
+
+export default HeaderMenu;
