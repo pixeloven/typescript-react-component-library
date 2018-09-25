@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Menu, Input, MenuItemProps, Container} from "semantic-ui-react";
 
+// TODO move to scss
 const menuStyle = {
     border: "none",
     boxShadow: "none",
@@ -14,7 +15,7 @@ const fixedMenuStyle = {
 };
 
 // TODO Move
-export type MenuItem = {
+export interface MenuItem {
     name: string;
     path: string;
     exact?: boolean;
@@ -75,11 +76,11 @@ class HeaderMenu extends React.PureComponent<Props, State> {
             : menuStyle;
         return(
             <Menu
-                borderless
+                borderless={true}
                 style={menuStyles}
                 {...fixed && { fixed: "top" }}
             >
-                <Container text>
+                <Container text={true}>
                     {items.map((item: MenuItem, index: number) => {
                         return (<div key={index}>
                             <Menu.Item

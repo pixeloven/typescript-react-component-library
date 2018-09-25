@@ -1,0 +1,11 @@
+version: '2'
+services:
+  react-internal:
+    container_name: typescript-react-component-library
+    image: node:8.12
+    hostname: typescript-react-component-library
+    build:
+      context: .
+    volumes:
+    - ./:/usr/src/app
+

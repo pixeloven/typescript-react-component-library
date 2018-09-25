@@ -10,3 +10,6 @@
 
 
 More clearly define how the CSS and SCSS builds... maybe rename those steps
+
+I'd like to add a some pre-commit steps.
+
