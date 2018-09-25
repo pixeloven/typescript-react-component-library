@@ -12,4 +12,18 @@
 More clearly define how the CSS and SCSS builds... maybe rename those steps
 
 I'd like to add a some pre-commit steps.
+ What about react helment for SSR?
 
+Don't allow .js files???
+
+
+LINT AND fix SCSS????
+
+```
+warning react-scripts-ts > autoprefixer > browserslist@2.11.3: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+warning react-scripts-ts > babel-preset-react-app > babel-preset-env > browserslist@2.11.3: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+warning react-scripts-ts > css-loader > cssnano > autoprefixer > browserslist@1.7.7: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+warning react-scripts-ts > css-loader > cssnano > postcss-merge-rules > browserslist@1.7.7: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+warning react-scripts-ts > css-loader > cssnano > postcss-merge-rules > caniuse-api > browserslist@1.7.7: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+warning enzyme > rst-selector-parser > nearley > nomnom@1.6.2: Package no longer supported. Contact support@npmjs.com for more info.
+```

@@ -3,27 +3,10 @@
   "extends": [
     "tslint:recommended",
     "tslint-react",
-    "tslint-config-prettier"
+    "tslint-eslint-rules"
   ],
-  "rules": {
-    "interface-name": [true, "never-prefix"],
-    "object-literal-sort-keys": [false],
-    "max-line-length": [false],
-    "no-consecutive-blank-lines": [true, 2],
-    "member-access": [
-      false
-    ],
-    "ordered-imports": [
-      false
-    ],
-    "no-console": [
-      false
-    ],
-    "no-var-requires": false
-  },
   "linterOptions": {
     "exclude": [
-      "config/**/*.js",
       "node_modules/**/*.ts"
     ]
   }
