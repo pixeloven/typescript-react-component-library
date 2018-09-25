@@ -2,10 +2,10 @@
 const withReadme = (require("storybook-readme/with-readme") as any).default;
 const readme = require("./README.md");
 
-import * as React from "react";
-import { storiesOf } from "@storybook/react";
 import { boolean, text } from "@storybook/addon-knobs";
-import HeaderMenu, {MenuItem} from "./HeaderMenu";
+import { storiesOf } from "@storybook/react";
+import * as React from "react";
+import {MainMenu, MenuItem} from "src/components/molecules";
 
 const items: MenuItem[] = [
     { name: "Home", path: "/", exact: true },
@@ -13,17 +13,16 @@ const items: MenuItem[] = [
     { name: "Blog", path: "/blog/", exact: false },
 ];
 
-storiesOf('HeaderMenu', module)
+storiesOf("Components/Organisms/MainMenu", module)
     .addDecorator(withReadme(readme))
-    .add('default', () => {
-        const value = boolean('fixed', true);
+    .add("default", () => {
+        const value = boolean("fixed", true);
         const currentPath = text("currentPath", "/");
         return (
-            <HeaderMenu
+            <MainMenu
                 fixed={value}
                 items={items}
                 currentPath={currentPath}
             />
         );
     });
-
