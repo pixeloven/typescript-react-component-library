@@ -1,7 +1,6 @@
 import * as React from "react";
 import {Container, Icon, Responsive, Segment, Visibility} from "semantic-ui-react";
-import MainMenu from "src/components/molecules/MainMenu/MainMenu";
-import {MenuItem} from "src/components/molecules/MenuItemArray/MenuItemArray";
+import {MainMenu, MenuItem} from "src/components/molecules";
 
 interface Props {
     children: React.ReactNode;
@@ -31,7 +30,7 @@ class Default extends React.PureComponent<Props, State> {
         const { fixedTopMenu } = this.state;
         return (
             <Responsive>
-                <Segment vertical={true} style={{ border: 0 }}>
+                <Container fluid={true}>
                     <Visibility
                         onBottomPassed={this.stickMainMenu}
                         onBottomVisible={this.unStickMainMenu}
@@ -39,15 +38,15 @@ class Default extends React.PureComponent<Props, State> {
                     >
                         <MainMenu currentPath={""} items={menuItems} fixed={fixedTopMenu}/>
                     </Visibility>
-                </Segment>
-                <Segment vertical={true} style={{ border: 0 }}>
+                </Container>
+                <Container fluid={true}>
                     {children}
-                </Segment>
-                <Segment inverted={true} vertical={true} style={{ position: "absolute", bottom: 0, width: "100%" }}>
-                    <Container textAlign="center">
+                </Container>
+                <Container fluid={true}>
+                    <Segment inverted={true} vertical={true} textAlign="center">
                         <p>Powered with <Icon name="heart" /> by PixelOven</p>
-                    </Container>
-                </Segment>
+                    </Segment>
+                </Container>
             </Responsive>
         );
     }

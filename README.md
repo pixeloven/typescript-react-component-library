@@ -8,7 +8,7 @@ warning react-scripts-ts > css-loader > cssnano > postcss-merge-rules > browsers
 warning react-scripts-ts > css-loader > cssnano > postcss-merge-rules > caniuse-api > browserslist@1.7.7: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
 warning enzyme > rst-selector-parser > nearley > nomnom@1.6.2: Package no longer supported. Contact support@npmjs.com for more info.
 ```
-
+https://github.com/danilowoz/react-atomic-design#templates
 
 ### Creating a new component
 First create a new component filename matching class name with extension `.tsx`.

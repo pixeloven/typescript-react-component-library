@@ -1,11 +1,10 @@
 /* tslint:disable no-var-requires */
-import {MenuItem} from "../../molecules/MenuItemArray/MenuItemArray";
-
 const withReadme = (require("storybook-readme/with-readme") as any).default;
 const readme = require("./README.md");
 
 import { storiesOf } from "@storybook/react";
 import * as React from "react";
+import {MenuItem} from "src/components/molecules";
 import Default from "./Default";
 
 const items: MenuItem[] = [
