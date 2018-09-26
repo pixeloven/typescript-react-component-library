@@ -16,3 +16,5 @@
     const withReadme = (require("storybook-readme/with-readme") as any).default;
     const readme = require("./README.md");
     ```
+* https://www.npmjs.com/package/tslint-config-airbnb Do we want this?
+* Need to remove     "src/**.js" adn make it pure TS

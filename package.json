@@ -17,6 +17,8 @@
   ],
   "dependencies": {
     "classnames": "^2.2.6",
+    "hypernova": "^2.3.0",
+    "hypernova-react": "^2.1.0",
     "immutable": "^3.8.2",
     "lodash": "^4.17.11",
     "react": "^16.5.2",

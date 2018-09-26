@@ -10,27 +10,30 @@ export interface MenuItem {
 interface Props {
     as: any;
     items: MenuItem[];
+    onClick?: (event: React.MouseEvent<HTMLAnchorElement>, name?: string) => void;
 }
 
 class MenuItemArray extends React.PureComponent<Props> {
 
     public handleItemClick = (event: React.MouseEvent<HTMLAnchorElement>, item: MenuItemProps): void => {
-        console.log("woot");
+        const {onClick} = this.props;
+        if (onClick) {
+            onClick(event, item.name);
+        }
     }
 
     public render(): React.ReactNode {
         const {as, items} = this.props;
         return items.map((item: MenuItem, index: number) => {
             return (
-                <div key={index}>
-                    <Menu.Item
-                        as={as}
-                        to={item.path}
-                        name={item.name}
-                        active={item.active}
-                        onClick={this.handleItemClick}
-                    />
-                </div>
+                <Menu.Item
+                    key={index}
+                    as={as}
+                    to={item.path}
+                    name={item.name}
+                    active={item.active}
+                    onClick={this.handleItemClick}
+                />
             );
         });
     }
