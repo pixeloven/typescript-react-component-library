@@ -9,9 +9,9 @@ configure({
 });
 
 const items: MenuItem[] = [
-    { name: "Home", path: "/", exact: true },
-    { name: "About", path: "/about/", exact: true },
-    { name: "Blog", path: "/blog/", exact: false },
+    { name: "Home", path: "/", active: true },
+    { name: "About", path: "/about/", active: false },
+    { name: "Blog", path: "/blog/", active: false },
 ];
 
 describe("Components", () => {
@@ -21,7 +21,6 @@ describe("Components", () => {
                 const wrapper = shallow(
                     <MainMenu
                         items={items}
-                        currentPath="/plop"
                     />,
                 );
                 expect(wrapper.find({ active: true }).length).toBe(0);
@@ -31,7 +30,6 @@ describe("Components", () => {
                 const wrapper = shallow(
                     <MainMenu
                         items={items}
-                        currentPath="/about/"
                     />,
                 );
                 expect(wrapper.find({ name: "About" }).prop("active")).toBeTruthy();
@@ -41,7 +39,6 @@ describe("Components", () => {
                 const wrapper = shallow(
                     <MainMenu
                         items={items}
-                        currentPath="/blog/toto"
                     />,
                 );
                 expect(wrapper.find({ name: "Blog" }).prop("active")).toBeTruthy();
@@ -51,7 +48,6 @@ describe("Components", () => {
                 const wrapper = shallow(
                     <MainMenu
                         items={items}
-                        currentPath="/blog/toto"
                         fixed={true}
                     />,
                 );

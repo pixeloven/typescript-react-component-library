@@ -1,10 +1,10 @@
 import * as React from "react";
+import { Link, RouteComponentProps } from "react-router-dom";
 import {Container, Icon, Responsive, Segment, Visibility} from "semantic-ui-react";
 import {MainMenu, MenuItem} from "src/components/molecules";
 
-interface Props {
+interface Props extends RouteComponentProps {
     children: React.ReactNode;
-    menuItems: MenuItem[];
 }
 
 interface State {
@@ -26,8 +26,20 @@ class Default extends React.PureComponent<Props, State> {
     }
 
     public render(): React.ReactNode {
-        const { children, menuItems } = this.props;
+        const { children, match } = this.props;
         const { fixedTopMenu } = this.state;
+
+        // TODO Make this configurable
+        const items: MenuItem[] = [
+            { name: "Home", path: "/", active: true },
+            { name: "Blog", path: "/blog", active: false },
+        ];
+        items.forEach((item, index) => {
+            items[index].active = match.isExact
+                ? match.path === item.path
+                : match.path.startsWith(item.path);
+        });
+
         return (
             <Responsive>
                 <Container fluid={true}>
@@ -36,7 +48,11 @@ class Default extends React.PureComponent<Props, State> {
                         onBottomVisible={this.unStickMainMenu}
                         once={false}
                     >
-                        <MainMenu currentPath={""} items={menuItems} fixed={fixedTopMenu}/>
+                        <MainMenu
+                            as={Link}
+                            items={items}
+                            fixed={fixedTopMenu}
+                        />
                     </Visibility>
                 </Container>
                 <Container fluid={true}>

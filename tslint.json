@@ -12,6 +12,7 @@
   },
   "rules": {
     "interface-name" : false,
-    "max-line-length": false
+    "max-line-length": false,
+    "no-console": false
   }
 }
