@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom-asdsadasd";
 import {Container, Grid, Header, Image, Segment} from "semantic-ui-react";
 import Logo from "src/assets/logo.svg";
 import {Default} from "src/components/templates";
@@ -23,7 +23,7 @@ class Home extends React.Component<RouteComponentProps> {
                                 </Container>
                             </Segment>
                         </Grid.Column>
-                    </Grid.Row adsadsasa;,a;jkllkjas>
+                    </Grid.Row>
                 </Grid>
                 <Grid container={true} divided="vertically">
                     <Grid.Row>
