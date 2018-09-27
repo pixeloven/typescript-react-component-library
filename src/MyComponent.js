@@ -6,7 +6,7 @@ function MyComponent(props) {
         onClick: function () {
             alert('Click handlers work.');
         },
-    }, 'Hello, ' + props.name + '!');
+    }, 'Helloo, ' + props.name + '!');
 }
 
 module.exports = renderReact('MyComponent.js', MyComponent);
