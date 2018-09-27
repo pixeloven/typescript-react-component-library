@@ -21,3 +21,4 @@
 * Might be able to add a .ssr in source to designate that a component can be rendered server side?
     * Should do something similar for connected?
 * Might use nwb vs neutrino instead of create react app
+* tsconfig __snapshot__ vs __mocks__
