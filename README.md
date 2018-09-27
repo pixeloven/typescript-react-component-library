@@ -22,3 +22,12 @@
     * Should do something similar for connected?
 * Might use nwb vs neutrino instead of create react app
 * tsconfig __snapshot__ vs __mocks__
+
+
+
+// TODO need to generate dist + standard build?
+// TODO rewrite client in type script then server
+https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2
+https://medium.com/airbnb-engineering/server-rendering-code-splitting-and-lazy-loading-with-react-router-v4-bfe596a6af70
+https://medium.com/airbnb-engineering/operationalizing-node-js-for-server-side-rendering-c5ba718acfc9
+https://medium.com/@stokedbits/adventures-in-creating-a-react-component-library-with-create-react-app-and-typescript-26d1116a7d87
