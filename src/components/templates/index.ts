@@ -1,4 +1,4 @@
 /**
  * Register Templates here
  */
-export { default as Default } from "./Default/Default";
+export { Default } from "./Default";

@@ -18,3 +18,6 @@
     ```
 * https://www.npmjs.com/package/tslint-config-airbnb Do we want this?
 * Need to remove     "src/**.js" adn make it pure TS
+* Might be able to add a .ssr in source to designate that a component can be rendered server side?
+    * Should do something similar for connected?
+* Might use nwb vs neutrino instead of create react app
