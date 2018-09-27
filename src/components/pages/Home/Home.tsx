@@ -23,7 +23,7 @@ class Home extends React.Component<RouteComponentProps> {
                                 </Container>
                             </Segment>
                         </Grid.Column>
-                    </Grid.Row>
+                    </Grid.Row adsadsasa;,a;jkllkjas>
                 </Grid>
                 <Grid container={true} divided="vertically">
                     <Grid.Row>
