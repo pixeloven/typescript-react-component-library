@@ -2,21 +2,19 @@ version: '3'
 services:
   node-client:
     container_name: node-client
-    hostname: node-client
+    hostname: node.client
     build:
       context: .docker/node-client
     ports:
     - "8080:8080"
-    extra_hosts:
-    - "api.local:127.0.0.1"
     volumes:
     - ./:/usr/src/app
   node-server:
     container_name: node-server
-    hostname: node-server
+    hostname: node.server
     build:
       context: .docker/node-server
-    extra_hosts:
-    - "api.local:127.0.0.1"
+    ports:
+    - "8081:8081"
     volumes:
     - ./:/usr/src/app

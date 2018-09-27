@@ -1,21 +1,17 @@
+'use strict';
+
 const path = require('path');
 const hypernova = require('hypernova/server');
+
+const PORT = 8081;
+const HOST = 'node.server';
 
 hypernova({
     devMode: true,
     endpoint: '/batch',
-    host: 'api.local',
     getComponent: hypernova.createGetComponent({
-        MyComponent: path.resolve(path.join('src', 'MyComponent.ssr.js')),
+        MyComponent: path.resolve(path.join('./src/MyComponent.js')),
     }),
-
-    port: 8081,
+    host: HOST,
+    port: PORT,
 });
-
-// TODO update to typescript? might need node-ts
-// TODO mmaybe this belows somewhere else????
-// Also the client router maybe needs to be somwehere else???
-    /// Think maybe like sections for server vs client
-// TODO standarize ports for all this
-    // Should use a .env for all this... can manage with ansible???
-// TODO definitely move this stuff somewhere else

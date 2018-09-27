@@ -1,10 +1,12 @@
-import * as React from "react";
+var React = require('react');
+var renderReact = require('hypernova-react').renderReact;
 
-// TODO if this works should set this up with the Example instead
-class MyComponent extends React.Component {
-    render(){
-        return <div>Hello World</div>;
-    }
+function MyComponent(props) {
+    return React.createElement('div', {
+        onClick: function () {
+            alert('Click handlers work.');
+        },
+    }, 'Hello, ' + props.name + '!');
 }
 
-export default MyComponent;
+module.exports = renderReact('MyComponent.js', MyComponent);
