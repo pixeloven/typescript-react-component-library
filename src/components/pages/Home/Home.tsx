@@ -19,7 +19,7 @@ class Home extends React.Component<RouteComponentProps> {
                                         src={Logo}
                                     />
                                     <Header as="h1" inverted={true}>Welcome to TypeScript + React</Header>
-                                    <p>Also includes Semantic UI React, Redux and much more!</p>
+                                    <p>Includes Semantic UI React, Redux and much more!</p>
                                 </Container>
                             </Segment>
                         </Grid.Column>
