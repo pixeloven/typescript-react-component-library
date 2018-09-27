@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RouteComponentProps } from "react-router-dom-asdsadasd";
+import { RouteComponentProps } from "react-router-dom";
 import {Container, Grid, Header, Image, Segment} from "semantic-ui-react";
 import Logo from "src/assets/logo.svg";
 import {Default} from "src/components/templates";
