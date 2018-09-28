@@ -1,11 +1,11 @@
 version: '3.5'
 services:
-  node-mono:
-    container_name: node-mono
-    hostname: node.mono
+  nginx-client:
+    container_name: nginx-client
+    hostname: nginx.client
     build:
       context: .
     ports:
-    - "8000:8000"
-    volumes:
-    - ./:/usr/src/app
+    - "8080:80"
+    environment:
+    - NGINX_PORT=80

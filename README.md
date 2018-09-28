@@ -41,9 +41,13 @@ With all of the items below we need to consider whether we want to maintain a si
     * Need to generate a distribution library not just a standard build
 * Might use nwb vs neutrino instead of create react app
     * We might need to eject the current config. (Currently trying to keep it all simple until ready for prod)
-
-
-
+* Move storybook down or upgrade scripts but either way we should consolidate some of the babel deps
+* See if we can also write node code in typescript
+* ejected config
+    * can add scss loader instead of the hack job I have
+    * cleanup dependecies
+    * can get watch to work with the server too?
+* Need to hide build scripts that shouldn't be public
 ### References
 1) https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2
 2) https://medium.com/airbnb-engineering/server-rendering-code-splitting-and-lazy-loading-with-react-router-v4-bfe596a6af70

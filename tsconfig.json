@@ -1,9 +1,6 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "src/*": ["src/*"]
-    },
     "outDir": "build/lib",
     "module": "commonjs",
     "target": "es5",
@@ -24,17 +21,15 @@
   },
   "exclude": [
     ".docker",
-    "node_modules",
+    ".storybook",
     "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest",
-    "src/setupTests.ts",
-    "**/*.spec.ts",
-    "**/*.test.ts",
     "config",
-    "dist",
-    "src/**.js"
+    "jest",
+    "node_modules",
+    "public",
+    "scripts",
+    "src/**/*.storybook.ts",
+    "src/**/*.test.ts",
+    "**/*.js"
   ]
 }
