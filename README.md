@@ -59,8 +59,70 @@ With all of the items below we need to consider whether we want to maintain a si
     * cleanup dependecies
     * can get watch to work with the server too?
 * Need to hide build scripts that shouldn't be public
+* Does it still make sense to use `yarn`? `npm`? Or another alternative?
+
+
 ### References
 1) https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2
 2) https://medium.com/airbnb-engineering/server-rendering-code-splitting-and-lazy-loading-with-react-router-v4-bfe596a6af70
 3) https://medium.com/airbnb-engineering/operationalizing-node-js-for-server-side-rendering-c5ba718acfc9
 4) https://medium.com/@stokedbits/adventures-in-creating-a-react-component-library-with-create-react-app-and-typescript-26d1116a7d87
+
+
+### Packages Test
+
+```bash
+yarn install v1.9.4
+info No lockfile found.
+[1/4] Resolving packages...
+warning autoprefixer > browserslist@2.11.3: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+warning babel-preset-react-app > babel-preset-env > browserslist@2.11.3: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+warning css-loader > cssnano > autoprefixer > browserslist@1.7.7: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+warning css-loader > cssnano > postcss-merge-rules > browserslist@1.7.7: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+warning css-loader > cssnano > postcss-merge-rules > caniuse-api > browserslist@1.7.7: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+warning enzyme > rst-selector-parser > nearley > nomnom@1.6.2: Package no longer supported. Contact support@npmjs.com for more info.
+[2/4] Fetching packages...
+info fsevents@1.2.4: The platform "linux" is incompatible with this module.
+info "fsevents@1.2.4" is an optional dependency and failed compatibility check. Excluding it from installation.
+[3/4] Linking dependencies...
+[4/4] Building fresh packages...
+success Saved lockfile.
+Done in 45.70s.
+
+```
+
+```bash
+npm WARN deprecated browserslist@2.11.3: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+npm WARN deprecated browserslist@1.7.7: Browserslist 2 could fail on reading Browserslist >3.0 config used in other tools.
+npm WARN deprecated nomnom@1.6.2: Package no longer supported. Contact support@npmjs.com for more info.
+
+> node-sass@4.9.3 install /home/brian/Documents/Development/typescript-react-component-library/node_modules/node-sass
+> node scripts/install.js
+
+Cached binary found at /home/brian/.npm/node-sass/4.9.3/linux-x64-57_binding.node
+
+> husky@1.0.1 install /home/brian/Documents/Development/typescript-react-component-library/node_modules/husky
+> node husky install
+
+husky > setting up git hooks
+husky > done
+
+> uglifyjs-webpack-plugin@0.4.6 postinstall /home/brian/Documents/Development/typescript-react-component-library/node_modules/webpack/node_modules/uglifyjs-webpack-plugin
+> node lib/post_install.js
+
+
+> node-sass@4.9.3 postinstall /home/brian/Documents/Development/typescript-react-component-library/node_modules/node-sass
+> node scripts/build.js
+
+Binary found at /home/brian/Documents/Development/typescript-react-component-library/node_modules/node-sass/vendor/linux-x64-57/binding.node
+Testing binary
+Binary is fine
+npm notice created a lockfile as package-lock.json. You should commit this file.
+npm WARN webpack-dev-middleware@3.4.0 requires a peer of webpack@^4.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@1.2.4 (node_modules/fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@1.2.4: wanted {"os":"darwin","arch":"any"} (current: {"os":"linux","arch":"x64"})
+
+added 2260 packages from 1164 contributors and audited 50421 packages in 45.283s
+found 0 vulnerabilities
+
+```
