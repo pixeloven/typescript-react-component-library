@@ -1,45 +1,35 @@
-import {NextFunction, Request, Response, Router} from "express";
+import {Request, Response} from "express";
 import * as React from "react";
 import { renderToString } from "react-dom/server";
 import {matchPath, RouteProps, StaticRouter} from "react-router-dom";
 import App from "../../shared/App";
 import routes from "../../shared/routes";
+import {HtmlTemplate} from "../templates";
 
 /**
- * Define DefaultController
+ * DefaultController
  */
-const router: Router = Router();
+class DefaultController {
 
-/**
- * Creates default route for all clients
- */
-router.get("*", (req: Request, res: Response, next: NextFunction) => {
-    const Html = (app: string) => (`
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>SSR with RR</title>
-    <script src="/bundle.js" defer></script>
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root">${app}</div
-  </body>
-</html>
-`);
-    const markup = renderToString(
-        <StaticRouter location={req.url} context={{}}>
-            <App />
-        </StaticRouter>,
-    );
-    const activeRoute = routes.find((route: RouteProps) => !!matchPath(req.url, route));
-    if (!activeRoute) {
-        res.status(404).send(Html(markup));
-    } else {
-       res.status(200).send(Html(markup));
+    /**
+     * Catch all endpoint
+     * @param req
+     * @param res
+     */
+    public all = (req: Request, res: Response): void => {
+        // TODO move somewhere else and rename this file as .ts
+        const markup = renderToString(
+            <StaticRouter location={req.url} context={{}}>
+                <App />
+            </StaticRouter>,
+        );
+        const activeRoute = routes.find((route: RouteProps) => !!matchPath(req.url, route));
+        if (!activeRoute) {
+            res.status(404).send(HtmlTemplate(markup));
+        } else {
+            res.status(200).send(HtmlTemplate(markup));
+        }
     }
-});
+}
 
-export const DefaultController: Router = router;
+export default DefaultController;

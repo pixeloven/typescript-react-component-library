@@ -137,7 +137,8 @@
     "start-storybook": "yarn build-scss && start-storybook -p 9001 -c .storybook",
     "start-react-client": "node scripts/client.js",
     "start-react-server": "node scripts/server.js",
-    "start-ssr": "npm-run-all --parallel start-react-*",
+    "start-ssr-fancy": "npm-run-all --parallel start-react-*",
+    "start-ssr": "node build/client.js",
     "test": "node scripts/test.js --env=jsdom"
   },
   "lint-staged": {

@@ -47,7 +47,7 @@ With all of the items below we need to consider whether we want to maintain a si
     * can add scss loader instead of the hack job I have
     * cleanup dependecies
     * can get watch to work with the server too?
-
+* Need to hide build scripts that shouldn't be public
 ### References
 1) https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2
 2) https://medium.com/airbnb-engineering/server-rendering-code-splitting-and-lazy-loading-with-react-router-v4-bfe596a6af70

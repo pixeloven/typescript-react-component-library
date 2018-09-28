@@ -38,7 +38,9 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 // Note: defined here because it will be used more than once.
-const cssFilename = 'static/css/[name].[contenthash:8].css';
+// TODO how can we keep the hash but also still server it form the server side???
+// const cssFilename = 'static/css/[name].[contenthash:8].css';
+const cssFilename = 'static/css/[name].css';
 
 // ExtractTextPlugin expects the build output to be flat.
 // (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
@@ -386,7 +388,7 @@ const serverConfig = {
     externals: [nodeExternals()],
     output: {
         path: paths.appBuild,
-        filename: 'bundle.js',
+        filename: 'client.js',
         publicPath: publicPath,
     },
     // Don't attempt to continue if there are any errors.

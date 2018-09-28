@@ -1,9 +1,9 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import {Container, Grid, Header, Image, Segment} from "semantic-ui-react";
-import Logo from "src/shared/assets/logo.svg";
 import {Default} from "src/shared/components/templates";
 
+// TODO build/ might break in development
 class Home extends React.Component<RouteComponentProps> {
     public render(): React.ReactNode {
         const pageProps = this.props;
@@ -14,10 +14,7 @@ class Home extends React.Component<RouteComponentProps> {
                         <Grid.Column>
                             <Segment inverted={true} vertical={true} textAlign="center">
                                 <Container>
-                                    <Image
-                                        className="app-logo"
-                                        src={Logo}
-                                    />
+                                    <Image className="app-logo" src={"/public/static/media/logo.svg"} />
                                     <Header as="h1" inverted={true}>Welcome to TypeScript + React</Header>
                                     <p>Includes Semantic UI React, Redux and much more!</p>
                                 </Container>
