@@ -1,7 +1,5 @@
-FROM node:8.12
+FROM nginx:1.15
 
-WORKDIR /usr/src/app
+COPY ./build/index.html /usr/share/nginx/html/index.html
+COPY ./build /usr/share/nginx/html/public
 
-EXPOSE 8000
-
-CMD ["yarn", "start-ssr"]

@@ -1,9 +1,11 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import {Container, Grid, Header, Image, Segment} from "semantic-ui-react";
+
 import {Default} from "src/shared/components/templates";
 
 // TODO build/ might break in development
+
 class Home extends React.Component<RouteComponentProps> {
     public render(): React.ReactNode {
         const pageProps = this.props;
