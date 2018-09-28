@@ -4,7 +4,7 @@ import {Grid, Header} from "semantic-ui-react";
 import {Default} from "src/shared/components/templates";
 
 class Blog extends React.Component<RouteComponentProps> {
-    public render() {
+    public render(): React.ReactNode {
         const pageProps = this.props;
         return (
             <Default {...pageProps}>

@@ -5,7 +5,7 @@ import Logo from "src/shared/assets/logo.svg";
 import {Default} from "src/shared/components/templates";
 
 class Home extends React.Component<RouteComponentProps> {
-    public render() {
+    public render(): React.ReactNode {
         const pageProps = this.props;
         return (
             <Default {...pageProps}>

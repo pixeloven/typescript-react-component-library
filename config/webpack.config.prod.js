@@ -388,11 +388,12 @@ const serverConfig = {
         path: paths.appBuild,
         filename: 'bundle.js',
         publicPath: publicPath,
-        devtoolModuleFilenameTemplate: info =>
-            path
-                .relative(paths.appSrc, info.absoluteResourcePath)
-                .replace(/\\/g, '/'),
     },
+    // Don't attempt to continue if there are any errors.
+    bail: true,
+    // We generate sourcemaps in production. This is slow but gives good results.
+    // You can exclude the *.map files from the build during deployment.
+    devtool: shouldUseSourceMap ? 'source-map' : false,
     resolve: {
         // This allows you to set a fallback for where Webpack should look for modules.
         // We placed these paths second because we want `node_modules` to "win"
@@ -596,6 +597,9 @@ const serverConfig = {
         // It is absolutely essential that NODE_ENV was set to production here.
         // Otherwise React will be compiled in the very slow development mode.
         new webpack.DefinePlugin(env.stringified),
+        new webpack.DefinePlugin({
+            __isBrowser__: "false"
+        }),
         // Minify the code.
         new UglifyJsPlugin({
             uglifyOptions: {
@@ -687,4 +691,4 @@ const serverConfig = {
     ],
 }
 
-module.exports = [browserConfig];
+module.exports = [browserConfig, serverConfig];
