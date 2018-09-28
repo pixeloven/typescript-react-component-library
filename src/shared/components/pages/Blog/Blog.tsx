@@ -1,30 +1,13 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
-import {Container, Grid, Header, Image, Segment} from "semantic-ui-react";
-import Logo from "src/assets/logo.svg"; // TODO no longer rendering
-import {Default} from "src/components/templates";
+import {Grid, Header} from "semantic-ui-react";
+import {Default} from "src/shared/components/templates";
 
-class Home extends React.Component<RouteComponentProps> {
+class Blog extends React.Component<RouteComponentProps> {
     public render() {
         const pageProps = this.props;
         return (
             <Default {...pageProps}>
-                <Grid>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <Segment inverted={true} vertical={true} textAlign="center">
-                                <Container>
-                                    <Image
-                                        className="app-logo"
-                                        src={Logo}
-                                    />
-                                    <Header as="h1" inverted={true}>Welcome to TypeScript + React</Header>
-                                    <p>Includes Semantic UI React, Redux and much more!</p>
-                                </Container>
-                            </Segment>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
                 <Grid container={true} divided="vertically">
                     <Grid.Row>
                         <Grid.Column>
@@ -63,4 +46,4 @@ class Home extends React.Component<RouteComponentProps> {
     }
 }
 
-export default Home;
+export default Blog;

@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Container, Menu} from "semantic-ui-react";
-import {MenuItem, MenuItemArray} from "src/components/molecules";
+import {MenuItem, MenuItemArray} from "src/shared/components/molecules";
 
 const menuStyle = {
     border: "none",

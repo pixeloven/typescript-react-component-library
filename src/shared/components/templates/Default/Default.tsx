@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import {Container, Icon, Responsive, Segment, Visibility} from "semantic-ui-react";
-import {MainMenu, MenuItem} from "src/components/molecules";
+import {MainMenu, MenuItem} from "src/shared/components/molecules";
 
 interface Props extends RouteComponentProps {
     children: React.ReactNode;
