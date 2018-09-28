@@ -41,8 +41,8 @@ With all of the items below we need to consider whether we want to maintain a si
     * Need to generate a distribution library not just a standard build
 * Might use nwb vs neutrino instead of create react app
     * We might need to eject the current config. (Currently trying to keep it all simple until ready for prod)
-
-
+* Move storybook down or upgrade scripts but either way we should consolidate some of the babel deps
+* See if we can also write node code in typescript
 
 ### References
 1) https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2
