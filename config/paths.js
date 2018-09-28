@@ -4,13 +4,18 @@ const path = require('path');
 const fs = require('fs');
 const url = require('url');
 
-// Make sure any symlinks in the project folder are resolved:
-// https://github.com/facebookincubator/create-react-app/issues/637
-const appDirectory = fs.realpathSync(process.cwd());
-const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
-
+/**
+ * Environment variable for public url
+ * @type {string}
+ */
 const envPublicUrl = process.env.PUBLIC_URL;
 
+/**
+ * Ensures slashes are in path
+ * @param path
+ * @param needsSlash
+ * @returns {*}
+ */
 function ensureSlash(path, needsSlash) {
     const hasSlash = path.endsWith('/');
     if (hasSlash && !needsSlash) {
@@ -22,15 +27,33 @@ function ensureSlash(path, needsSlash) {
     }
 }
 
-const getPublicUrl = appPackageJson =>
-    envPublicUrl || require(appPackageJson).homepage;
+/**
+ * Returns the absolute app directory
+ * @type {string}
+ */
+const appDirectory = fs.realpathSync(process.cwd());
 
-// We use `PUBLIC_URL` environment variable or "homepage" field to infer
-// "public path" at which the app is served.
-// Webpack needs to know it to put the right <script> hrefs into HTML even in
-// single-page apps that may serve index.html for nested URLs like /todos/42.
-// We can't use a relative path in HTML because we don't want to load something
-// like /todos/42/static/js/bundle.7289d.js. We have to know the root.
+/**
+ * Resolves appDirectory from a relative path
+ * @param relativePath
+ * @returns {string}
+ */
+const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+
+/**
+ * Return public url
+ * @param appPackageJson
+ * @returns {string|*}
+ */
+const getPublicUrl = appPackageJson => envPublicUrl || require(appPackageJson).homepage;
+
+/**
+ * Get Served path
+ * @description Webpack needs to know it to put the right <script> hrefs into HTML even in single-page apps that may serve index.html for nested URLs like /todos/42.
+ *  We can't use a relative path in HTML because we don't want to load something like /todos/42/static/js/bundle.7289d.js. We have to know the root.
+ * @param appPackageJson
+ * @returns {*}
+ */
 function getServedPath(appPackageJson) {
     const publicUrl = getPublicUrl(appPackageJson);
     const servedUrl = envPublicUrl ||
@@ -40,6 +63,7 @@ function getServedPath(appPackageJson) {
 
 // config after eject: we're in ./config/
 module.exports = {
+    appDirectory,
     dotenv: resolveApp('.env'),
     appBuild: resolveApp('build'),
     appPublic: resolveApp('public'),

@@ -1,5 +1,16 @@
 # TypeScript React Component Library
 
+### Environment Setup
+
+            REACT_APP_* environment variables and prepare them to be
+            // Useful for determining whether we're running in production mode.
+            // Most importantly, it switches React into the correct mode.
+            NODE_ENV: process.env.NODE_ENV || 'development',
+            // Useful for resolving the correct path to static assets in `public`.
+            // For example, <img src={process.env.PUBLIC_URL + '/img/logo.png'} />.
+            // This should only be used as an escape hatch. Normally you would put
+            // images into the `src` and `import` them in code to get their paths.
+            PUBLIC_URL: publicUrl,
 
 ### Tasks
 With all of the items below we need to consider whether we want to maintain a single application or multiple applications. Now that we are doing PWA, SSR, etc it might make sense to maintian a single app and just break it into templates and pages.

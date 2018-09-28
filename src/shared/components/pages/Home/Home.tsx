@@ -4,7 +4,7 @@ import {Container, Grid, Header, Image, Segment} from "semantic-ui-react";
 
 import {Default} from "src/shared/components/templates";
 
-// TODO build/ might break in development
+// TODO should remove process.env.PUBLIC_URL and inject it in somehow
 
 class Home extends React.Component<RouteComponentProps> {
     public render(): React.ReactNode {
@@ -16,7 +16,7 @@ class Home extends React.Component<RouteComponentProps> {
                         <Grid.Column>
                             <Segment inverted={true} vertical={true} textAlign="center">
                                 <Container>
-                                    <Image className="app-logo" src={"/public/static/media/logo.svg"} />
+                                    <Image className="app-logo" src={process.env.PUBLIC_URL + "/static/media/logo.svg"} />
                                     <Header as="h1" inverted={true}>Welcome to TypeScript + React</Header>
                                     <p>Includes Semantic UI React, Redux and much more!</p>
                                 </Container>
