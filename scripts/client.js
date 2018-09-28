@@ -43,10 +43,9 @@ app.use(expressWinston.logger({
 /**
  * Create express server
  */
-
 app.get('/', (req, res) => {
     const jobs = {
-        MyComponent: { name: req.query.name || 'Stranger' }
+        Example: { name: req.query.name || 'Stranger' }
     };
     renderer.render(jobs).then(html => res.send(html));
 });

@@ -90,16 +90,15 @@
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/jest": "^23.3.1",
     "@types/lodash": "^4.14.115",
-    "@types/node": "^10.11.0",
+    "@types/node": "^8.10.0",
     "@types/react": "^16.4.14",
     "@types/react-dom": "^16.0.7",
     "@types/react-router-dom": "^4.3.0",
-    "@types/redux-form": "^7.4.8",
-    "@types/storybook__addon-actions": "^3.0.0",
-    "@types/storybook__addon-knobs": "^3.3.0",
-    "@types/storybook__addon-notes": "^3.3.0",
-    "@types/storybook__addon-options": "^3.2.0",
-    "@types/storybook__react": "^3.0.0",
+    "@types/storybook__addon-actions": "^3.4.1",
+    "@types/storybook__addon-knobs": "^3.4.1",
+    "@types/storybook__addon-notes": "^3.3.3",
+    "@types/storybook__addon-options": "^3.2.2",
+    "@types/storybook__react": "^3.0.9",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
     "husky": "^1.0.0-rc.15",
@@ -132,9 +131,9 @@
     "start-scss": "yarn build-scss && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "start-ts": "node scripts/start.js",
     "start-storybook": "yarn build-scss && start-storybook -p 9001 -c .storybook",
-    "start-ssr-client": "node scripts/hypernovaClient.js",
-    "start-ssr-service": "node scripts/hypernovaService.js",
-    "start-ssr": "npm-run-all --parallel start-ssr-*",
+    "start-react-client": "node scripts/client.js",
+    "start-react-server": "node scripts/server.js",
+    "start-ssr": "npm-run-all --parallel start-react-*",
     "test": "node scripts/test.js --env=jsdom"
   },
   "lint-staged": {
@@ -191,12 +190,7 @@
       "json",
       "node",
       "mjs"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsConfigFile": "/home/brian/Documents/Development/typescript-react-component-library/tsconfig.test.json"
-      }
-    }
+    ]
   },
   "babel": {
     "presets": [

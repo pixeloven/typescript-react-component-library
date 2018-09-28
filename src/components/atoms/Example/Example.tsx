@@ -1,16 +1,17 @@
 import * as React from "react";
 
 interface Props {
-    example?: any;
+    example?: string;
 }
 
 interface State {
-    example?: any;
+    example?: string;
 }
 
 class Example extends React.Component<Props, State> {
     public render(): React.ReactNode {
-        return null;
+        const {example} = this.props;
+        return example ? <div>{example}</div> : null;
     }
 }
 

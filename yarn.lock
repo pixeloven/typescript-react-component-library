@@ -1018,9 +1018,13 @@
   version "4.14.116"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.116.tgz#5ccf215653e3e8c786a58390751033a9adca0eb9"
 
-"@types/node@*", "@types/node@^10.11.0":
+"@types/node@*":
   version "10.11.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.11.2.tgz#59508b88ce90fe2742f7b8414c6f5db3e359570d"
+
+"@types/node@^8.10.0":
+  version "8.10.30"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.30.tgz#2c82cbed5f79d72280c131d2acffa88fbd8dd353"
 
 "@types/prop-types@*":
   version "15.5.6"
@@ -1055,34 +1059,27 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/redux-form@^7.4.8":
-  version "7.4.8"
-  resolved "https://registry.yarnpkg.com/@types/redux-form/-/redux-form-7.4.8.tgz#a423e597b3bae0f559dd1e9ff605f7d4aad30538"
-  dependencies:
-    "@types/react" "*"
-    redux "^3.6.0 || ^4.0.0"
-
-"@types/storybook__addon-actions@^3.0.0":
+"@types/storybook__addon-actions@^3.4.1":
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/@types/storybook__addon-actions/-/storybook__addon-actions-3.4.1.tgz#8f90d76b023b58ee794170f2fe774a3fddda2c1d"
 
-"@types/storybook__addon-knobs@^3.3.0":
+"@types/storybook__addon-knobs@^3.4.1":
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/@types/storybook__addon-knobs/-/storybook__addon-knobs-3.4.1.tgz#36a9ff38c50b00b198bfdc04f6c0aaf747e0ed86"
   dependencies:
     "@types/react" "*"
 
-"@types/storybook__addon-notes@^3.3.0":
+"@types/storybook__addon-notes@^3.3.3":
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/@types/storybook__addon-notes/-/storybook__addon-notes-3.3.3.tgz#621e5a4936b0ba4d505c1a582da2d58e4c8572b9"
   dependencies:
     "@types/react" "*"
 
-"@types/storybook__addon-options@^3.2.0":
+"@types/storybook__addon-options@^3.2.2":
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/@types/storybook__addon-options/-/storybook__addon-options-3.2.2.tgz#f42f81414fa9692cf20d947e9b49c60c4bdfbc4d"
 
-"@types/storybook__react@^3.0.0":
+"@types/storybook__react@^3.0.9":
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/@types/storybook__react/-/storybook__react-3.0.9.tgz#aac193f0c037ddfc2342bd027d720553ac089a56"
   dependencies:
@@ -9214,7 +9211,7 @@ redux-saga@^0.16.0:
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.16.0.tgz#0a231db0a1489301dd980f6f2f88d8ced418f724"
 
-"redux@^3.6.0 || ^4.0.0", redux@^4.0.0:
+redux@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.0.tgz#aa698a92b729315d22b34a0553d7e6533555cc03"
   dependencies:

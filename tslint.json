@@ -7,8 +7,15 @@
   ],
   "linterOptions": {
     "exclude": [
-      "src/**.js",
-      "node_modules/**/*.ts"
+      ".docker",
+      ".storybook",
+      "build",
+      "config",
+      "jest",
+      "node_modules",
+      "public",
+      "scripts",
+      "**/*.js"
     ]
   },
   "rules": {

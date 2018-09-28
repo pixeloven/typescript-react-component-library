@@ -11,11 +11,17 @@ configure({
 describe("Components", () => {
     describe("Atoms", () => {
         describe("Example", () => {
-            it("should render child", () => {
+            it("should render null", () => {
                 const wrapper = shallow(
                     <Example />,
                 );
                 expect(wrapper.type()).toBeNull();
+            });
+            it("should render null", () => {
+                const wrapper = shallow(
+                    <Example example={"example"}/>,
+                );
+                expect(wrapper.find("div").text()).toEqual("example");
             });
         });
     });

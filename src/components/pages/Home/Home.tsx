@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import {Container, Grid, Header, Image, Segment} from "semantic-ui-react";
-import Logo from "src/assets/logo.svg";
+import Logo from "src/assets/logo.svg"; // TODO no longer rendering
 import {Default} from "src/components/templates";
 
 class Home extends React.Component<RouteComponentProps> {
