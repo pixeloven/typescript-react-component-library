@@ -3,8 +3,8 @@
 const path = require('path');
 const hypernova = require('hypernova/server');
 
-const PORT = 8081;
-const HOST = 'node.server';
+const PORT = 8001;
+const HOST = '0.0.0.0';
 
 hypernova({
     devMode: true,
@@ -15,3 +15,13 @@ hypernova({
     host: HOST,
     port: PORT,
 });
+
+/*
+const renderReact = require('hypernova-react').renderReact;
+  getComponent(name) {
+    for (let componentName in bundle) {
+      if (name === componentName) {
+        return renderReact(componentName, bundle[componentName]);
+      }
+    }
+ */

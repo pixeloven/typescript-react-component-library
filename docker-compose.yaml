@@ -1,20 +1,11 @@
-version: '3'
+version: '3.5'
 services:
-  node-client:
-    container_name: node-client
-    hostname: node.client
+  node-mono:
+    container_name: node-mono
+    hostname: node.mono
     build:
-      context: .docker/node-client
+      context: .
     ports:
-    - "8080:8080"
-    volumes:
-    - ./:/usr/src/app
-  node-server:
-    container_name: node-server
-    hostname: node.server
-    build:
-      context: .docker/node-server
-    ports:
-    - "8081:8081"
+    - "8000:8000"
     volumes:
     - ./:/usr/src/app
