@@ -3,13 +3,13 @@
 const express = require('express'); // implicit from hypernova
 const expressWinston = require('express-winston');
 const winston = require('winston');
-const Renderer = require('hypernova-client');
+const Renderer = require('hypernova-client'); // TODO doesn't support typescript
 const devModePlugin = require('hypernova-client/plugins/devModePlugin');
 
-const PORT = 8080;
-const HOST = 'node.client';
-const SERVER_PORT = 8081;
-const SERVER_HOST = 'node.server';
+const PORT = 8000;
+const HOST = '0.0.0.0';
+const SERVER_PORT = 8001;
+const SERVER_HOST = '0.0.0.0';
 
 /**
  * Setup render for react
@@ -45,7 +45,6 @@ app.use(expressWinston.logger({
  */
 
 app.get('/', (req, res) => {
-    console.log(req.query) // TODO req.query is empty -- Which means the comp might not render???
     const jobs = {
         MyComponent: { name: req.query.name || 'Stranger' }
     };

@@ -101,6 +101,9 @@
     "start-scss": "yarn build-scss && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "start-ts": "react-scripts-ts start",
     "start-storybook": "yarn build-scss && start-storybook -p 9001 -c .storybook",
+    "start-ssr-client": "node src/hypernovaClient.js",
+    "start-ssr-service": "node src/hypernovaService.js",
+    "start-ssr": "npm-run-all --parallel start-ssr-*",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
