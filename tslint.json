@@ -21,6 +21,8 @@
   "rules": {
     "interface-name" : false,
     "max-line-length": false,
-    "no-console": false
+    "no-console": false,
+    "no-any": false,
+    "no-null-keyword": false
   }
 }

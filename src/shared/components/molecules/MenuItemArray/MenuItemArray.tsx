@@ -8,7 +8,7 @@ export interface MenuItem {
 }
 
 interface Props {
-    as: any;
+    as: string | React.Component | React.PureComponent | React.StatelessComponent;
     items: MenuItem[];
     onClick?: (event: React.MouseEvent<HTMLAnchorElement>, name?: string) => void;
 }

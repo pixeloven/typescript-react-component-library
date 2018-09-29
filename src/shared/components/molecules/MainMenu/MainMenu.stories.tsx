@@ -1,6 +1,5 @@
-/* tslint:disable no-var-requires */
-const withReadme = (require("storybook-readme/with-readme") as any).default;
-const readme = require("./README.md");
+import { withReadme } from "storybook-readme";
+import Readme from "./README.md";
 
 import { boolean } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
@@ -14,7 +13,7 @@ const items: MenuItem[] = [
 ];
 
 storiesOf("Components/Organisms/MainMenu", module)
-    .addDecorator(withReadme(readme))
+    .addDecorator(withReadme(Readme))
     .add("default", () => {
         const value = boolean("fixed", true);
         return (
