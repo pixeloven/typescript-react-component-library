@@ -19,7 +19,7 @@ interface DefaultProps {
 }
 
 interface Props {
-    as?: string | React.Component | React.PureComponent | React.StatelessComponent;
+    as?: string | React.ReactNode;
     fixed?: boolean;
     items: MenuItem[];
 }

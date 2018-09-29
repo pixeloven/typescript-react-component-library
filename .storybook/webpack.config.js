@@ -5,7 +5,7 @@ module.exports = (baseConfig, env, defaultConfig) => {
     // Add typescript loader
     defaultConfig.module.rules.push({
         test: /\.(ts|tsx)$/,
-        include: path.resolve(__dirname, "../src/components"),
+        include: path.resolve(__dirname, "../src/shared/components"),
         loader: require.resolve("ts-loader"),
         options: {
             configFile: ".storybook/tsconfig.json"

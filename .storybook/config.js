@@ -1,7 +1,7 @@
 import { configure, addDecorator } from "@storybook/react";
 import { setOptions } from "@storybook/addon-options";
 import { withKnobs } from "@storybook/addon-knobs";
-import '../src/assets/semantic.css';
+import '../src/shared/assets/semantic.css';
 import './index.css';
 
 setOptions({
@@ -15,7 +15,7 @@ setOptions({
 addDecorator(withKnobs);
 
 // Stories loader
-const req = require.context("../src/components", true, /.stories.[jt]sx?$/);
+const req = require.context("../src/shared/components", true, /.stories.[jt]sx?$/);
 function loadStories() {
     req.keys().forEach(req);
 }

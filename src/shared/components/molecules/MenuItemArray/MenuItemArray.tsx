@@ -12,7 +12,7 @@ interface DefaultProps {
 }
 
 interface Props {
-    as: string | React.Component | React.PureComponent | React.StatelessComponent;
+    as: string | React.ReactNode;
     items: MenuItem[];
     onClick?: (event: React.MouseEvent<HTMLAnchorElement>, name?: string) => void;
 }
