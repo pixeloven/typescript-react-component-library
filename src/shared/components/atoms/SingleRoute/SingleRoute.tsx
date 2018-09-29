@@ -2,7 +2,7 @@ import * as React from "react";
 import {Route, RouteComponentProps, RouteProps} from "react-router-dom";
 
 interface Props extends RouteProps {
-    [key: string]: any;
+    key: Optional<number>;
     component: new (props: any) => React.Component<RouteComponentProps>;
 }
 
