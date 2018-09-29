@@ -11,7 +11,7 @@ interface State {
 class Example extends React.Component<Props, State> {
     public render(): React.ReactNode {
         const {example} = this.props;
-        return example ? <div>{example}</div> : null;
+        return example ? <div>{example}</div> : undefined;
     }
 }
 

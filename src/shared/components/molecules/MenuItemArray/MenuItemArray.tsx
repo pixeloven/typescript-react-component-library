@@ -7,6 +7,10 @@ export interface MenuItem {
     active?: boolean;
 }
 
+interface DefaultProps {
+    as: string;
+}
+
 interface Props {
     as: string | React.Component | React.PureComponent | React.StatelessComponent;
     items: MenuItem[];
@@ -14,6 +18,10 @@ interface Props {
 }
 
 class MenuItemArray extends React.PureComponent<Props> {
+
+    public static defaultProps: DefaultProps = {
+        as: "a",
+    };
 
     public handleItemClick = (event: React.MouseEvent<HTMLAnchorElement>, item: MenuItemProps): void => {
         const {onClick} = this.props;

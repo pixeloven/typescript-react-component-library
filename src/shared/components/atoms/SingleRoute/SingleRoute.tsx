@@ -3,11 +3,11 @@ import {Route, RouteComponentProps, RouteProps} from "react-router-dom";
 
 interface Props extends RouteProps {
     key: Optional<number>;
-    component: new (props: any) => React.Component<RouteComponentProps>;
+    component: new (props: RouteComponentProps) => React.Component<RouteComponentProps>;
 }
 
 const SingleRoute = ({ key, path, exact, component: Component, ...rest }: Props) => {
-    const render = (props: any) => (
+    const render = (props: RouteComponentProps) => (
         <Component {...props} {...rest} />
     );
     return (
