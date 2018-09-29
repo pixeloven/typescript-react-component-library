@@ -5,7 +5,7 @@ import {Container, Grid, Header, Image, Segment} from "semantic-ui-react";
 import {Default} from "src/shared/components/templates";
 
 // TODO should remove process.env.PUBLIC_URL and inject it in somehow
-
+// process.env.PUBLIC_URL
 class Home extends React.Component<RouteComponentProps> {
     public render(): React.ReactNode {
         const pageProps = this.props;
