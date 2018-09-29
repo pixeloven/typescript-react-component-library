@@ -60,7 +60,7 @@ With all of the items below we need to consider whether we want to maintain a si
     * can get watch to work with the server too?
 * Need to hide build scripts that shouldn't be public
 * Does it still make sense to use `yarn`? `npm`? Or another alternative?
-
+* Upgrade to webpack 4
 
 ### References
 1) https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2
