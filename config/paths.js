@@ -69,7 +69,7 @@ module.exports = {
     appPublic: resolveApp('public'),
     appHtml: resolveApp('public/index.html'),
     appIndexJs: resolveApp('src/browser/index.tsx'),
-    serverIndexJs: resolveApp('src/server/index.tsx'),
+    serverIndexJs: resolveApp('src/server/index.ts'),
     appPackageJson: resolveApp('package.json'),
     appSrc: resolveApp('src'),
     yarnLockFile: resolveApp('yarn.lock'),

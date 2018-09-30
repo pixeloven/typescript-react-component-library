@@ -24,9 +24,6 @@
     "noUnusedLocals": true,
     "declaration": true
   },
-  "include": [
-    "../src/**/*"
-  ],
   "exclude": [
     ".docker",
     ".storybook",
