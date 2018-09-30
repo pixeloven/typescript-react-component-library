@@ -24,6 +24,12 @@
     "noUnusedLocals": true,
     "declaration": true
   },
+  "types": [
+    "jest"
+  ],
+  "files": [
+    "node_modules/@types/react-dom/server/index.d.ts"
+  ],
   "exclude": [
     ".docker",
     ".storybook",
