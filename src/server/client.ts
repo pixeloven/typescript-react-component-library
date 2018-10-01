@@ -6,10 +6,7 @@ import {config} from "./config";
 import {DefaultController} from "./controllers";
 
 // TODO re-write hypernova client
-
-const PORT = 8000;
-const HOST = "0.0.0.0";
-
+// TODO should explore mvc frameworks for express
 /**
  * Create express application
  * @type {Function}
@@ -46,9 +43,11 @@ const defaultController = new DefaultController(config);
  * TODO need to handle 404s
  */
 app.get("/health", defaultController.health);
-app.get("*", defaultController.root);
+app.get("*", defaultController.render);
 
 /**
  * Start express server on specific host and port
  */
-app.listen(PORT, HOST, () => console.log(`Running on http://${HOST}:${PORT}`));
+app.listen(config.CLIENT.PORT, config.CLIENT.HOST, () => {
+    console.log(`Running on http://${config.CLIENT.HOST}:${config.CLIENT.PORT}`);
+});

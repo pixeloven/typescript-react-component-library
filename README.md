@@ -284,6 +284,7 @@ With all of the items below we need to consider whether we want to maintain a si
     * cleanup dependecies
     * can get watch to work with the server too?
 * Need to hide build scripts that shouldn't be public
+* Look into MVCish frameworks for the client server
 * Does it still make sense to use `yarn`? `npm`? Or another alternative?
 
 ## References
