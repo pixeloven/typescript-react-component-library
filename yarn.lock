@@ -1033,6 +1033,13 @@
     "@types/node" "*"
     "@types/range-parser" "*"
 
+"@types/express-winston@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/express-winston/-/express-winston-3.0.0.tgz#9bfe0ee65f69901fb240b4e374bbd811a2bd8366"
+  dependencies:
+    "@types/express" "*"
+    winston "^3.0.0"
+
 "@types/express@*", "@types/express@^4.16.0":
   version "4.16.0"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.16.0.tgz#6d8bc42ccaa6f35cf29a2b7c3333cb47b5a32a19"
@@ -11557,7 +11564,7 @@ winston@^2.4.2:
     isstream "0.1.x"
     stack-trace "0.0.x"
 
-winston@^3.1.0:
+winston@^3.0.0, winston@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/winston/-/winston-3.1.0.tgz#80724376aef164e024f316100d5b178d78ac5331"
   dependencies:

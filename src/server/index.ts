@@ -1,5 +1,6 @@
 import * as cors from "cors";
 import * as express from "express";
+import {DefaultController} from "./config";
 import {DefaultController} from "./controllers";
 
 const PORT = 8000;
@@ -21,8 +22,14 @@ app.use("/public", express.static("build")); // TODO read in from .env????
  * This defines a catch all route for serving all react pages
  */
 // TODO can create an inheritable controller class
-const defaultController = new DefaultController(); // TODO should inject template into the controllers
-app.get("*", defaultController.all);
+// TODO should inject template into the controllers
+const defaultController = new DefaultController();
+
+/**
+ * Register endpoints
+ */
+app.get("/health", defaultController.root);
+app.get("*", defaultController.root);
 
 // TODO need to try and search for a port range???
 app.listen(PORT, HOST, () => {
