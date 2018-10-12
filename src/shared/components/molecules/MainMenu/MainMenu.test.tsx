@@ -2,7 +2,7 @@ import { configure, shallow } from "enzyme";
 import * as ReactSixteenAdapter from "enzyme-adapter-react-16";
 import "jest";
 import * as React from "react";
-import {MainMenu, MenuItem} from "src/shared/components/molecules";
+import {MainMenu, MenuItem} from "../";
 
 configure({
     adapter: new ReactSixteenAdapter(),

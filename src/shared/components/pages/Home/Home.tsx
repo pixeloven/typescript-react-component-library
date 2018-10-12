@@ -2,7 +2,7 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import {Container, Grid, Header, Image, Segment} from "semantic-ui-react";
 
-import {Default} from "src/shared/components/templates";
+import {Default} from "../../templates";
 
 // TODO should remove process.env.PUBLIC_URL and inject it in somehow
 // process.env.PUBLIC_URL

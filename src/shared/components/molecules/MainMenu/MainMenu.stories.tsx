@@ -4,7 +4,7 @@ import Readme from "./README.md";
 import { boolean } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
 import * as React from "react";
-import {MainMenu, MenuItem} from "src/shared/components/molecules";
+import {MainMenu, MenuItem} from "../";
 
 const items: MenuItem[] = [
     { name: "Home", path: "/", active: true },

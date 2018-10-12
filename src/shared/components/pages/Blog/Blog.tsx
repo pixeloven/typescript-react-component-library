@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import {Grid, Header} from "semantic-ui-react";
-import {Default} from "src/shared/components/templates";
+import {Default} from "../../templates";
 
 class Blog extends React.Component<RouteComponentProps> {
     public render(): React.ReactNode {

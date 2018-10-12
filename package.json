@@ -137,7 +137,8 @@
     "start-ts": "node scripts/start.js",
     "start-story": "start-storybook -p 9001 -c .storybook",
     "start-ssr": "node build/server.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test-watch": "jest --watch --env=jsdom",
+    "test-coverage": "jest --coverage --env=jsdom"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -158,11 +159,14 @@
     ]
   },
   "jest": {
+    "preset": "ts-jest",
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}"
     ],
     "setupFiles": [
-      "<rootDir>/config/polyfills.js"
+      "<rootDir>/config/polyfills.js",
+      "<rootDir>/config/jest/setup.js",
+      "<rootDir>/config/env.js"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.(j|t)s?(x)",
@@ -171,8 +175,8 @@
     "testEnvironment": "node",
     "testURL": "http://localhost",
     "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest",
       "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
-      "^.+\\.tsx?$": "<rootDir>/config/jest/typescriptTransform.js",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
