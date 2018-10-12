@@ -61,7 +61,11 @@ function getServedPath(appPackageJson) {
     return ensureSlash(servedUrl, true);
 }
 
-// config after eject: we're in ./config/
+/**
+ * Configuration
+ * TODO move configuration somewhere else
+ * @type Object
+ */
 module.exports = {
     appDirectory,
     dotenv: resolveApp('.env'),
@@ -81,6 +85,7 @@ module.exports = {
     appTsProdConfig: resolveApp('tsconfig.prod.json'),
     appTsLint: resolveApp('tslint.json'),
 
-    clientEntryPoint: resolveApp('src/server/client.ts'),
-    rendererEntryPoint: resolveApp('src/server/renderer.ts'),
+    clientOutputFile: 'client.js',
+    clientEntryPointFile: resolveApp('src/server/client.ts'),
+    rendererEntryPointFile: resolveApp('src/server/renderer.ts'),
 };

@@ -3,13 +3,13 @@ import * as Renderer from "hypernova-client";
 import * as devModePlugin from "hypernova-client/plugins/devModePlugin";
 import {matchPath, RouteProps} from "react-router-dom";
 import routes from "../../shared/routes";
+import {config} from "../config";
 import {HtmlTemplate} from "../templates";
-import Controller from "./Controller";
 
 /**
  * DefaultController
  */
-class DefaultController extends Controller {
+class DefaultController {
 
     /**
      * Render from service
@@ -23,7 +23,7 @@ class DefaultController extends Controller {
                 plugins: [
                     devModePlugin, // TODO need to make configurable
                 ],
-                url: `http://${this.config.RENDERER.HOST}:${this.config.RENDERER.HOST}/batch`,
+                url: `http://${config.RENDERER.HOST}:${config.RENDERER.HOST}/batch`,
             });
             const jobs = {
                 Example: {

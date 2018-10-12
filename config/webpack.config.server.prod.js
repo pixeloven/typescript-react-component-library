@@ -43,12 +43,12 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 const cssFilename = 'static/css/[name].css';
 
 module.exports = merge(commonConfig, {
-    entry: [paths.clientEntryPoint],
+    entry: [paths.clientEntryPointFile],
     target: 'node',
     externals: [nodeExternals()],
     output: {
         path: paths.appBuild,
-        filename: 'client.js',
+        filename: paths.clientOutputFile,
         publicPath: publicPath,
     },
     // Don't attempt to continue if there are any errors.

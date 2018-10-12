@@ -36,7 +36,7 @@ app.use("/public", express.static("build"));
  * TODO can create an inheritable controller class
  * TODO should inject template into the controllers
  */
-const defaultController = new DefaultController(config);
+const defaultController = new DefaultController();
 
 /**
  * Register endpoints
