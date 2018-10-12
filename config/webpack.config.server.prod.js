@@ -43,12 +43,12 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 module.exports = merge(commonConfig, {
-    entry: [paths.clientEntryPointFile],
+    entry: [paths.serverEntryPointFile],
     target: 'node',
     externals: [nodeExternals()],
     output: {
         path: paths.appBuild,
-        filename: paths.clientOutputFile,
+        filename: paths.serverOutputFile,
         publicPath: publicPath,
     },
     // Don't attempt to continue if there are any errors.

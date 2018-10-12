@@ -90,7 +90,6 @@ module.exports = {
     // const cssFilename = 'static/css/[name].[contenthash:8].css';
     cssFilename: 'static/css/[name].css',
 
-
     serverOutputFile: 'server.js',
     serverEntryPointFile: resolveApp('src/server/bootstrap.ts'),
 };
