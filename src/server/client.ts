@@ -5,7 +5,6 @@ import * as winston from "winston";
 import {config} from "./config";
 import {DefaultController} from "./controllers";
 
-// TODO re-write hypernova client
 // TODO should explore mvc frameworks for express
 /**
  * Create express application
