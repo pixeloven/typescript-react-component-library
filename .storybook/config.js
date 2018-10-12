@@ -1,7 +1,7 @@
 import { configure, addDecorator } from "@storybook/react";
 import { setOptions } from "@storybook/addon-options";
 import { withKnobs } from "@storybook/addon-knobs";
-import '../src/shared/assets/semantic.css';
+import '../src/client/assets/semantic.css';
 import './index.css';
 
 setOptions({
