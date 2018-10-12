@@ -77,7 +77,7 @@ module.exports = {
     appBuild: resolveApp('build'),
     appPublic: resolveApp('public'),
     appHtml: resolveApp('public/index.html'),
-    appIndexJs: resolveApp('src/browser/index.tsx'),
+    appIndexJs: resolveApp('src/client/index.tsx'),
     appPackageJson: resolveApp('package.json'),
     appSrc: resolveApp('src'),
     appNodeModules: resolveApp('node_modules'),
@@ -91,7 +91,6 @@ module.exports = {
     cssFilename: 'static/css/[name].css',
 
 
-    clientOutputFile: 'client.js',
-    clientEntryPointFile: resolveApp('src/server/client.ts'),
-    rendererEntryPointFile: resolveApp('src/server/renderer.ts'),
+    serverOutputFile: 'server.js',
+    serverEntryPointFile: resolveApp('src/server/bootstrap.ts'),
 };

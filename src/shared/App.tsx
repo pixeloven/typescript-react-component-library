@@ -1,7 +1,5 @@
 import * as React from "react";
 import {Switch} from "react-router-dom";
-import "./assets/App.css";
-import "./assets/semantic.css";
 import {SingleRoute} from "./components/atoms";
 import {NoMatch} from "./components/pages";
 import routes from "./routes";

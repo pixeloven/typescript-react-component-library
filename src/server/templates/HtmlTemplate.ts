@@ -20,3 +20,5 @@ const HtmlTemplate = (app: string) => (`
 `);
 export default HtmlTemplate;
 // TODO make a react comp
+// TODO should just load the index.html instead of this.
+// TODO we should also include the JS so we can hydrate!

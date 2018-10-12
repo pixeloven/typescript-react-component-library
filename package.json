@@ -136,7 +136,7 @@
     "start-scss": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "start-ts": "node scripts/start.js",
     "start-story": "start-storybook -p 9001 -c .storybook",
-    "start-ssr": "node build/client.js",
+    "start-ssr": "node build/server.js",
     "test": "node scripts/test.js --env=jsdom"
   },
   "lint-staged": {
@@ -152,9 +152,9 @@
   "stylelint": {
     "extends": "stylelint-config-recommended-scss",
     "ignoreFiles": [
-      "./src/shared/assets/semantic.scss",
-      "./src/shared/assets/semantic.css",
-      "./src/shared/assets/themes/**"
+      "./src/client/assets/semantic.scss",
+      "./src/client/assets/semantic.css",
+      "./src/client/assets/themes/**"
     ]
   },
   "jest": {

@@ -2,7 +2,6 @@
 
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const paths = require('./paths');
@@ -55,6 +54,25 @@ module.exports = merge(commonConfig, {
     // Don't attempt to continue if there are any errors.
     bail: true,
     devtool: shouldUseSourceMap ? 'source-map' : false,
+    module: {
+        strictExportPresence: true,
+        rules: [
+            {
+                test: /\.(ts|tsx)$/,
+                include: paths.appSrc,
+                use: [
+                    {
+                        loader: require.resolve('ts-loader'),
+                        options: {
+                            // disable type checker - we will use it in fork plugin
+                            transpileOnly: true,
+                            configFile: paths.appTsProdConfig,
+                        },
+                    },
+                ],
+            },
+        ],
+    },
     plugins: [
         // Makes some environment variables available in index.html.
         // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
@@ -69,10 +87,6 @@ module.exports = merge(commonConfig, {
         new webpack.DefinePlugin(env.stringified),
         new webpack.DefinePlugin({
             __isBrowser__: "false"
-        }),
-        // TODO we should remove this???
-        new ExtractTextPlugin({
-            filename: paths.cssFilename,
         }),
         // Moment.js is an extremely popular library that bundles large locale files
         // by default due to how Webpack interprets its code. This is a practical
