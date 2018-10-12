@@ -1,4 +1,4 @@
 /**
  * Register Controllers here
  */
-export { default as HtmlTemplate } from "./HtmlTemplate";
+export { default as Html } from "./Html";

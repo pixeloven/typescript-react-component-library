@@ -56,10 +56,9 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
     throw new Error('Production builds must have NODE_ENV=production.');
 }
 
-// ExtractTextPlugin expects the build output to be flat.
-// (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
-// However, our output is structured with css, js and media folders.
-// To have this structure working with relative paths, we have to use custom options.
+/**
+ * Create extract text plugin options
+ */
 const extractTextPluginOptions = shouldUseRelativeAssetPaths
     ? // Making sure that the publicPath goes back to to build folder.
     { publicPath: Array(paths.cssFilename.split('/').length).join('../') }
@@ -77,13 +76,9 @@ module.exports = merge(commonConfig, {
         paths.appIndexJs
     ],
     output: {
-        // The build folder.
         path: paths.appBuild,
-        // Generated JS file names (with nested folders).
-        // There will be one main bundle, and one file per asynchronous chunk.
-        // We don't currently advertise code splitting but Webpack supports it.
-        filename: 'static/js/[name].[chunkhash:8].js',
-        chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
+        filename: paths.appOutputFilePattern,
+        chunkFilename: paths.appChunkOutputFilePattern,
         // We inferred the "public path" (such as / or /my-project) from homepage.
         publicPath: publicPath,
         // Point sourcemap entries to original disk location (format as URL on Windows)
@@ -113,7 +108,7 @@ module.exports = merge(commonConfig, {
                         loader: require.resolve('url-loader'),
                         options: {
                             limit: 10000,
-                            name: 'static/media/[name].[hash:8].[ext]', // todo unhash for now
+                            name: 'static/media/[name].[hash:8].[ext]',
                         },
                     },
                     {

@@ -85,6 +85,12 @@ module.exports = {
     appTsProdConfig: resolveApp('tsconfig.prod.json'),
     appTsLint: resolveApp('tslint.json'),
 
+    // TODO implement hashing and chunking again
+    // appOutputFilePattern: 'static/js/[name].[chunkhash:8].js',
+    appOutputFilePattern: 'static/js/[name].js',
+    // appChunkOutputFilePattern: 'static/js/[name].[chunkhash:8].chunk.js',
+    appChunkOutputFilePattern: 'static/js/[name].chunk.js',
+
     // TODO how can we keep the hash but also still server it form the server side???
     // TODO need to only extract once... right now we do it for both server and browser builds
     // const cssFilename = 'static/css/[name].[contenthash:8].css';

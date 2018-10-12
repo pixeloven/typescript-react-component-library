@@ -1,10 +1,10 @@
 import {Request, Response} from "express";
 import * as React from "react";
-import { renderToString } from "react-dom/server";
+import { renderToNodeStream } from "react-dom/server";
 import {matchPath, RouteProps, StaticRouter} from "react-router-dom";
 import App from "../../shared/App";
 import routes from "../../shared/routes";
-import {HtmlTemplate} from "../templates";
+import {Html} from "../templates";
 
 /**
  * DefaultController
@@ -26,16 +26,17 @@ class DefaultController {
      * @param res
      */
     public render = (req: Request, res: Response): void => {
-        const markup = renderToString(
-            <StaticRouter location={req.url} context={{}}>
-                <App />
-            </StaticRouter>,
-        );
         const activeRoute = routes.find((route: RouteProps) => !!matchPath(req.url, route));
-        if (!activeRoute) {
-            res.status(404).send(HtmlTemplate(markup));
+        if (activeRoute) {
+            renderToNodeStream(
+                <Html>
+                <StaticRouter location={req.url} context={{}}>
+                    <App />
+                </StaticRouter>
+                </Html>,
+            ).pipe(res);
         } else {
-            res.status(200).send(HtmlTemplate(markup));
+            res.status(404).send("O no we should be serving a 404!");
         }
     }
 }

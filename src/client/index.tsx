@@ -8,7 +8,7 @@ import {register} from "./serviceWorkers";
 
 /**
  * When using hot module replacement we need to use the render method
- * Otherwise erros may occur in development.
+ * otherwise errors may occur in development.
  */
 const renderMethod = !!module.hot ? ReactDOM.render : ReactDOM.hydrate;
 renderMethod((
