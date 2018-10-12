@@ -85,6 +85,12 @@ module.exports = {
     appTsProdConfig: resolveApp('tsconfig.prod.json'),
     appTsLint: resolveApp('tslint.json'),
 
+    // TODO how can we keep the hash but also still server it form the server side???
+    // TODO need to only extract once... right now we do it for both server and browser builds
+    // const cssFilename = 'static/css/[name].[contenthash:8].css';
+    cssFilename: 'static/css/[name].css',
+
+
     clientOutputFile: 'client.js',
     clientEntryPointFile: resolveApp('src/server/client.ts'),
     rendererEntryPointFile: resolveApp('src/server/renderer.ts'),
