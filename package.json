@@ -134,10 +134,10 @@
     "precommit": "lint-staged",
     "start": "run-p start-scss start-ts",
     "start-scss": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
-    "start-ts": "node scripts/start.js",
+    "start-ts": "ts-node scripts/start.ts",
     "start-story": "start-storybook -p 9001 -c .storybook",
     "start-ssr": "node build/server.js",
-    "test-watch": "jest --watch --env=jsdom",
+    "test": "jest --watch --env=jsdom",
     "test-coverage": "jest --coverage --env=jsdom"
   },
   "lint-staged": {
