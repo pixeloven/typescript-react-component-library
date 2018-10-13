@@ -122,7 +122,7 @@
   "scripts": {
     "build": "run-s build-scss build-ts build-story",
     "build-scss": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
-    "build-ts": "node scripts/build.js",
+    "build-ts": "ts-node scripts/build.ts",
     "build-story": "build-storybook -c .storybook -o build/docs",
     "clean": "rm -rf ./build",
     "lint": "npm-run-all --aggregate-output --parallel lint-ts lint-scss",

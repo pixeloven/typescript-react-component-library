@@ -16,9 +16,6 @@ process.on("unhandledRejection", err => {
     throw err;
 });
 
-/**
- * Ensure environment variables are read.
- */
 import * as fs from "fs";
 import "../config/env";
 
@@ -76,11 +73,6 @@ console.log();
  * We attempt to use the default port but if it is busy, we offer the user to
  * run on a different port. `choosePort()` Promise resolves to the next free port.
  */
-
-interface Error {
-    message?: string;
-}
-
 choosePort(DEFAULT_HOST, DEFAULT_PORT).then((port: string) => {
     const urls = prepareUrls(DEFAULT_PROTOCOL, DEFAULT_HOST, port);
     const compiler = createCompiler(webpack, config, appName, urls, useYarn);
