@@ -16,11 +16,11 @@ process.on("unhandledRejection", err => {
     throw err;
 });
 
-import * as fs from "fs";
+import * as fs from "fs-extra";
+import * as webpack from "webpack";
 import "../config/env";
 
 const chalk = require("chalk");
-const webpack = require("webpack");
 const WebpackDevServer = require("webpack-dev-server");
 const clearConsole = require("react-dev-utils/clearConsole");
 const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles");

@@ -1,4 +1,5 @@
 /* tslint:disable no-var-requires */
+
 /**
  * Initialize env vars
  */
@@ -14,12 +15,13 @@ process.on("unhandledRejection", err => {
     throw err;
 });
 
+import * as fs from "fs-extra";
+import * as webpack from "webpack";
+import {Stats} from "webpack";
 import "../config/env";
 
 const path = require("path");
 const chalk = require("chalk");
-const fs = require("fs-extra");
-const webpack = require("webpack");
 const config = require("../config/webpack.config.prod");
 const paths = require("../config/paths");
 const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles");
@@ -41,10 +43,20 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
     process.exit(1);
 }
 
+// TODO Need to figure out what these types really look like
+// https://www.npmjs.com/package/react-dev-utils
+type OpaqueFileSizes = [];
+
+interface BuildInformation {
+    stats: Stats;
+    previousFileSizes: OpaqueFileSizes;
+    warnings: string[];
+}
+
 // First, read the current file sizes in build directory.
 // This lets us display how much they changed later.
 measureFileSizesBeforeBuild(paths.appBuild)
-    .then(previousFileSizes => {
+    .then((previousFileSizes: OpaqueFileSizes) => {
         // Remove all content but keep the directory so that
         // if you"re in it, you don"t end up in Trash
         fs.emptyDirSync(paths.appBuild);
@@ -52,24 +64,15 @@ measureFileSizesBeforeBuild(paths.appBuild)
         copyPublicFolder();
         // Start the webpack build
         return build(previousFileSizes);
-    }).then(({ stats, previousFileSizes, warnings }) => {
+    }).then(({ stats, previousFileSizes, warnings }: BuildInformation) => {
         if (warnings.length) {
             console.log(chalk.yellow("Compiled with warnings.\n"));
             console.log(warnings.join("\n\n"));
-            console.log(
-                "\nSearch for the " +
-                chalk.underline(chalk.yellow("keywords")) +
-                " to learn more about each warning.",
-            );
-            console.log(
-                "To ignore, add " +
-                chalk.cyan("// eslint-disable-next-line") +
-                " to the line before.\n",
-            );
+            console.log("\nSearch for the " + chalk.underline(chalk.yellow("keywords")) + " to learn more about each warning.");
+            console.log("To ignore, add " + chalk.cyan("// eslint-disable-next-line") + " to the line before.\n");
         } else {
             console.log(chalk.green("Compiled successfully.\n"));
         }
-
         console.log("File sizes after gzip:\n");
         printFileSizesAfterBuild(
             stats,
@@ -104,15 +107,15 @@ measureFileSizesBeforeBuild(paths.appBuild)
  * Create the production build and print the deployment instructions.
  * @param previousFileSizes
  */
-function build(previousFileSizes) {
+function build(previousFileSizes: OpaqueFileSizes) {
     console.log("Creating an optimized production build...");
     const compiler = webpack(config);
     return new Promise((resolve, reject) => {
-        compiler.run((error: Error, stats) => {
-            if (error) {
-                return reject(error);
+        compiler.run((err: Error, stats: Stats) => {
+            if (err) {
+                return reject(err);
             }
-            const messages = formatWebpackMessages(stats.toJson({}, true));
+            const messages = formatWebpackMessages(stats.toJson("verbose"));
             if (messages.errors.length) {
                 // Only keep the first error. Others are often indicative
                 // of the same problem, but confuse the reader with noise.

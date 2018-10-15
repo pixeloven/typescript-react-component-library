@@ -242,6 +242,9 @@ REACT_APP_BAR=$DOMAIN/bar
 
 ## Current Tasks
 With all of the items below we need to consider whether we want to maintain a single application or multiple applications. Now that we are doing PWA, SSR, etc it might make sense to maintian a single app and just break it into templates and pages.
+* Add linting to all files
+    * First need to port everything to TS
+    * Second update lint scripts to check all files and prevent JS
 * Create a build step for importing in semantic ui scss (might not be a good idea yet)
 * Upgrade to webpack 4
     * More than likely required to gt storybook working
