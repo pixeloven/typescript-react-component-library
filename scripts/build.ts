@@ -15,42 +15,53 @@ process.on("unhandledRejection", err => {
     throw err;
 });
 
+/**
+ * Import dependencies
+ */
+import * as paths from "@config/paths";
+import * as config from "@config/webpack.config.prod";
+import chalk from "chalk";
 import * as fs from "fs-extra";
+import * as path from "path";
+import * as checkRequiredFiles from "react-dev-utils/checkRequiredFiles";
+import * as FileSizeReporter from "react-dev-utils/FileSizeReporter";
+import * as formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
+import * as printBuildError from "react-dev-utils/printBuildError";
+import * as printHostingInstructions from "react-dev-utils/printHostingInstructions";
 import * as webpack from "webpack";
 import {Stats} from "webpack";
 import "../config/env";
 
 /**
- * This section uses imports that do not have specific type script types.
- * @todo Need to eventually create our own definitions for these
+ * Get FileSizeReporter functions
  */
-/* tslint:disable no-var-requires */
-const path = require("path");
-const chalk = require("chalk");
-const config = require("../config/webpack.config.prod");
-const paths = require("../config/paths");
-const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles");
-const formatWebpackMessages = require("react-dev-utils/formatWebpackMessages");
-const printHostingInstructions = require("react-dev-utils/printHostingInstructions");
-const FileSizeReporter = require("react-dev-utils/FileSizeReporter");
-const printBuildError = require("react-dev-utils/printBuildError");
+const {
+    measureFileSizesBeforeBuild,
+    printFileSizesAfterBuild,
+} = FileSizeReporter;
 
-const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild;
-const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
-const useYarn = fs.existsSync(paths.yarnLockFile);
-/* tslint:enable no-var-requires */
-
-// These sizes are pretty large. We"ll warn for bundles exceeding them.
+/**
+ * Setup constants for budle size
+ * @description These sizes are pretty large. We"ll warn for bundles exceeding them.
+ */
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
-// Warn and crash if required files are missing
+/**
+ * Determine if we are using yarn or not
+ */
+const useYarn = fs.existsSync(paths.yarnLockFile);
+
+/**
+ * Warn and crash if required files are missing
+ */
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
     process.exit(1);
 }
 
-// TODO Need to figure out what these types really look like
-// https://www.npmjs.com/package/react-dev-utils
+/**
+ * Build Information
+ */
 type OpaqueFileSizes = [];
 
 interface BuildInformation {
@@ -59,8 +70,10 @@ interface BuildInformation {
     warnings: string[];
 }
 
-// First, read the current file sizes in build directory.
-// This lets us display how much they changed later.
+/**
+ * Read the current file sizes in build directory
+ * @description This lets us display how much they changed later.
+ */
 measureFileSizesBeforeBuild(paths.appBuild)
     .then((previousFileSizes: OpaqueFileSizes) => {
         // Remove all content but keep the directory so that

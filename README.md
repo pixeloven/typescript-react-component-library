@@ -242,6 +242,10 @@ REACT_APP_BAR=$DOMAIN/bar
 
 ## Current Tasks
 With all of the items below we need to consider whether we want to maintain a single application or multiple applications. Now that we are doing PWA, SSR, etc it might make sense to maintian a single app and just break it into templates and pages.
+* Write config in type script
+    * Create definitions https://medium.com/webpack/unambiguous-webpack-config-with-typescript-8519def2cac7
+* Add aliases for the atomic design stuff
+    * https://stackoverflow.com/questions/43281741/how-to-use-paths-in-tsconfig-json
 * Add linting to all files
     * First need to port everything to TS
     * Second update lint scripts to check all files and prevent JS

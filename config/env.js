@@ -58,7 +58,7 @@ dotenvFiles.forEach(dotenvFile => {
 process.env.NODE_PATH = (process.env.NODE_PATH || '')
     .split(path.delimiter)
     .filter(folder => folder && !path.isAbsolute(folder))
-    .map(folder => path.resolve(paths.appDirectory, folder))
+    .map(folder => path.resolve(paths.getAppDirectory, folder))
     .join(path.delimiter);
 
 

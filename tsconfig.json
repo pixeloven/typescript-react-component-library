@@ -24,24 +24,24 @@
     "noUnusedLocals": true,
     "declaration": true
   },
+  "typeRoots": [
+    "./definitions",
+    "./node_modules/@types"
+  ],
   "types": [
     "jest"
   ],
-  "typeRoots": [
-    "global.d.ts",
-    "node_modules/@types/react-dom/server/index.d.ts"
-  ],
+  "paths": {
+    "@config/*": ["config/*"]
+  },
   "exclude": [
     ".docker",
     ".storybook",
     "build",
-    "config",
     "jest",
     "node_modules",
     "public",
-    "scripts",
     "src/**/*.storybook.ts",
-    "src/**/*.test.ts",
-    "**/*.js"
+    "src/**/*.test.ts"
   ]
 }

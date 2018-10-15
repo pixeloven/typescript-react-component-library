@@ -34,6 +34,18 @@ function ensureSlash(path, needsSlash) {
 const appDirectory = fs.realpathSync(process.cwd());
 
 /**
+ * Return Application name
+ * @returns {string}
+ */
+const getAppName = () => require(resolveApp('package.json')).name || '';
+
+/**
+ * Return proxy settings
+ * @returns {WebpackDevServer.ProxyConfigMap | WebpackDevServer.ProxyConfigArray | features.proxy | * | jQuery.proxy | proxy | T}
+ */
+const getProxySettings = () => require(resolveApp('package.json')).proxy;
+
+/**
  * Resolves appDirectory from a relative path
  * @param relativePath
  * @returns {string}
@@ -67,7 +79,9 @@ function getServedPath(appPackageJson) {
  * @type Object
  */
 module.exports = {
-    appDirectory,
+    getAppDirectory,
+    getAppName,
+    getProxySettings,
     dotenv: resolveApp('.env'),
     publicUrl: getPublicUrl(resolveApp('package.json')),
     servedPath: getServedPath(resolveApp('package.json')),
