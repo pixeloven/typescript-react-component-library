@@ -1,4 +1,3 @@
-/* tslint:disable no-var-requires */
 /**
  * Initialize env vars
  */
@@ -18,10 +17,15 @@ process.on("unhandledRejection", err => {
 
 import * as fs from "fs-extra";
 import * as webpack from "webpack";
+import * as WebpackDevServer from "webpack-dev-server";
 import "../config/env";
 
+/**
+ * This section uses imports that do not have specific type script types.
+ * @todo Need to eventually create our own definitions for these
+ */
+/* tslint:disable no-var-requires */
 const chalk = require("chalk");
-const WebpackDevServer = require("webpack-dev-server");
 const clearConsole = require("react-dev-utils/clearConsole");
 const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles");
 const {
@@ -34,6 +38,11 @@ const openBrowser = require("react-dev-utils/openBrowser");
 const paths = require("../config/paths");
 const config = require("../config/webpack.config.dev");
 const createDevServerConfig = require("../config/webpackDevServer.config");
+
+// TODO should get this from env
+const appName = require(paths.appPackageJson).name;
+const proxySetting = require(paths.appPackageJson).proxy;
+/* tslint:enable no-var-requires */
 
 /**
  * Warn and crash if required files are missing
@@ -57,10 +66,6 @@ const DEFAULT_PROTOCOL = process.env.HTTPS === "true" ? "https" : "http";
 const useYarn = fs.existsSync(paths.yarnLockFile);
 const isInteractive = process.stdout.isTTY;
 
-// TODO should get this from env
-const appName = require(paths.appPackageJson).name;
-const proxySetting = require(paths.appPackageJson).proxy;
-
 /**
  * Notify user of host binding
  */
@@ -73,7 +78,7 @@ console.log();
  * We attempt to use the default port but if it is busy, we offer the user to
  * run on a different port. `choosePort()` Promise resolves to the next free port.
  */
-choosePort(DEFAULT_HOST, DEFAULT_PORT).then((port: string) => {
+choosePort(DEFAULT_HOST, DEFAULT_PORT).then((port: number) => {
     const urls = prepareUrls(DEFAULT_PROTOCOL, DEFAULT_HOST, port);
     const compiler = createCompiler(webpack, config, appName, urls, useYarn);
     const proxyConfig = prepareProxy(proxySetting, paths.appPublic);
@@ -82,9 +87,9 @@ choosePort(DEFAULT_HOST, DEFAULT_PORT).then((port: string) => {
         urls.lanUrlForConfig,
     );
     const devServer = new WebpackDevServer(compiler, serverConfig);
-    devServer.listen(port, DEFAULT_HOST, (errorMessage: string) => {
-        if (errorMessage) {
-            return console.log(errorMessage);
+    devServer.listen(port, DEFAULT_HOST, (error?: Error) => {
+        if (error && error.message) {
+            console.log(error.message);
         }
         if (isInteractive) {
             clearConsole();

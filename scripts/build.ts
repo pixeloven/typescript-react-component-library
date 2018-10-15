@@ -1,10 +1,10 @@
-/* tslint:disable no-var-requires */
-
 /**
  * Initialize env vars
  */
 process.env.BABEL_ENV = "production";
 process.env.NODE_ENV = "production";
+process.env.HOST = process.env.HOST || "0.0.0.0";
+process.env.PORT = process.env.PORT || "3000";
 
 /**
  * Makes the script crash on unhandled rejections instead of silently
@@ -20,6 +20,11 @@ import * as webpack from "webpack";
 import {Stats} from "webpack";
 import "../config/env";
 
+/**
+ * This section uses imports that do not have specific type script types.
+ * @todo Need to eventually create our own definitions for these
+ */
+/* tslint:disable no-var-requires */
 const path = require("path");
 const chalk = require("chalk");
 const config = require("../config/webpack.config.prod");
@@ -33,6 +38,7 @@ const printBuildError = require("react-dev-utils/printBuildError");
 const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
 const useYarn = fs.existsSync(paths.yarnLockFile);
+/* tslint:enable no-var-requires */
 
 // These sizes are pretty large. We"ll warn for bundles exceeding them.
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
