@@ -114,5 +114,5 @@ module.exports = {
     cssFilename: 'static/css/[name].css',
 
     serverOutputFile: 'server.js',
-    serverEntryPointFile: resolveApp('src/server/bootstrap.ts'),
+    serverEntryPointFile: resolveApp('src/server/index.ts'),
 };

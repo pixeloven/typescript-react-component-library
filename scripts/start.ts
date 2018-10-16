@@ -18,25 +18,22 @@ process.on("unhandledRejection", err => {
 /**
  * Import dependencies
  */
-// import * as paths from "@config/paths";
 // import * as config from "@config/webpack.config.dev";
 // import * as createDevServerConfig from "@config/webpackDevServer.config";
 
 /* tslint:disable no-var-requires */
-const paths = require("../config/paths");
 const config = require("../config/webpack.config.dev");
 const createDevServerConfig = require("../config/webpackDevServer.config");
 /* tslint:enable no-var-requires */
+import * as assert from "assert";
 import chalk from "chalk";
-import * as fs from "fs-extra";
-import * as checkRequiredFiles from "react-dev-utils/checkRequiredFiles";
 import * as clearConsole from "react-dev-utils/clearConsole";
 import * as openBrowser from "react-dev-utils/openBrowser";
 import * as WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
 import * as webpack from "webpack";
 import * as WebpackDevServer from "webpack-dev-server";
 import "../config/env";
-import Applicaton from "./Application";
+import Application from "./Application";
 
 /**
  * Get WebpackDevServerUtils functions
@@ -49,14 +46,13 @@ const {
 } = WebpackDevServerUtils;
 
 /**
- * Get application settings
- */
-const app = new Applicaton();
-
-/**
  * Warn and crash if required files are missing
  */
-if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
+try {
+    assert(Application.clientEntryPoint && Application.publicEntryPoint);
+} catch (error) {
+    console.log(chalk.red(error.message));
+    console.log();
     process.exit(1);
 }
 
@@ -68,11 +64,11 @@ const signals: Signals[] = ["SIGINT", "SIGTERM"];
 
 /**
  * Set default constants
+ * TODO move to config
  */
 const DEFAULT_PORT = parseInt(process.env.PORT, 10);
 const DEFAULT_HOST = process.env.HOST;
 const DEFAULT_PROTOCOL = process.env.HTTPS === "true" ? "https" : "http";
-const useYarn = fs.existsSync(paths.yarnLockFile);
 const isInteractive = process.stdout.isTTY;
 
 /**
@@ -89,8 +85,8 @@ console.log();
  */
 choosePort(DEFAULT_HOST, DEFAULT_PORT).then((port: number) => {
     const urls = prepareUrls(DEFAULT_PROTOCOL, DEFAULT_HOST, port);
-    const compiler = createCompiler(webpack, config, app.name, urls, useYarn);
-    const proxyConfig = prepareProxy(app.proxySettings, paths.appPublic);
+    const compiler = createCompiler(webpack, config, Application.appName, urls, Application.usingYarn);
+    const proxyConfig = prepareProxy(Application.proxySettings, Application.publicPath);
     const serverConfig = createDevServerConfig(
         proxyConfig,
         urls.lanUrlForConfig,
