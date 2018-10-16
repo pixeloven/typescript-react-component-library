@@ -79,7 +79,7 @@ function getServedPath(appPackageJson) {
  * @type Object
  */
 module.exports = {
-    getAppDirectory,
+    appDirectory,
     getAppName,
     getProxySettings,
     dotenv: resolveApp('.env'),

@@ -18,9 +18,15 @@ process.on("unhandledRejection", err => {
 /**
  * Import dependencies
  */
-import * as paths from "@config/paths";
-import * as config from "@config/webpack.config.dev";
-import * as createDevServerConfig from "@config/webpackDevServer.config";
+// import * as paths from "@config/paths";
+// import * as config from "@config/webpack.config.dev";
+// import * as createDevServerConfig from "@config/webpackDevServer.config";
+
+/* tslint:disable no-var-requires */
+const paths = require("../config/paths");
+const config = require("../config/webpack.config.dev");
+const createDevServerConfig = require("../config/webpackDevServer.config");
+/* tslint:enable no-var-requires */
 import chalk from "chalk";
 import * as fs from "fs-extra";
 import * as checkRequiredFiles from "react-dev-utils/checkRequiredFiles";
@@ -30,6 +36,7 @@ import * as WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
 import * as webpack from "webpack";
 import * as WebpackDevServer from "webpack-dev-server";
 import "../config/env";
+import Applicaton from "./Application";
 
 /**
  * Get WebpackDevServerUtils functions
@@ -44,8 +51,7 @@ const {
 /**
  * Get application settings
  */
-const appName = paths.getAppName();
-const proxySetting = paths.getProxySettings();
+const app = new Applicaton();
 
 /**
  * Warn and crash if required files are missing
@@ -83,8 +89,8 @@ console.log();
  */
 choosePort(DEFAULT_HOST, DEFAULT_PORT).then((port: number) => {
     const urls = prepareUrls(DEFAULT_PROTOCOL, DEFAULT_HOST, port);
-    const compiler = createCompiler(webpack, config, appName, urls, useYarn);
-    const proxyConfig = prepareProxy(proxySetting, paths.appPublic);
+    const compiler = createCompiler(webpack, config, app.name, urls, useYarn);
+    const proxyConfig = prepareProxy(app.proxySettings, paths.appPublic);
     const serverConfig = createDevServerConfig(
         proxyConfig,
         urls.lanUrlForConfig,

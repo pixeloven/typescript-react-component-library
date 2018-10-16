@@ -18,8 +18,14 @@ process.on("unhandledRejection", err => {
 /**
  * Import dependencies
  */
-import * as paths from "@config/paths";
-import * as config from "@config/webpack.config.prod";
+// import * as paths from "@config/paths";
+// import * as config from "@config/webpack.config.dev";
+
+/* tslint:disable no-var-requires */
+const paths = require("../config/paths");
+const config = require("../config/webpack.config.prod");
+/* tslint:enable no-var-requires */
+
 import chalk from "chalk";
 import * as fs from "fs-extra";
 import * as path from "path";
