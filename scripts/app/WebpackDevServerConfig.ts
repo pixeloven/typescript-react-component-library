@@ -7,7 +7,7 @@ import {
     Server,
 } from "./configs/servers";
 
-class WebpackDevServerConfg {
+class WebpackDevServerConfig {
 
     protected server: Server;
     protected publicPath: string;
@@ -93,4 +93,4 @@ class WebpackDevServerConfg {
     }
 }
 
-export default WebpackDevServerConfg;
+export default WebpackDevServerConfig;

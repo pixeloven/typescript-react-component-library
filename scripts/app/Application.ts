@@ -16,6 +16,7 @@ export interface Package {
     proxy?: Proxy;
 }
 
+// TODO consolidate this under either source or lib or something else.
 class Application {
 
     /**
