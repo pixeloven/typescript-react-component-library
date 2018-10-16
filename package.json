@@ -16,6 +16,7 @@
     "typescript"
   ],
   "dependencies": {
+    "@types/react-redux": "^6.0.9",
     "classnames": "^2.2.6",
     "cors": "^2.8.4",
     "express": "^4.16.3",
