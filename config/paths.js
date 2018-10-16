@@ -88,13 +88,16 @@ module.exports = {
     yarnLockFile: resolveApp('yarn.lock'),
     testsSetup: resolveApp('src/setupTests.ts'),
 
+    appRoot: resolveApp('.'),
+    appSrc: resolveApp('src'),
+    appConfig: resolveApp('config'),
     appBuild: resolveApp('build'),
     appPublic: resolveApp('public'),
+    appNodeModules: resolveApp('node_modules'),
+
     appHtml: resolveApp('public/index.html'),
     appIndexJs: resolveApp('src/client/index.tsx'),
     appPackageJson: resolveApp('package.json'),
-    appSrc: resolveApp('src'),
-    appNodeModules: resolveApp('node_modules'),
     appTsConfig: resolveApp('tsconfig.json'),
     appTsProdConfig: resolveApp('tsconfig.prod.json'),
     appTsLint: resolveApp('tslint.json'),

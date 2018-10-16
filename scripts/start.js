@@ -18,8 +18,8 @@ process.on("unhandledRejection", function (err) {
 /**
  * Import dependencies
  */
-var paths = require("@config/paths");
-var config = require("@config/webpack.config.dev");
+var paths = require("config/paths");
+var config = require("config/webpack.config.dev");
 var createDevServerConfig = require("@config/webpackDevServer.config");
 var chalk_1 = require("chalk");
 var fs = require("fs-extra");
