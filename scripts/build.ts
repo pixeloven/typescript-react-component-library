@@ -1,5 +1,3 @@
-import * as assert from "assert";
-
 /**
  * Initialize env vars
  */
@@ -20,13 +18,7 @@ process.on("unhandledRejection", err => {
 /**
  * Import dependencies
  */
-// import * as paths from "@config/paths";
-// import * as config from "@config/webpack.config.dev";
-
-/* tslint:disable no-var-requires */
-const config = require("../config/webpack.config.prod");
-/* tslint:enable no-var-requires */
-
+import * as assert from "assert";
 import chalk from "chalk";
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -68,6 +60,7 @@ try {
     const appPackage = Application.package; // TODO need to cleanup package.json since we don't use everything there.
     const usingYarn = Application.usingYarn;
     const publicUrl = Application.publicUrl; // TODO doesn't seem to get what's in process.env... need to read this in better
+    const config = Application.webpack("production");
 
     /**
      * Read the current file sizes in build directory
@@ -76,7 +69,7 @@ try {
     measureFileSizesBeforeBuild(buildPath)
         .then((previousFileSizes: OpaqueFileSizes) => {
             copyPublicDirIntoFreshBuildDir();
-            return build(previousFileSizes);
+            return build(config, previousFileSizes);
         }).then(({ stats, previousFileSizes, warnings }: BuildInformation) => {
             if (warnings.length) {
                 console.log(chalk.yellow("Compiled with warnings.\n"));
@@ -134,10 +127,11 @@ interface BuildInformation {
 
 /**
  * Create the production build and print the deployment instructions.
+ * @param config
  * @param previousFileSizes
  * TODO move to class
  */
-function build(previousFileSizes: OpaqueFileSizes) {
+function build(config: object, previousFileSizes: OpaqueFileSizes) {
     console.log("Creating an optimized production build...");
     const compiler = webpack(config);
     return new Promise((resolve, reject) => {

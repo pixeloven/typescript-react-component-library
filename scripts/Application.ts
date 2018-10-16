@@ -1,10 +1,14 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as WebpackDevServer from "webpack-dev-server";
+import {Environment} from "./configs/env";
+import files from "./configs/files";
+import paths from "./configs/paths";
+import servers, {
+    Proxy,
+    Server,
+} from "./configs/servers";
+import webpack from "./configs/webpack";
 import FileNotFoundException from "./exceptions/FileNotFoundException";
-
-export type Environment = "development" | "production";
-export type Proxy = WebpackDevServer.ProxyConfigMap | WebpackDevServer.ProxyConfigArray | undefined;
 
 export interface Package {
     name: string;
@@ -12,81 +16,23 @@ export interface Package {
     proxy?: Proxy;
 }
 
-export interface Server {
-    host: string;
-    port: number;
-    protocol: string;
-}
-
-// TODO move to another file and create one for dev and one for prod
-export interface Config {
-    file: {
-        entryPoint: {
-            client: string;
-            public: string;
-            server: string;
-        };
-        lock: string;
-        package: string;
-    };
-    path: {
-        app: string;
-        build: string;
-        config: string;
-        modules: string;
-        public: string;
-    };
-    server: {
-        development: Server;
-        production: Server;
-    };
-}
-
-// TODO Should get some of this from .env
-// TODO process.env should be injected???
-const DEFAULT_HOST = process.env.HOST || "0.0.0.0";
-const DEFAULT_PORT = parseInt(process.env.PORT || "8080", 10);
-const DEFAULT_PROTOCOL = process.env.PROTOCOL || "http";
-
-export const config: Config = {
-    file: {
-        entryPoint: {
-            client: "src/client/index.tsx",
-            public: "public/index.html",
-            server: "src/server/index.ts",
-        },
-        lock: "yarn.lock",
-        package: "package.json",
-    },
-    path: {
-        app: "src",
-        build: "build",
-        config: "config",
-        modules: "node_modules",
-        public: "public",
-    },
-    server: {
-        development: {
-            host: DEFAULT_HOST,
-            port: DEFAULT_PORT,
-            protocol: DEFAULT_PROTOCOL,
-        },
-        production: {
-            host: DEFAULT_HOST,
-            port: DEFAULT_PORT,
-            protocol: DEFAULT_PROTOCOL,
-        },
-    },
-};
-
 class Application {
+
+    /**
+     * Return webpack config
+     * @param env
+     */
+    public static webpack(env: Environment) {
+        const absolutePath = Application.resolvePath(webpack[env].config);
+        return require(absolutePath);
+    }
 
     /**
      * Return server configuration for specific environment
      * @param env
      */
-    public static serve(env: Environment): Server {
-        return config.server[env];
+    public static server(env: Environment): Server {
+        return servers[env];
     }
 
     /**
@@ -102,7 +48,7 @@ class Application {
      * @returns {string}
      */
     public static get buildPath(): string {
-        return Application.resolvePath(config.path.build);
+        return Application.resolvePath(paths.build);
     }
 
     /**
@@ -119,7 +65,7 @@ class Application {
      * @returns {string}
      */
     public static get publicEntryPoint(): string {
-        return Application.resolvePath(config.file.entryPoint.public);
+        return Application.resolvePath(files.entryPoint.public);
     }
 
     /**
@@ -127,7 +73,7 @@ class Application {
      * @returns {string}
      */
     public static get publicPath(): string {
-        return Application.resolvePath(config.path.public);
+        return Application.resolvePath(paths.public);
     }
 
     /**
@@ -143,7 +89,7 @@ class Application {
      * @returns {string}
      */
     public static get clientEntryPoint(): string {
-        return Application.resolvePath(config.file.entryPoint.client);
+        return Application.resolvePath(files.entryPoint.client);
     }
 
     /**
@@ -151,7 +97,7 @@ class Application {
      * @returns {string}
      */
     public static get serverEntryPoint(): string {
-        return Application.resolvePath(config.file.entryPoint.server);
+        return Application.resolvePath(files.entryPoint.server);
     }
 
     /**
@@ -167,7 +113,7 @@ class Application {
      * @returns {string}
      */
     public static get package(): Package {
-        const absolutePath = Application.resolvePath(config.file.package);
+        const absolutePath = Application.resolvePath(files.package);
         return require(absolutePath);
     }
 
@@ -185,11 +131,19 @@ class Application {
     }
 
     /**
+     * Return src path
+     * @returns {string}
+     */
+    public static get srcPath(): string {
+        return Application.resolvePath(paths.src);
+    }
+
+    /**
      * Check if we are using yarn or another package manager.
      * @return {boolean}
      */
     public static get usingYarn(): boolean {
-        return config.file.lock.includes("yarn");
+        return files.lock.includes("yarn");
     }
 }
 
