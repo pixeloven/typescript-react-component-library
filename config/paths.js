@@ -83,7 +83,7 @@ module.exports = {
     getAppName,
     getProxySettings,
     dotenv: resolveApp('.env'),
-    publicUrl: getPublicUrl(resolveApp('package.json')),
+    publicUrl: getPublicUrl(resolveApp('package.json')), // TODO in application
     servedPath: getServedPath(resolveApp('package.json')),
     yarnLockFile: resolveApp('yarn.lock'),
     testsSetup: resolveApp('src/setupTests.ts'),

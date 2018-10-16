@@ -3,10 +3,12 @@ import * as path from "path";
 import * as WebpackDevServer from "webpack-dev-server";
 import FileNotFoundException from "./exceptions/FileNotFoundException";
 
+export type Enviroment = "development" | "production";
 export type Proxy = WebpackDevServer.ProxyConfigMap | WebpackDevServer.ProxyConfigArray | undefined;
 
 export interface Package {
     name: string;
+    homepage: string;
     proxy?: Proxy;
 }
 
@@ -49,28 +51,15 @@ export const config: Config = {
     },
 };
 
+// TODO process.env should be injected???
 class Application {
 
     /**
-     * Resolve relative path
-     * @param relativePath
-     * @param strict if true returns
+     * Return configuration for specific environment
+     * @param env
      */
-    public static resolvePath(relativePath: string, strict: boolean = true): string {
-        const absolutePath = path.resolve(Application.processPath, relativePath);
-        if (strict && !fs.existsSync(absolutePath)) {
-            throw new FileNotFoundException(`No such file or directory ${absolutePath}.`);
-        }
-        return absolutePath;
-    }
-
-    /**
-     * Return Application name
-     * @returns {string}
-     */
-    public static get package(): Package {
-        const absolutePath = Application.resolvePath(config.file.package);
-        return require(absolutePath);
+    public static config(env: Enviroment): string {
+        return "";
     }
 
     /**
@@ -79,6 +68,14 @@ class Application {
      */
     public static get appName(): string {
         return Application.package.name;
+    }
+
+    /**
+     * Return build path
+     * @returns {string}
+     */
+    public static get buildPath(): string {
+        return Application.resolvePath(config.path.build);
     }
 
     /**
@@ -107,6 +104,14 @@ class Application {
     }
 
     /**
+     * Return public url
+     * @returns {string}
+     */
+    public static get publicUrl(): string {
+        return process.env.PUBLIC_URL || Application.package.homepage;
+    }
+
+    /**
      * Return Application name
      * @returns {string}
      */
@@ -128,6 +133,28 @@ class Application {
      */
     public static get processPath(): string {
         return fs.realpathSync(process.cwd());
+    }
+
+    /**
+     * Return Application name
+     * @returns {string}
+     */
+    public static get package(): Package {
+        const absolutePath = Application.resolvePath(config.file.package);
+        return require(absolutePath);
+    }
+
+    /**
+     * Resolve relative path
+     * @param relativePath
+     * @param strict if true returns
+     */
+    public static resolvePath(relativePath: string, strict: boolean = true): string {
+        const absolutePath = path.resolve(Application.processPath, relativePath);
+        if (strict && !fs.existsSync(absolutePath)) {
+            throw new FileNotFoundException(`No such file or directory ${absolutePath}.`);
+        }
+        return absolutePath;
     }
 
     /**

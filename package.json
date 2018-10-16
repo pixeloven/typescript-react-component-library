@@ -4,7 +4,7 @@
   "description": "TypeScript React component library and demo application",
   "author": "Brian Gebel <me@pixeloven.com>",
   "license": "MIT",
-  "homepage": "https://github.com/pixeloven/typescript-react-component-library/blob/master/README.md",
+  "homepage": "https://github.com/pixeloven/typescript-react-component-library",
   "repository": {
     "type": "git",
     "url": "https://github.com/pixeloven/typescript-react-component-library.git"
@@ -128,6 +128,7 @@
     "build-ts": "ts-node --files scripts/build.ts",
     "build-story": "build-storybook -c .storybook -o build/docs",
     "clean": "rm -rf ./build",
+    "deploy": "node build/server.js",
     "lint": "npm-run-all --aggregate-output --parallel lint-ts lint-scss",
     "lint-fix": "npm-run-all --aggregate-output --parallel lint-ts-fix lint-scss-fix",
     "lint-ts": "tslint src/**/*.{ts,tsx}",
@@ -139,7 +140,6 @@
     "start-scss": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "start-ts": "ts-node --files scripts/start.ts",
     "start-story": "start-storybook -p 9001 -c .storybook",
-    "start-ssr": "node build/server.js",
     "test": "jest --watch --env=jsdom",
     "test-coverage": "jest --coverage --env=jsdom"
   },

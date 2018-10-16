@@ -1,3 +1,5 @@
+import * as assert from "assert";
+
 /**
  * Initialize env vars
  */
@@ -22,14 +24,12 @@ process.on("unhandledRejection", err => {
 // import * as config from "@config/webpack.config.dev";
 
 /* tslint:disable no-var-requires */
-const paths = require("../config/paths");
 const config = require("../config/webpack.config.prod");
 /* tslint:enable no-var-requires */
 
 import chalk from "chalk";
 import * as fs from "fs-extra";
 import * as path from "path";
-import * as checkRequiredFiles from "react-dev-utils/checkRequiredFiles";
 import * as FileSizeReporter from "react-dev-utils/FileSizeReporter";
 import * as formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
 import * as printBuildError from "react-dev-utils/printBuildError";
@@ -37,6 +37,7 @@ import * as printHostingInstructions from "react-dev-utils/printHostingInstructi
 import * as webpack from "webpack";
 import {Stats} from "webpack";
 import "../config/env";
+import Application from "./Application";
 
 /**
  * Get FileSizeReporter functions
@@ -54,14 +55,69 @@ const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 /**
- * Determine if we are using yarn or not
- */
-const useYarn = fs.existsSync(paths.yarnLockFile);
-
-/**
  * Warn and crash if required files are missing
  */
-if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
+
+try {
+    // TODO can remove once we use this in our webpack setup
+    assert(Application.clientEntryPoint);
+    assert(Application.serverEntryPoint);
+    assert(Application.publicEntryPoint);
+
+    const buildPath = Application.buildPath;
+    const appPackage = Application.package; // TODO need to cleanup package.json since we don't use everything there.
+    const usingYarn = Application.usingYarn;
+    const publicUrl = Application.publicUrl; // TODO doesn't seem to get what's in process.env... need to read this in better
+
+    /**
+     * Read the current file sizes in build directory
+     * @description This lets us display how much they changed later.
+     */
+    measureFileSizesBeforeBuild(buildPath)
+        .then((previousFileSizes: OpaqueFileSizes) => {
+            copyPublicDirIntoFreshBuildDir();
+            return build(previousFileSizes);
+        }).then(({ stats, previousFileSizes, warnings }: BuildInformation) => {
+            if (warnings.length) {
+                console.log(chalk.yellow("Compiled with warnings.\n"));
+                console.log(warnings.join("\n\n"));
+                console.log("\nSearch for the " + chalk.underline(chalk.yellow("keywords")) + " to learn more about each warning.");
+                console.log("To ignore, add " + chalk.cyan("// eslint-disable-next-line") + " to the line before.\n");
+            } else {
+                console.log(chalk.green("Compiled successfully.\n"));
+            }
+            console.log("File sizes after gzip:\n");
+            printFileSizesAfterBuild(
+                stats,
+                previousFileSizes,
+                buildPath,
+                WARN_AFTER_BUNDLE_GZIP_SIZE,
+                WARN_AFTER_CHUNK_GZIP_SIZE,
+            );
+            console.log();
+
+            // TODO how do we get server stuff here too
+            const publicPath = config[0].output.publicPath;
+            const buildRelativePath = path.relative(process.cwd(), buildPath);
+
+            // TODO we should copy and write this custom for a real deploy process
+            printHostingInstructions(
+                appPackage,
+                publicUrl,
+                publicPath,
+                buildRelativePath,
+                usingYarn,
+            );
+        },
+        (error: Error) => {
+            console.log(chalk.red("Failed to compile.\n"));
+            printBuildError(error);
+            process.exit(1);
+        },
+    );
+} catch (error) {
+    console.log(chalk.red(error.message));
+    console.log();
     process.exit(1);
 }
 
@@ -77,60 +133,9 @@ interface BuildInformation {
 }
 
 /**
- * Read the current file sizes in build directory
- * @description This lets us display how much they changed later.
- */
-measureFileSizesBeforeBuild(paths.appBuild)
-    .then((previousFileSizes: OpaqueFileSizes) => {
-        // Remove all content but keep the directory so that
-        // if you"re in it, you don"t end up in Trash
-        fs.emptyDirSync(paths.appBuild);
-        // Merge with the public folder
-        copyPublicFolder();
-        // Start the webpack build
-        return build(previousFileSizes);
-    }).then(({ stats, previousFileSizes, warnings }: BuildInformation) => {
-        if (warnings.length) {
-            console.log(chalk.yellow("Compiled with warnings.\n"));
-            console.log(warnings.join("\n\n"));
-            console.log("\nSearch for the " + chalk.underline(chalk.yellow("keywords")) + " to learn more about each warning.");
-            console.log("To ignore, add " + chalk.cyan("// eslint-disable-next-line") + " to the line before.\n");
-        } else {
-            console.log(chalk.green("Compiled successfully.\n"));
-        }
-        console.log("File sizes after gzip:\n");
-        printFileSizesAfterBuild(
-            stats,
-            previousFileSizes,
-            paths.appBuild,
-            WARN_AFTER_BUNDLE_GZIP_SIZE,
-            WARN_AFTER_CHUNK_GZIP_SIZE,
-        );
-        console.log();
-
-        const appPackage = require(paths.appPackageJson);
-        const publicUrl = paths.publicUrl;
-        const publicPath = config[0].output.publicPath;
-        const buildFolder = path.relative(process.cwd(), paths.appBuild);
-        // TODO how do we get server stuff here too
-        printHostingInstructions(
-            appPackage,
-            publicUrl,
-            publicPath,
-            buildFolder,
-            useYarn,
-        );
-    },
-    (error: Error) => {
-        console.log(chalk.red("Failed to compile.\n"));
-        printBuildError(error);
-        process.exit(1);
-    },
-);
-
-/**
  * Create the production build and print the deployment instructions.
  * @param previousFileSizes
+ * TODO move to class
  */
 function build(previousFileSizes: OpaqueFileSizes) {
     console.log("Creating an optimized production build...");
@@ -167,9 +172,17 @@ function build(previousFileSizes: OpaqueFileSizes) {
     });
 }
 
-function copyPublicFolder() {
-    fs.copySync(paths.appPublic, paths.appBuild, {
+/**
+ * Copy public folder to fresh build
+ * TODO move to class
+ */
+function copyPublicDirIntoFreshBuildDir() {
+    const buildPath = Application.buildPath;
+    const publicPath = Application.publicPath;
+    const publicEntryPoint = Application.publicEntryPoint;
+    fs.emptyDirSync(buildPath);
+    fs.copySync(publicPath, buildPath, {
         dereference: true,
-        filter: file => file !== paths.appHtml,
+        filter: file => file !== publicEntryPoint,
     });
 }

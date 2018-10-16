@@ -12,7 +12,6 @@ declare module "*.md";
  * http://definitelytyped.org/
  */
 declare module "chalk";
-declare module "react-dev-utils/checkRequiredFiles";
 declare module "react-dev-utils/clearConsole";
 declare module "react-dev-utils/FileSizeReporter";
 declare module "react-dev-utils/formatWebpackMessages";
