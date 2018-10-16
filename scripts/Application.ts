@@ -3,13 +3,19 @@ import * as path from "path";
 import * as WebpackDevServer from "webpack-dev-server";
 import FileNotFoundException from "./exceptions/FileNotFoundException";
 
-export type Enviroment = "development" | "production";
+export type Environment = "development" | "production";
 export type Proxy = WebpackDevServer.ProxyConfigMap | WebpackDevServer.ProxyConfigArray | undefined;
 
 export interface Package {
     name: string;
     homepage: string;
     proxy?: Proxy;
+}
+
+export interface Server {
+    host: string;
+    port: number;
+    protocol: string;
 }
 
 // TODO move to another file and create one for dev and one for prod
@@ -30,7 +36,17 @@ export interface Config {
         modules: string;
         public: string;
     };
+    server: {
+        development: Server;
+        production: Server;
+    };
 }
+
+// TODO Should get some of this from .env
+// TODO process.env should be injected???
+const DEFAULT_HOST = process.env.HOST || "0.0.0.0";
+const DEFAULT_PORT = parseInt(process.env.PORT || "8080", 10);
+const DEFAULT_PROTOCOL = process.env.PROTOCOL || "http";
 
 export const config: Config = {
     file: {
@@ -49,17 +65,28 @@ export const config: Config = {
         modules: "node_modules",
         public: "public",
     },
+    server: {
+        development: {
+            host: DEFAULT_HOST,
+            port: DEFAULT_PORT,
+            protocol: DEFAULT_PROTOCOL,
+        },
+        production: {
+            host: DEFAULT_HOST,
+            port: DEFAULT_PORT,
+            protocol: DEFAULT_PROTOCOL,
+        },
+    },
 };
 
-// TODO process.env should be injected???
 class Application {
 
     /**
-     * Return configuration for specific environment
+     * Return server configuration for specific environment
      * @param env
      */
-    public static config(env: Enviroment): string {
-        return "";
+    public static serve(env: Environment): Server {
+        return config.server[env];
     }
 
     /**

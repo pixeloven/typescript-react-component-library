@@ -1,10 +1,10 @@
+
 /**
  * Initialize env vars
  */
 process.env.BABEL_ENV = "development";
-process.env.NODE_ENV = "development";
-process.env.HOST = process.env.HOST || "0.0.0.0";
-process.env.PORT = process.env.PORT || "3000";
+process.env.NODE_ENV = "development"; // TODO read from .env
+import "../config/env"; // TODO make ENV a type script enforced req
 
 /**
  * Makes the script crash on unhandled rejections instead of silently
@@ -31,7 +31,7 @@ import * as openBrowser from "react-dev-utils/openBrowser";
 import * as WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
 import * as webpack from "webpack";
 import * as WebpackDevServer from "webpack-dev-server";
-import "../config/env";
+
 import Application from "./Application";
 
 /**
@@ -54,10 +54,20 @@ const signals: Signals[] = ["SIGINT", "SIGTERM"];
  * Set default constants
  * TODO move to config
  */
-const DEFAULT_PORT = parseInt(process.env.PORT, 10);
-const DEFAULT_HOST = process.env.HOST;
-const DEFAULT_PROTOCOL = process.env.HTTPS === "true" ? "https" : "http";
 const isInteractive = process.stdout.isTTY;
+
+/**
+ * Sleep application for a given time
+ * @param milliseconds
+ */
+function sleep(milliseconds: number) {
+    const start = new Date().getTime();
+    for (let i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {
+            break;
+        }
+    }
+}
 
 /**
  * Warn and crash if required files are missing
@@ -76,20 +86,21 @@ try {
     const publicPath = Application.publicPath;
     const usingYarn = Application.usingYarn;
 
+    const server = Application.serve("development");
+
     /**
      * We attempt to use the default port but if it is busy, we offer the user to
      * run on a different port. `choosePort()` Promise resolves to the next free port.
      */
-    choosePort(DEFAULT_HOST, DEFAULT_PORT).then((port: number) => {
+    choosePort(server.host, server.port).then((port: number) => {
         /**
          * Notify user of host binding
          */
-        console.log(chalk.cyan(`Attempting to bind to HOST environment variable: ${chalk.yellow(chalk.bold(DEFAULT_HOST))}`));
-        console.log(`If this was unintentional, check that you haven"t mistakenly set it in your shell.`);
-        console.log(`Learn more here: ${chalk.yellow("http://bit.ly/2mwWSwH")}`);
+        console.log(chalk.cyan(`Attempting to bind to HOST environment variable: ${chalk.yellow(chalk.bold(server.host))}`));
         console.log();
+        sleep(1000);
 
-        const urls = prepareUrls(DEFAULT_PROTOCOL, DEFAULT_HOST, port);
+        const urls = prepareUrls(server.protocol, server.host, port);
         const compiler = createCompiler(webpack, config, appName, urls, usingYarn);
         const proxyConfig = prepareProxy(proxySettings, publicPath);
         const serverConfig = createDevServerConfig(
@@ -97,7 +108,7 @@ try {
             urls.lanUrlForConfig,
         );
         const devServer = new WebpackDevServer(compiler, serverConfig);
-        devServer.listen(port, DEFAULT_HOST, (error?: Error) => {
+        devServer.listen(port, server.host, (error?: Error) => {
             if (error && error.message) {
                 console.log(error.message);
             }
