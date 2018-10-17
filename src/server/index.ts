@@ -1,7 +1,7 @@
-import * as cors from "cors";
-import * as express from "express";
-import * as expressWinston from "express-winston";
-import * as winston from "winston";
+import cors from "cors";
+import express from "express";
+import expressWinston from "express-winston";
+import winston from "winston";
 import {config} from "./config";
 import {DefaultController} from "./controllers";
 
