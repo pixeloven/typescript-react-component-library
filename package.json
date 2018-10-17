@@ -16,7 +16,6 @@
     "typescript"
   ],
   "dependencies": {
-    "@types/react-redux": "^6.0.9",
     "classnames": "^2.2.6",
     "cors": "^2.8.4",
     "express": "^4.16.3",
@@ -68,6 +67,7 @@
     "@types/storybook__react": "^3.0.9",
     "@types/webpack": "^3.8.16",
     "@types/webpack-dev-server": "^3.1.1",
+    "@types/react-redux": "^6.0.9",
     "autoprefixer": "9.1.5",
     "babel-core": "^6.26.0",
     "babel-jest": "^22.1.0",
