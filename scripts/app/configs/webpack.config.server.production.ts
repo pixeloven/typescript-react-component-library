@@ -9,9 +9,10 @@ import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import path from "path";
 import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
+import Application from "../Application";
+import files from "./files";
 
 const getClientEnvironment = require("../../../config/env");
-const paths = require("../../../config/paths");
 
 process.env = process.env || {};
 process.env.NODE_ENV = process.env.NODE_ENV || "production";
@@ -21,7 +22,7 @@ process.env.NODE_PATH = process.env.NODE_PATH || "";
  * Webpack uses `publicPath` to determine where the app is being served from.
  * It requires a trailing slash, or the file assets will get an incorrect path.
  */
-const publicPath = paths.servedPath;
+const publicPath = Application.servedPath;
 
 /**
  * publicUrl is just like `publicPath`, but we will provide it to our app
@@ -52,12 +53,12 @@ if (env.stringified["process.env"].NODE_ENV !== '"production"') {
 }
 
 const serverConfig = {
-    entry: [paths.serverEntryPointFile],
+    entry: [Application.serverEntryPoint],
     target: "node",
     externals: [webpackNodeExternals()],
     output: {
-        path: paths.appBuild,
-        filename: paths.serverOutputFile,
+        path: Application.buildPath,
+        filename: files.outputPattern.jsServer,
         publicPath,
     },
     // Don't attempt to continue if there are any errors.
@@ -68,14 +69,14 @@ const serverConfig = {
         rules: [
             {
                 test: /\.(ts|tsx)$/,
-                include: paths.appSrc,
+                include: Application.srcPath,
                 use: [
                     {
                         loader: require.resolve("ts-loader"),
                         options: {
                             // disable type checker - we will use it in fork plugin
                             transpileOnly: true,
-                            configFile: paths.appTsProdConfig,
+                            configFile: Application.tsConfigProd,
                         },
                     },
                 ],
@@ -106,8 +107,8 @@ const serverConfig = {
         // Perform type checking and linting in a separate process to speed up compilation
         new ForkTsCheckerWebpackPlugin({
             async: false,
-            tsconfig: paths.appTsProdConfig,
-            tslint: paths.appTsLint,
+            tsconfig: Application.tsConfigProd,
+            tslint: Application.tsLint,
         }),
     ],
     resolve: {
@@ -139,7 +140,7 @@ const serverConfig = {
         // We placed these paths second because we want `node_modules` to "win"
         // if there are any conflicts. This matches Node resolution mechanism.
         // https://github.com/facebookincubator/create-react-app/issues/253
-        modules: ["node_modules", paths.appNodeModules].concat(
+        modules: ["node_modules", Application.nodeModulesPath].concat(
             // It is guaranteed to exist because we tweak it in `env.js`
             process.env.NODE_PATH.split(path.delimiter).filter(Boolean),
         ),
@@ -149,8 +150,8 @@ const serverConfig = {
             // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
             // please link the files into your node_modules/ and let module-resolution kick in.
             // Make sure your source files are compiled, as they will not be processed in any way.
-            new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
-            new TsconfigPathsPlugin({ configFile: paths.appTsProdConfig }),
+            new ModuleScopePlugin(Application.srcPath, [Application.packagePath]),
+            new TsconfigPathsPlugin({ configFile: Application.tsConfigProd }),
         ],
     },
 };

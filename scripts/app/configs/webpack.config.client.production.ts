@@ -13,9 +13,10 @@ import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import webpack, {DevtoolModuleFilenameTemplateInfo} from "webpack";
 import ManifestPlugin from "webpack-manifest-plugin";
+import Application from "../Application";
+import files from "./files";
 
 const getClientEnvironment = require("../../../config/env");
-const paths = require("../../../config/paths");
 
 process.env = process.env || {};
 process.env.NODE_ENV = process.env.NODE_ENV || "production";
@@ -25,7 +26,7 @@ process.env.NODE_PATH = process.env.NODE_PATH || "";
  * Webpack uses `publicPath` to determine where the app is being served from.
  * It requires a trailing slash, or the file assets will get an incorrect path.
  */
-const publicPath = paths.servedPath;
+const publicPath = Application.servedPath;
 /**
  * publicUrl is just like `publicPath`, but we will provide it to our app
  * as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript
@@ -64,7 +65,7 @@ if (env.stringified["process.env"].NODE_ENV !== '"production"') {
  */
 const extractTextPluginOptions = shouldUseRelativeAssetPaths
     ? // Making sure that the publicPath goes back to to build folder.
-    { publicPath: Array(paths.cssFilename.split("/").length).join("../") }
+    { publicPath: Array(files.outputPattern.css.split("/").length).join("../") }
     : {};
 
 const postCssPlugin = () => [
@@ -89,18 +90,18 @@ const clientConfig = {
     // In production, we only want to load the polyfills and the app code.
     entry: [
         require.resolve("../../../config/polyfills"),
-        paths.appIndexJs,
+        Application.clientEntryPoint,
     ],
     output: {
-        path: paths.appBuild,
-        filename: paths.appOutputFilePattern,
-        chunkFilename: paths.appChunkOutputFilePattern,
+        path: Application.buildPath,
+        filename: files.outputPattern.js,
+        chunkFilename: files.outputPattern.jsChunk,
         // We inferred the "public path" (such as / or /my-project) from homepage.
         publicPath,
         // Point sourcemap entries to original disk location (format as URL on Windows)
         devtoolModuleFilenameTemplate: (info: DevtoolModuleFilenameTemplateInfo) =>
             path
-                .relative(paths.appSrc, info.absoluteResourcePath)
+                .relative(Application.srcPath, info.absoluteResourcePath)
                 .replace(/\\/g, "/"),
     },
     module: {
@@ -110,7 +111,7 @@ const clientConfig = {
                 test: /\.(js|jsx|mjs)$/,
                 loader: require.resolve("source-map-loader"),
                 enforce: "pre",
-                include: paths.appSrc,
+                include: Application.srcPath,
             },
             {
                 // "oneOf" will traverse all following loaders until one will
@@ -129,7 +130,7 @@ const clientConfig = {
                     },
                     {
                         test: /\.(js|jsx|mjs)$/,
-                        include: paths.appSrc,
+                        include: Application.srcPath,
                         loader: require.resolve("babel-loader"),
                         options: {
                             compact: true,
@@ -137,14 +138,14 @@ const clientConfig = {
                     },
                     {
                         test: /\.(ts|tsx)$/,
-                        include: paths.appSrc,
+                        include: Application.srcPath,
                         use: [
                             {
                                 loader: require.resolve("ts-loader"),
                                 options: {
                                     // disable type checker - we will use it in fork plugin
                                     transpileOnly: true,
-                                    configFile: paths.appTsProdConfig,
+                                    configFile: Application.tsConfigProd,
                                 },
                             },
                         ],
@@ -228,7 +229,7 @@ const clientConfig = {
         // Generates an `index.html` file with the <script> injected.
         new HtmlWebpackPlugin({
             inject: true,
-            template: paths.appHtml,
+            template: Application.publicEntryPoint,
             minify: {
                 removeComments: true,
                 collapseWhitespace: true,
@@ -285,7 +286,7 @@ const clientConfig = {
             sourceMap: shouldUseSourceMap,
         }), // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
         new ExtractTextPlugin({
-            filename: paths.cssFilename,
+            filename: files.outputPattern.css,
         }),
         // Generate a manifest file which contains a mapping of all asset filenames
         // to their corresponding output file so that tools can pick it up without
@@ -327,8 +328,8 @@ const clientConfig = {
         // Perform type checking and linting in a separate process to speed up compilation
         new ForkTsCheckerWebpackPlugin({
             async: false,
-            tsconfig: paths.appTsProdConfig,
-            tslint: paths.appTsLint,
+            tsconfig: Application.tsConfigProd,
+            tslint: Application.tsLint,
         }),
     ],
     // Some libraries import Node modules but don't use them in the browser.
@@ -369,7 +370,7 @@ const clientConfig = {
         // We placed these paths second because we want `node_modules` to "win"
         // if there are any conflicts. This matches Node resolution mechanism.
         // https://github.com/facebookincubator/create-react-app/issues/253
-        modules: ["node_modules", paths.appNodeModules].concat(
+        modules: ["node_modules", Application.nodeModulesPath].concat(
             // It is guaranteed to exist because we tweak it in `env.js`
             process.env.NODE_PATH.split(path.delimiter).filter(Boolean),
         ),
@@ -379,8 +380,8 @@ const clientConfig = {
             // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
             // please link the files into your node_modules/ and let module-resolution kick in.
             // Make sure your source files are compiled, as they will not be processed in any way.
-            new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
-            new TsconfigPathsPlugin({ configFile: paths.appTsProdConfig }),
+            new ModuleScopePlugin(Application.srcPath, [Application.packagePath]),
+            new TsconfigPathsPlugin({ configFile: Application.tsConfigProd }),
         ],
     },
 };

@@ -1,11 +1,11 @@
 import * as WebpackDevServer from "webpack-dev-server";
-import {Environments} from "./env";
+import env, {Environments} from "./env";
 
 // TODO Should get some of this from .env
 // TODO process.env should be injected???
-const DEFAULT_HOST = process.env.HOST || "0.0.0.0";
-const DEFAULT_PORT = parseInt(process.env.PORT || "8080", 10);
-const DEFAULT_PROTOCOL = process.env.PROTOCOL || "http";
+const DEFAULT_HOST = env.HOST;
+const DEFAULT_PORT = parseInt(env.PORT, 10);
+const DEFAULT_PROTOCOL = env.PROTOCOL;
 
 export type Proxy = WebpackDevServer.ProxyConfigMap | WebpackDevServer.ProxyConfigArray | undefined;
 

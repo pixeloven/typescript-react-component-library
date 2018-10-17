@@ -7,29 +7,32 @@ import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "path";
 import webpack, {DevtoolModuleFilenameTemplateInfo} from "webpack";
+import Application from "../Application";
 import {
     InterpolateHtmlPlugin,
     ModuleScopePlugin,
     TsconfigPathsPlugin,
     WatchMissingNodeModulesPlugin,
 } from "../ReactDevUtils";
+import env from "./env";
 
-const getClientEnvironment = require("../../../config/env");
-const paths = require("../../../config/paths");
+/**
+ * Stringify all values so we can feed into Webpack DefinePlugin
+ * @type Object
+ */
+const definePluginSettings = {
+    "process.env": Object.keys(env).reduce((values, key) => {
+            values[key] = JSON.stringify(env[key]);
+            return values;
+        }, {},
+    ),
+};
 
-process.env = process.env || {};
 process.env.NODE_ENV = process.env.NODE_ENV || "development";
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
-const publicPath = "/";
-// `publicUrl` is just like `publicPath`, but we will provide it to our app
-// as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
-// Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
-const publicUrl = "";
-// Get environment variables to inject into our app.
-const env = getClientEnvironment(publicUrl);
-
+const publicPath = "/"; // TODO get from .env
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
 // The production configuration is different and lives in a separate file.
@@ -55,7 +58,7 @@ const clientConfig = {
         // require.resolve('webpack/hot/dev-server'),
         require.resolve("react-dev-utils/webpackHotDevClient"),
         // Finally, this is your app's code:
-        paths.appIndexJs,
+        Application.clientEntryPoint,
         // We include the app code last so that if there is a runtime error during
         // initialization, it doesn't blow up the WebpackDevServer client, and
         // changing JS code would still trigger a refresh.
@@ -80,9 +83,9 @@ const clientConfig = {
         // We placed these paths second because we want `node_modules` to "win"
         // if there are any conflicts. This matches Node resolution mechanism.
         // https://github.com/facebookincubator/create-react-app/issues/253
-        modules: ["node_modules", paths.appNodeModules].concat(
+        modules: ["node_modules", Application.nodeModulesPath].concat(
             // It is guaranteed to exist because we tweak it in `env.js`
-            process.env.NODE_ENV.split(path.delimiter).filter(Boolean),
+            env.NODE_ENV.split(path.delimiter).filter(Boolean),
         ),
         // These are the reasonable defaults supported by the Node ecosystem.
         // We also include JSX as a common component filename extension to support
@@ -114,8 +117,8 @@ const clientConfig = {
             // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
             // please link the files into your node_modules/ and let module-resolution kick in.
             // Make sure your source files are compiled, as they will not be processed in any way.
-            new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
-            new TsconfigPathsPlugin({ configFile: paths.appTsConfig }),
+            new ModuleScopePlugin(Application.srcPath, [Application.package]),
+            new TsconfigPathsPlugin({ configFile: Application.tsConfig }),
         ],
     },
     module: {
@@ -129,7 +132,7 @@ const clientConfig = {
                 test: /\.(js|jsx|mjs)$/,
                 loader: require.resolve("source-map-loader"),
                 enforce: "pre",
-                include: paths.appSrc,
+                include: Application.srcPath,
             },
             {
                 // "oneOf" will traverse all following loaders until one will
@@ -149,7 +152,7 @@ const clientConfig = {
                     },
                     {
                         test: /\.(js|jsx|mjs)$/,
-                        include: paths.appSrc,
+                        include: Application.srcPath,
                         loader: require.resolve("babel-loader"),
                         options: {
                             compact: true,
@@ -159,7 +162,7 @@ const clientConfig = {
                     // Compile .tsx?
                     {
                         test: /\.(ts|tsx)$/,
-                        include: paths.appSrc,
+                        include: Application.srcPath,
                         use: [
                             {
                                 loader: require.resolve("ts-loader"),
@@ -234,17 +237,17 @@ const clientConfig = {
         // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
         // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
         // In development, this will be an empty string.
-        new InterpolateHtmlPlugin(env.raw),
+        new InterpolateHtmlPlugin(env),
         // Generates an `index.html` file with the <script> injected.
         new HtmlWebpackPlugin({
             inject: true,
-            template: paths.appHtml,
+            template: Application.publicEntryPoint,
         }),
         // Add module names to factory functions so they appear in browser profiler.
         new webpack.NamedModulesPlugin(),
         // Makes some environment variables available to the JS code, for example:
         // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
-        new webpack.DefinePlugin(env.stringified),
+        new webpack.DefinePlugin(definePluginSettings),
         // This is necessary to emit hot updates (currently CSS only):
         new webpack.HotModuleReplacementPlugin(),
         // Watcher doesn't work well if you mistype casing in a path so we use
@@ -255,7 +258,7 @@ const clientConfig = {
         // to restart the development server for Webpack to discover it. This plugin
         // makes the discovery automatic so you don't have to restart.
         // See https://github.com/facebookincubator/create-react-app/issues/186
-        new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+        new WatchMissingNodeModulesPlugin(Application.nodeModulesPath),
         // Moment.js is an extremely popular library that bundles large locale files
         // by default due to how Webpack interprets its code. This is a practical
         // solution that requires the user to opt into importing specific locales.
@@ -265,9 +268,9 @@ const clientConfig = {
         // Perform type checking and linting in a separate process to speed up compilation
         new ForkTsCheckerWebpackPlugin({
             async: false,
-            watch: paths.appSrc,
-            tsconfig: paths.appTsConfig,
-            tslint: paths.appTsLint,
+            watch: Application.srcPath,
+            tsconfig: Application.tsConfig,
+            tslint: Application.tsLint,
         }),
     ],
     // Some libraries import Node modules but don't use them in the browser.

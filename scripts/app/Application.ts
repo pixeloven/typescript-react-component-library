@@ -1,5 +1,6 @@
-import * as fs from "fs";
-import * as path from "path";
+import fs from "fs";
+import path from "path";
+import url from "url";
 import {Environment} from "./configs/env";
 import files from "./configs/files";
 import paths from "./configs/paths";
@@ -16,6 +17,7 @@ export interface Package {
 }
 
 // TODO consolidate this under either source or lib or something else.
+// TODO once paths.js is removed we should remove the help getters and rely on just resolving from a config
 class Application {
 
     /**
@@ -72,7 +74,7 @@ class Application {
      * @returns {string}
      */
     public static get publicUrl(): string {
-        return process.env.PUBLIC_URL || Application.package.homepage;
+        return process.env.PUBLIC_URL || "/"; // TODO need to enforce these env vars
     }
 
     /**
@@ -92,6 +94,25 @@ class Application {
     }
 
     /**
+     * Return served path
+     * @returns {string}
+     */
+    public static get servedPath(): string {
+        const pathName = url.parse(Application.publicUrl).pathname;
+        const servedUrl = pathName ? pathName : "/";
+        const hasSlash = servedUrl.endsWith("/");
+        return hasSlash ? servedUrl.substr(0, servedUrl.length - 1) : servedUrl;
+    }
+
+    /**
+     * Node modules path
+     * @return {string}
+     */
+    public static get nodeModulesPath(): string {
+        return Application.resolvePath(paths.modules);
+    }
+
+    /**
      * Application process path
      * @return {string}
      */
@@ -104,8 +125,15 @@ class Application {
      * @returns {string}
      */
     public static get package(): Package {
-        const absolutePath = Application.resolvePath(files.package);
-        return require(absolutePath);
+        return require(Application.packagePath);
+    }
+
+    /**
+     * Return Application name
+     * @returns {string}
+     */
+    public static get packagePath(): string {
+        return Application.resolvePath(files.package);
     }
 
     /**
@@ -127,6 +155,30 @@ class Application {
      */
     public static get srcPath(): string {
         return Application.resolvePath(paths.src);
+    }
+
+    /**
+     * Return ts config
+     * @returns {string}
+     */
+    public static get tsConfig(): string {
+        return Application.resolvePath(files.tsConfig);
+    }
+
+    /**
+     * Return ts config
+     * @returns {string}
+     */
+    public static get tsConfigProd(): string {
+        return Application.resolvePath(files.tsConfigProd);
+    }
+
+    /**
+     * Return ts lint
+     * @returns {string}
+     */
+    public static get tsLint(): string {
+        return Application.resolvePath(files.tsLint);
     }
 
     /**
