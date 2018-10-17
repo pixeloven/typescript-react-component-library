@@ -11,7 +11,6 @@ declare module "*.md";
  * @description Consult DefinitelyTyped before declaring below
  * http://definitelytyped.org/
  */
-declare module "chalk";
 declare module "react-dev-utils/errorOverlayMiddleware";
 declare module "react-dev-utils/clearConsole";
 declare module "react-dev-utils/FileSizeReporter";
@@ -21,8 +20,12 @@ declare module "react-dev-utils/noopServiceWorkerMiddleware";
 declare module "react-dev-utils/openBrowser";
 declare module "react-dev-utils/printBuildError";
 declare module "react-dev-utils/printHostingInstructions";
+declare module "react-dev-utils/InterpolateHtmlPlugin";
+declare module "react-dev-utils/ModuleScopePlugin";
+declare module "react-dev-utils/WatchMissingNodeModulesPlugin";
 declare module "react-dev-utils/WebpackDevServerUtils";
 declare module "storybook-readme";
+declare module "tsconfig-paths-webpack-plugin";
 
 /**
  * Global types

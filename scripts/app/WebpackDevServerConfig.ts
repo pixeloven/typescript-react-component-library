@@ -1,7 +1,7 @@
 import {Application} from "express-serve-static-core";
-import * as errorOverlayMiddleware from "react-dev-utils/errorOverlayMiddleware";
-import * as ignoredFiles from "react-dev-utils/ignoredFiles";
-import * as noopServiceWorkerMiddleware from "react-dev-utils/noopServiceWorkerMiddleware";
+import errorOverlayMiddleware from "react-dev-utils/errorOverlayMiddleware";
+import ignoredFiles from "react-dev-utils/ignoredFiles";
+import noopServiceWorkerMiddleware from "react-dev-utils/noopServiceWorkerMiddleware";
 import {
     Proxy,
     Server,

@@ -11,10 +11,10 @@ interface WebpackConfigs extends Environments {
 
 const webpack: WebpackConfigs = {
     development: {
-        config: "config/webpack.config.development.js",
+        config: "config/webpack.config.development.ts",
     },
     production: {
-        config: "config/webpack.config.production.js",
+        config: "config/webpack.config.production.ts",
     },
 };
 

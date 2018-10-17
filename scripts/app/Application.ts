@@ -7,7 +7,6 @@ import servers, {
     Proxy,
     Server,
 } from "./configs/servers";
-import webpack from "./configs/webpack";
 import FileNotFoundException from "./exceptions/FileNotFoundException";
 
 export interface Package {
@@ -18,15 +17,6 @@ export interface Package {
 
 // TODO consolidate this under either source or lib or something else.
 class Application {
-
-    /**
-     * Return webpack config
-     * @param env
-     */
-    public static webpack(env: Environment) {
-        const absolutePath = Application.resolvePath(webpack[env].config);
-        return require(absolutePath);
-    }
 
     /**
      * Return server configuration for specific environment

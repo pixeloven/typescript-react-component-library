@@ -17,14 +17,15 @@ process.on("unhandledRejection", err => {
 /**
  * Import dependencies
  */
-import * as assert from "assert";
+import assert from "assert";
 import chalk from "chalk";
-import * as clearConsole from "react-dev-utils/clearConsole";
-import * as openBrowser from "react-dev-utils/openBrowser";
-import * as WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
-import * as webpack from "webpack";
-import * as WebpackDevServer from "webpack-dev-server";
+import clearConsole from "react-dev-utils/clearConsole";
+import openBrowser from "react-dev-utils/openBrowser";
+import WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
+import webpack from "webpack";
+import WebpackDevServer from "webpack-dev-server";
 import Application from "./app/Application";
+import WebpackDevelopmentConfig from "./app/configs/webpack.config.development";
 import WebpackDevServerConfig from "./app/WebpackDevServerConfig";
 
 /**
@@ -79,7 +80,6 @@ try {
     const publicPath = Application.publicPath;
     const srcPath = Application.srcPath;
     const usingYarn = Application.usingYarn;
-    const config = Application.webpack("development");
     const server = Application.server("development");
 
     /**
@@ -96,7 +96,7 @@ try {
 
         // TODO rewrite all of this instead of importing react-utils
         const urls = prepareUrls(server.protocol, server.host, port);
-        const compiler = createCompiler(webpack, config, appName, urls, usingYarn);
+        const compiler = createCompiler(webpack, WebpackDevelopmentConfig, appName, urls, usingYarn);
         const proxyConfig = prepareProxy(proxySettings, publicPath);
         const webpackDevServerConfg = new WebpackDevServerConfig(server, publicPath, srcPath);
         const serverConfig = webpackDevServerConfg.create(

@@ -18,18 +18,18 @@ process.on("unhandledRejection", err => {
 /**
  * Import dependencies
  */
-import * as assert from "assert";
+import assert from "assert";
 import chalk from "chalk";
-import * as fs from "fs-extra";
-import * as path from "path";
-import * as FileSizeReporter from "react-dev-utils/FileSizeReporter";
-import * as formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
-import * as printBuildError from "react-dev-utils/printBuildError";
-import * as printHostingInstructions from "react-dev-utils/printHostingInstructions";
-import * as webpack from "webpack";
-import {Stats} from "webpack";
+import fs from "fs-extra";
+import path from "path";
+import FileSizeReporter from "react-dev-utils/FileSizeReporter";
+import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
+import printBuildError from "react-dev-utils/printBuildError";
+import printHostingInstructions from "react-dev-utils/printHostingInstructions";
+import webpack, {Stats} from "webpack";
 import "../config/env";
-import Application from "./Application";
+import Application from "./app/Application";
+import WebpackProductionConfig from "./app/configs/webpack.config.production";
 
 /**
  * Get FileSizeReporter functions
@@ -60,7 +60,6 @@ try {
     const appPackage = Application.package; // TODO need to cleanup package.json since we don't use everything there.
     const usingYarn = Application.usingYarn;
     const publicUrl = Application.publicUrl; // TODO doesn't seem to get what's in process.env... need to read this in better
-    const config = Application.webpack("production");
 
     /**
      * Read the current file sizes in build directory
@@ -69,7 +68,7 @@ try {
     measureFileSizesBeforeBuild(buildPath)
         .then((previousFileSizes: OpaqueFileSizes) => {
             copyPublicDirIntoFreshBuildDir();
-            return build(config, previousFileSizes);
+            return build(WebpackProductionConfig, previousFileSizes);
         }).then(({ stats, previousFileSizes, warnings }: BuildInformation) => {
             if (warnings.length) {
                 console.log(chalk.yellow("Compiled with warnings.\n"));
@@ -90,7 +89,7 @@ try {
             console.log();
 
             // TODO how do we get server stuff here too
-            const publicPath = config[0].output.publicPath;
+            const publicPath = WebpackProductionConfig[0].output.publicPath;
             const buildRelativePath = path.relative(process.cwd(), buildPath);
 
             // TODO we should copy and write this custom for a real deploy process
