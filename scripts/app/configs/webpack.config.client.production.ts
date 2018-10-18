@@ -57,7 +57,7 @@ const shouldUseSourceMap = env.GENERATE_SOURCEMAP !== "false";
 /**
  * Assert this just to be safe.
  */
-if (env.NODE_ENV !== '"production"') {
+if (env.NODE_ENV !== "production") {
     throw new Error("Production builds must have NODE_ENV=production.");
 }
 

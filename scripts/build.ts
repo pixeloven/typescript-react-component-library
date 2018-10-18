@@ -26,7 +26,6 @@ import printBuildError from "react-dev-utils/printBuildError";
 import printHostingInstructions from "react-dev-utils/printHostingInstructions";
 import webpack, {Stats} from "webpack";
 import Application from "./app/Application";
-import "./app/configs/env";
 import WebpackProductionConfig from "./app/configs/webpack.config.production";
 
 /**
