@@ -44,7 +44,7 @@ const publicPath = Application.servedPath;
  * You can exclude the *.map files from the build during deployment.
  * @type {boolean}
  */
-const shouldUseSourceMap = env.GENERATE_SOURCEMAP !== "false";
+const shouldUseSourceMap = env.GENERATE_SOURCE_MAP !== "false";
 
 /**
  * Assert this just to be safe.

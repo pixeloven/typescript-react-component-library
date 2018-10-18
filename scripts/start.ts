@@ -24,7 +24,6 @@ import WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
 import webpack from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import Application from "./app/Application";
-import "./app/configs/env";
 import WebpackDevelopmentConfig from "./app/configs/webpack.config.development";
 import WebpackDevServerConfig from "./app/WebpackDevServerConfig";
 

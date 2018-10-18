@@ -52,7 +52,7 @@ const shouldUseRelativeAssetPaths = publicPath === "./";
  * Source maps are resource heavy and can cause out of memory issue for large source files.
  * @type {boolean}
  */
-const shouldUseSourceMap = env.GENERATE_SOURCEMAP !== "false";
+const shouldUseSourceMap = env.GENERATE_SOURCE_MAP !== "false";
 
 /**
  * Assert this just to be safe.
