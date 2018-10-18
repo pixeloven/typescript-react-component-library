@@ -2,8 +2,7 @@
  * Initialize env vars
  */
 process.env.BABEL_ENV = "development";
-process.env.NODE_ENV = "development"; // TODO read from .env
-import "../config/env"; // TODO make ENV a type script enforced req
+process.env.NODE_ENV = "development";
 
 /**
  * Makes the script crash on unhandled rejections instead of silently
@@ -25,6 +24,7 @@ import WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
 import webpack from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import Application from "./app/Application";
+import "./app/configs/env";
 import WebpackDevelopmentConfig from "./app/configs/webpack.config.development";
 import WebpackDevServerConfig from "./app/WebpackDevServerConfig";
 

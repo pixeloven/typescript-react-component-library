@@ -14,13 +14,20 @@ import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import webpack, {DevtoolModuleFilenameTemplateInfo} from "webpack";
 import ManifestPlugin from "webpack-manifest-plugin";
 import Application from "../Application";
+import env from "./env";
 import files from "./files";
 
-const getClientEnvironment = require("../../../config/env");
-
-process.env = process.env || {};
-process.env.NODE_ENV = process.env.NODE_ENV || "production";
-process.env.NODE_PATH = process.env.NODE_PATH || "";
+/**
+ * Stringify all values so we can feed into Webpack DefinePlugin
+ * @type Object
+ */
+const definePluginSettings = {
+    "process.env": Object.keys(env).reduce((values, key) => {
+            values[key] = JSON.stringify(env[key]);
+            return values;
+        }, {},
+    ),
+};
 
 /**
  * Webpack uses `publicPath` to determine where the app is being served from.
@@ -45,18 +52,12 @@ const shouldUseRelativeAssetPaths = publicPath === "./";
  * Source maps are resource heavy and can cause out of memory issue for large source files.
  * @type {boolean}
  */
-const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== "false";
-
-/**
- * Get environment variables to inject into our app.
- * @type Object
- */
-const env = getClientEnvironment(publicUrl);
+const shouldUseSourceMap = env.GENERATE_SOURCEMAP !== "false";
 
 /**
  * Assert this just to be safe.
  */
-if (env.stringified["process.env"].NODE_ENV !== '"production"') {
+if (env.NODE_ENV !== '"production"') {
     throw new Error("Production builds must have NODE_ENV=production.");
 }
 
@@ -87,9 +88,7 @@ const clientConfig = {
     // We generate sourcemaps in production. This is slow but gives good results.
     // You can exclude the *.map files from the build during deployment.
     devtool: shouldUseSourceMap ? "source-map" : false,
-    // In production, we only want to load the polyfills and the app code.
     entry: [
-        require.resolve("../../../config/polyfills"),
         Application.clientEntryPoint,
     ],
     output: {
@@ -225,7 +224,7 @@ const clientConfig = {
         // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
         // In production, it will be an empty string unless you specify "homepage"
         // in `package.json`, in which case it will be the pathname of that URL.
-        new InterpolateHtmlPlugin(env.raw),
+        new InterpolateHtmlPlugin(env),
         // Generates an `index.html` file with the <script> injected.
         new HtmlWebpackPlugin({
             inject: true,
@@ -247,7 +246,7 @@ const clientConfig = {
         // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
         // It is absolutely essential that NODE_ENV was set to production here.
         // Otherwise React will be compiled in the very slow development mode.
-        new webpack.DefinePlugin(env.stringified),
+        new webpack.DefinePlugin(definePluginSettings),
         // Minify the code.
         new UglifyJsPlugin({
             uglifyOptions: {
@@ -372,7 +371,7 @@ const clientConfig = {
         // https://github.com/facebookincubator/create-react-app/issues/253
         modules: ["node_modules", Application.nodeModulesPath].concat(
             // It is guaranteed to exist because we tweak it in `env.js`
-            process.env.NODE_PATH.split(path.delimiter).filter(Boolean),
+            env.NODE_PATH.split(path.delimiter).filter(Boolean),
         ),
         plugins: [
             // Prevents users from importing files from outside of src/ (or node_modules/).

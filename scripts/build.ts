@@ -3,8 +3,6 @@
  */
 process.env.BABEL_ENV = "production";
 process.env.NODE_ENV = "production";
-process.env.HOST = process.env.HOST || "0.0.0.0";
-process.env.PORT = process.env.PORT || "3000";
 
 /**
  * Makes the script crash on unhandled rejections instead of silently
@@ -27,8 +25,8 @@ import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
 import printBuildError from "react-dev-utils/printBuildError";
 import printHostingInstructions from "react-dev-utils/printHostingInstructions";
 import webpack, {Stats} from "webpack";
-import "../config/env";
 import Application from "./app/Application";
+import "./app/configs/env";
 import WebpackProductionConfig from "./app/configs/webpack.config.production";
 
 /**

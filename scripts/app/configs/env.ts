@@ -6,12 +6,13 @@ export interface Environments {
     production: object;
 }
 
-dotenv.config();
+dotenv.config(); // TODO This doesn't seem to read in the .env
 
 /**
  * Define default values here
  */
 interface Env extends NodeJS.ProcessEnv {
+    GENERATE_SOURCEMAP: string;
     HOST: string;
     PORT: string;
     PROTOCOL: string;
@@ -21,6 +22,7 @@ interface Env extends NodeJS.ProcessEnv {
 }
 
 const envDefaults: Env = {
+    GENERATE_SOURCEMAP: "true",
     HOST: "0.0.0.0",
     NODE_ENV: "development",
     NODE_PATH: "",
