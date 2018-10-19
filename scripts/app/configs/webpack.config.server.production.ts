@@ -10,13 +10,14 @@ import path from "path";
 import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 import Application from "../Application";
-import env from "./env";
+import Env from "./env";
 import files from "./files";
 
 /**
  * Stringify all values so we can feed into Webpack DefinePlugin
  * @type Object
  */
+const env = Env.config();
 const definePluginSettings = {
     "process.env": Object.keys(env).reduce((values, key) => {
             values[key] = JSON.stringify(env[key]);
@@ -44,12 +45,12 @@ const publicPath = Application.servedPath;
  * You can exclude the *.map files from the build during deployment.
  * @type {boolean}
  */
-const shouldUseSourceMap = env.GENERATE_SOURCE_MAP !== "false";
+const shouldUseSourceMap: boolean = Env.config("GENERATE_SOURCE_MAP") !== "false";
 
 /**
  * Assert this just to be safe.
  */
-if (env.NODE_ENV !== "production") {
+if (Env.current !== "production") {
     throw new Error("Production builds must have NODE_ENV=production.");
 }
 
@@ -143,7 +144,7 @@ const serverConfig = {
         // https://github.com/facebookincubator/create-react-app/issues/253
         modules: ["node_modules", Application.nodeModulesPath].concat(
             // It is guaranteed to exist because we tweak it in `env.js`
-            env.NODE_PATH.split(path.delimiter).filter(Boolean),
+            Env.current.split(path.delimiter).filter(Boolean),
         ),
         plugins: [
             // Prevents users from importing files from outside of src/ (or node_modules/).

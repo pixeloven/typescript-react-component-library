@@ -81,7 +81,7 @@ const clientConfig = {
         // https://github.com/facebookincubator/create-react-app/issues/253
         modules: ["node_modules", Application.nodeModulesPath].concat(
             // It is guaranteed to exist because we tweak it in `env.js`
-            Env.config("NODE_ENV", "development").split(path.delimiter).filter(Boolean),
+            Env.current.split(path.delimiter).filter(Boolean),
         ),
         // These are the reasonable defaults supported by the Node ecosystem.
         // We also include JSX as a common component filename extension to support

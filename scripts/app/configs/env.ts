@@ -44,7 +44,7 @@ class Env {
      * Get current enviroment
      */
     public static get current(): Environment {
-        return process.env.NODE_ENV as Environment;
+        return Env.config("NODE_ENV", "production") as Environment;
     }
 
     /**
