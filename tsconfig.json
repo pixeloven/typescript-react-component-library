@@ -26,6 +26,11 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
+  "files": [
+    "./.storybook/addons.ts",
+    "./.storybook/config.ts",
+    "./.storybook/webpack.config.ts"
+  ],
   "typeRoots": [
     "./definitions",
     "./node_modules/@types"
@@ -34,7 +39,7 @@
     "jest"
   ],
   "include": [
-    ".storybook",
+    "./.storybook",
     "./definitions",
     "./scripts",
     "./src"
