@@ -9,7 +9,7 @@ configure({
 });
 
 const items: MenuItem[] = [
-    { name: "Home", path: "/", active: true },
+    { name: "Home", path: "/", active: false },
     { name: "About", path: "/about/", active: false },
     { name: "Blog", path: "/blog/", active: false },
 ];
@@ -17,33 +17,17 @@ const items: MenuItem[] = [
 describe("Components", () => {
     describe("Organisms", () => {
         describe("MainMenu", () => {
-            it("should nothing active", () => {
+            it("should render <MenuItemArray>", () => {
                 const wrapper = shallow(
                     <MainMenu
                         items={items}
                     />,
                 );
-                expect(wrapper.find({ active: true }).length).toBe(0);
+                expect(wrapper.find("MenuItemArray")).toHaveLength(1);
             });
-
-            it("should have about as active (match exact)", () => {
-                const wrapper = shallow(
-                    <MainMenu
-                        items={items}
-                    />,
-                );
-                expect(wrapper.find({ name: "About" }).prop("active")).toBeTruthy();
+            it("should have 'a' in defaultProps", () => {
+                expect(MainMenu.defaultProps.as).toEqual("a");
             });
-
-            it("should have blog as active (match not exact)", () => {
-                const wrapper = shallow(
-                    <MainMenu
-                        items={items}
-                    />,
-                );
-                expect(wrapper.find({ name: "Blog" }).prop("active")).toBeTruthy();
-            });
-
             it("should be fixed to top", () => {
                 const wrapper = shallow(
                     <MainMenu

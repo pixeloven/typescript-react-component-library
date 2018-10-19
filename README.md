@@ -28,20 +28,20 @@ typeScript-react-component-library
 ├── public
 ├── scripts
 ├── src
-│   ├── browser
+│   ├── client
+│   │   ├── assets
+│   │   │   └── themes
 │   │   ├── serviceWorkers
 │   ├── server
 │   │   ├── controllers
 │   │   └── templates
 │   ├── shared
-│   │   ├── assets
-│   │   │   └── themes
 │   │   ├── components
 │   │   │   ├── atoms
 │   │   │   ├── molecules
 │   │   │   ├── organisms
 │   │   │   ├── pages
-│   │   │   └── themplates
+│   │   │   └── templates
 ```
 The structure of this application should be considered living. As new requirements are needed this structure should be able to adapt to change. With that said there was a fair attempt to plan for the future. Below is a quick break down of the above structure.
 * `.storybook` defines speciall configuration for storybook. If changes are to be made to the root `tsconfig.json` they should also be carefully considered here too.
