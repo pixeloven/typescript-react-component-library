@@ -7,12 +7,10 @@
   ],
   "linterOptions": {
     "exclude": [
-      ".storybook",
       "build",
       "config",
       "node_modules",
-      "public",
-      "**/*.js"
+      "public"
     ]
   },
   "rules": {

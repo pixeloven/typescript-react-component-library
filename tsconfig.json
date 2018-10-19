@@ -26,6 +26,11 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
+  "files": [
+    "./.storybook/addons.ts",
+    "./.storybook/config.ts",
+    "./.storybook/webpack.config.ts"
+  ],
   "typeRoots": [
     "./definitions",
     "./node_modules/@types"
@@ -34,18 +39,15 @@
     "jest"
   ],
   "include": [
+    "./.storybook",
     "./definitions",
     "./scripts",
     "./src"
   ],
   "exclude": [
-    ".docker",
-    ".storybook",
     "build",
-    "jest",
+    "coverage",
     "node_modules",
-    "public",
-    "src/**/*.storybook.ts",
-    "src/**/*.test.ts"
+    "public"
   ]
 }

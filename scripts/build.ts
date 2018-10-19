@@ -1,17 +1,7 @@
 /**
- * Initialize env vars
+ * Bootstrap development env
  */
-process.env.BABEL_ENV = "production";
-process.env.NODE_ENV = "production";
-
-/**
- * Makes the script crash on unhandled rejections instead of silently
- * ignoring them. In the future, promise rejections that are not handled will
- * terminate the Node.js process with a non-zero exit code.
- */
-process.on("unhandledRejection", err => {
-    throw err;
-});
+import "./boostrap/production";
 
 /**
  * Import dependencies
@@ -20,15 +10,17 @@ import assert from "assert";
 import chalk from "chalk";
 import fs from "fs-extra";
 import path from "path";
-// TODO react move to lib
-// TODO fix build pathing so server script is out of public path.
-import FileSizeReporter from "react-dev-utils/FileSizeReporter";
-import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
-import printBuildError from "react-dev-utils/printBuildError";
-import printHostingInstructions from "react-dev-utils/printHostingInstructions";
+import Promise from "promise";
 import webpack, {Stats} from "webpack";
 import Application from "./app/Application";
-import WebpackProductionConfig from "./app/configs/webpack.config.production";
+import WebpackProductionClientConfig from "./app/configs/webpack.config.client.production";
+import WebpackProductionServerConfig from "./app/configs/webpack.config.server.production";
+import {
+    FileSizeReporter,
+    formatWebpackMessages,
+    printBuildError,
+    printHostingInstructions,
+} from "./app/libraries/ReactDevUtils";
 
 /**
  * Get FileSizeReporter functions
@@ -44,74 +36,6 @@ const {
  */
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
-
-/**
- * Warn and crash if required files are missing
- */
-
-try {
-    // TODO can remove once we use this in our webpack setup
-    assert(Application.clientEntryPoint);
-    assert(Application.serverEntryPoint);
-    assert(Application.publicEntryPoint);
-
-    const buildPath = Application.buildPath;
-    const appPackage = Application.package; // TODO need to cleanup package.json since we don't use everything there.
-    const usingYarn = Application.usingYarn;
-    const publicUrl = Application.publicUrl; // TODO doesn't seem to get what's in process.env... need to read this in better
-
-    /**
-     * Read the current file sizes in build directory
-     * @description This lets us display how much they changed later.
-     */
-    measureFileSizesBeforeBuild(buildPath)
-        .then((previousFileSizes: OpaqueFileSizes) => {
-            copyPublicDirIntoFreshBuildDir();
-            return build(WebpackProductionConfig, previousFileSizes);
-        }).then(({ stats, previousFileSizes, warnings }: BuildInformation) => {
-            if (warnings.length) {
-                console.log(chalk.yellow("Compiled with warnings.\n"));
-                console.log(warnings.join("\n\n"));
-                console.log("\nSearch for the " + chalk.underline(chalk.yellow("keywords")) + " to learn more about each warning.");
-                console.log("To ignore, add " + chalk.cyan("// eslint-disable-next-line") + " to the line before.\n");
-            } else {
-                console.log(chalk.green("Compiled successfully.\n"));
-            }
-            console.log("File sizes after gzip:\n");
-            printFileSizesAfterBuild(
-                stats,
-                previousFileSizes,
-                buildPath,
-                WARN_AFTER_BUNDLE_GZIP_SIZE,
-                WARN_AFTER_CHUNK_GZIP_SIZE,
-            );
-            console.log();
-
-            // TODO how do we get server stuff here too
-            const publicPath = WebpackProductionConfig[0].output.publicPath;
-            const buildRelativePath = path.relative(process.cwd(), buildPath);
-
-            // TODO we should copy and write this custom for a real deploy process
-            printHostingInstructions(
-                appPackage,
-                publicUrl,
-                publicPath,
-                buildRelativePath,
-                usingYarn,
-            );
-        },
-        (error: Error) => {
-            console.log(chalk.red("Failed to compile.\n"));
-            printBuildError(error);
-            process.exit(1);
-        },
-    );
-} catch (error) {
-    console.log(chalk.red(error.message));
-    console.log();
-    process.exit(1);
-}
-
 /**
  * Build Information
  */
@@ -124,10 +48,84 @@ interface BuildInformation {
 }
 
 /**
+ * Setup Build Directory
+ */
+function setupBuildDirectory() {
+    const buildPath = Application.buildPath;
+    if (!fs.existsSync(buildPath)) {
+        fs.mkdirSync(buildPath);
+    }
+    fs.emptyDirSync(buildPath);
+}
+
+/**
+ * Copy public folder to fresh build
+ */
+function copyPublicDirToBuild() {
+    const buildPath = Application.buildPath;
+    const publicPath = Application.publicPath;
+    const publicEntryPoint = Application.publicEntryPoint;
+    fs.copySync(publicPath, `${buildPath}/public`, {
+        dereference: true,
+        filter: file => file !== publicEntryPoint,
+    });
+}
+
+/**
+ * Print msg on status of build
+ * @param warnings
+ */
+function printBuildStatus(warnings: string[]) {
+    if (warnings.length) {
+        console.log(chalk.yellow("Compiled with warnings.\n"));
+        console.log(warnings.join("\n\n"));
+        console.log("\nSearch for the " + chalk.underline(chalk.yellow("keywords")) + " to learn more about each warning.");
+        console.log("To ignore, add " + chalk.cyan("// eslint-disable-next-line") + " to the line before.\n");
+    } else {
+        console.log(chalk.green("Compiled successfully.\n"));
+    }
+}
+
+/**
+ * Print build file sizes
+ * @param buildPath
+ * @param stats
+ * @param previousFileSizes
+ */
+function printBuildFileSizesAfterGzip(buildPath: string, stats: Stats, previousFileSizes: OpaqueFileSizes) {
+    console.log("File sizes after gzip:\n");
+    printFileSizesAfterBuild(
+        stats,
+        previousFileSizes,
+        buildPath,
+        WARN_AFTER_BUNDLE_GZIP_SIZE,
+        WARN_AFTER_CHUNK_GZIP_SIZE,
+    );
+    console.log();
+}
+
+/**
+ * Print instructions about deployment
+ * @param deploymentPath
+ * @param buildRelativePath
+ */
+function printDeploymentInstructions(deploymentPath: string, buildRelativePath: string) {
+    const appPackage = Application.package;
+    const publicUrl = Application.publicUrl; // TODO check this is being read in by .env
+    const usingYarn = Application.usingYarn;
+    printHostingInstructions(
+        appPackage,
+        publicUrl,
+        deploymentPath,
+        buildRelativePath,
+        usingYarn,
+    );
+}
+
+/**
  * Create the production build and print the deployment instructions.
  * @param config
  * @param previousFileSizes
- * TODO move to class
  */
 function build(config: object, previousFileSizes: OpaqueFileSizes) {
     console.log("Creating an optimized production build...");
@@ -146,12 +144,7 @@ function build(config: object, previousFileSizes: OpaqueFileSizes) {
                 }
                 return reject(new Error(messages.errors.join("\n\n")));
             }
-            if (
-                process.env.CI &&
-                (typeof process.env.CI !== "string" ||
-                    process.env.CI.toLowerCase() !== "false") &&
-                messages.warnings.length
-            ) {
+            if (process.env.CI && process.env.CI.toLowerCase() !== "false" && messages.warnings.length) {
                 console.log(chalk.yellow("\nTreating warnings as errors because process.env.CI = true.\n" + "Most CI servers set it automatically.\n"));
                 return reject(new Error(messages.warnings.join("\n\n")));
             }
@@ -165,16 +158,63 @@ function build(config: object, previousFileSizes: OpaqueFileSizes) {
 }
 
 /**
- * Copy public folder to fresh build
- * TODO move to class
+ * Build script
  */
-function copyPublicDirIntoFreshBuildDir() {
+try {
+    // TODO can remove once we use this in our webpack setup
+    assert(Application.clientEntryPoint);
+    assert(Application.serverEntryPoint);
+    assert(Application.publicEntryPoint);
+
     const buildPath = Application.buildPath;
-    const publicPath = Application.publicPath;
-    const publicEntryPoint = Application.publicEntryPoint;
-    fs.emptyDirSync(buildPath);
-    fs.copySync(publicPath, buildPath, {
-        dereference: true,
-        filter: file => file !== publicEntryPoint,
-    });
+
+    setupBuildDirectory();
+
+    /**
+     * Handle build for server side JavaScript
+     * @description This lets us display how files changed
+     */
+    // TODO should re-write measureFileSizesBeforeBuild to be more specific for the different paths
+    measureFileSizesBeforeBuild(buildPath)
+        .then((previousFileSizes: OpaqueFileSizes) => {
+            return build(WebpackProductionServerConfig, previousFileSizes);
+        }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
+            printBuildStatus(warnings);
+            printBuildFileSizesAfterGzip(buildPath, stats, previousFileSizes);
+            const publicPath = WebpackProductionServerConfig.output.publicPath;
+            const buildRelativePath = path.relative(process.cwd(), buildPath);
+            printDeploymentInstructions(publicPath, buildRelativePath);
+        },
+        (error: Error) => {
+            console.log(chalk.red("Failed to compile.\n"));
+            printBuildError(error);
+            process.exit(1);
+        },
+    );
+    /**
+     * Handle build for client side JavaScript
+     * @description This lets us display how files changed
+     */
+    const clientBuildPath = `${buildPath}/public`;
+    measureFileSizesBeforeBuild(clientBuildPath)
+        .then((previousFileSizes: OpaqueFileSizes) => {
+            copyPublicDirToBuild();
+            return build(WebpackProductionClientConfig, previousFileSizes);
+        }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
+            printBuildStatus(warnings);
+            printBuildFileSizesAfterGzip(clientBuildPath, stats, previousFileSizes);
+            const publicPath = WebpackProductionClientConfig.output.publicPath;
+            const buildRelativePath = path.relative(process.cwd(), buildPath);
+            printDeploymentInstructions(publicPath, buildRelativePath);
+        },
+        (error: Error) => {
+            console.log(chalk.red("Failed to compile.\n"));
+            printBuildError(error);
+            process.exit(1);
+        },
+    );
+} catch (error) {
+    console.log(chalk.red(error.message));
+    console.log();
+    process.exit(1);
 }
