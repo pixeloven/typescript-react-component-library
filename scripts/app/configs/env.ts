@@ -1,17 +1,20 @@
 import dotenv from "dotenv";
-export type Environment = "development" | "production";
+import NodeProcessException from "../exceptions/NodeProcessException";
+
+// TODO not really a config anymore... should be moved into a class lib or something
+export type Environment = "development" | "production" | "test";
 
 export interface Environments {
-    development: object;
-    production: object;
+    development?: object;
+    production?: object;
+    test?: object;
 }
 
-dotenv.config(); // TODO This doesn't seem to read in the .env
-
 /**
- * Define default values here
+ * Define required keys here
  */
-interface Env extends NodeJS.ProcessEnv {
+export interface DefaultEnv extends NodeJS.ProcessEnv {
+    BABEL_ENV: string;
     GENERATE_SOURCE_MAP: string;
     HOST: string;
     PORT: string;
@@ -21,16 +24,78 @@ interface Env extends NodeJS.ProcessEnv {
     NODE_PATH: string;
 }
 
-const envDefaults: Env = {
-    GENERATE_SOURCE_MAP: "true",
-    HOST: "0.0.0.0",
-    NODE_ENV: "development",
-    NODE_PATH: "",
-    PORT: "8080",
-    PROTOCOL: "http",
-    PUBLIC_URL: "",
-};
+class Env {
 
-const env: Env = Object.assign(envDefaults, process.env);
+    /**
+     * Defualt values for env
+     */
+    public static defaultValues: DefaultEnv = {
+        BABEL_ENV: "",
+        GENERATE_SOURCE_MAP: "",
+        HOST: "",
+        NODE_ENV: "",
+        NODE_PATH: "",
+        PORT: "",
+        PROTOCOL: "",
+        PUBLIC_URL: "",
+    };
 
-export default env;
+    /**
+     * Get current enviroment
+     */
+    public static get current(): Environment {
+        return process.env.NODE_ENV as Environment;
+    }
+
+    /**
+     * Get entire env, get by key or set by key
+     * @description Values will always be read in as a string. All casting must happen afterward.
+     * @param key
+     * @param defaultValue
+     */
+    public static config(): NodeJS.ProcessEnv;
+    public static config(key: string): string | undefined;
+    public static config(key: string, defaultValue: string): string;
+    public static config(key?: string, defaultValue?: string): NodeJS.ProcessEnv | string | undefined {
+        if (key && process.env.hasOwnProperty(key)) {
+            const value = process.env[key];
+            return !value
+                ? defaultValue
+                : value;
+        }
+        return process.env;
+    }
+
+    /**
+     * Set value on env
+     * @param key
+     * @param value
+     */
+    public static define(key: string, value: string): void {
+        process.env[key] = value;
+    }
+
+    /**
+     * Load from file for specific enviroment
+     * @description Check env and setup defualt keys
+     */
+    public static load(enviroment?: Environment): void {
+        if (!process) {
+            throw new NodeProcessException("Node process is undefined.");
+        }
+        if (!process.env) {
+            throw new NodeProcessException("Node enviromental variables are undefined.");
+        }
+        dotenv.config();
+        if (enviroment) {
+            process.env = Object.assign(Env.defaultValues, process.env, {
+                BABEL_ENV: enviroment,
+                NODE_ENV: enviroment,
+            });
+        } else {
+            process.env = Object.assign(Env.defaultValues, process.env);
+        }
+    }
+}
+
+export default Env;

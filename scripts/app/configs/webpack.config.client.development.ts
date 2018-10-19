@@ -1,6 +1,5 @@
 // TODO remove these eventually
 /* tslint:disable object-literal-sort-keys */
-/* tslint:disable no-var-requires */
 import autoprefixer from "autoprefixer";
 import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
@@ -13,13 +12,14 @@ import {
     ModuleScopePlugin,
     TsconfigPathsPlugin,
     WatchMissingNodeModulesPlugin,
-} from "../ReactDevUtils";
-import env from "./env";
+} from "../libraries/ReactDevUtils";
+import Env from "./env";
 
 /**
  * Stringify all values so we can feed into Webpack DefinePlugin
  * @type Object
  */
+const env = Env.config();
 const definePluginSettings = {
     "process.env": Object.keys(env).reduce((values, key) => {
             values[key] = JSON.stringify(env[key]);
@@ -81,7 +81,7 @@ const clientConfig = {
         // https://github.com/facebookincubator/create-react-app/issues/253
         modules: ["node_modules", Application.nodeModulesPath].concat(
             // It is guaranteed to exist because we tweak it in `env.js`
-            env.NODE_ENV.split(path.delimiter).filter(Boolean),
+            Env.config("NODE_ENV", "development").split(path.delimiter).filter(Boolean),
         ),
         // These are the reasonable defaults supported by the Node ecosystem.
         // We also include JSX as a common component filename extension to support

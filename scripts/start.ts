@@ -1,31 +1,23 @@
 /**
- * Initialize env vars
+ * Bootstrap development env
  */
-process.env.BABEL_ENV = "development";
-process.env.NODE_ENV = "development";
-
-/**
- * Makes the script crash on unhandled rejections instead of silently
- * ignoring them. In the future, promise rejections that are not handled will
- * terminate the Node.js process with a non-zero exit code.
- */
-process.on("unhandledRejection", err => {
-    throw err;
-});
+import "./boostrap/development";
 
 /**
  * Import dependencies
  */
 import assert from "assert";
 import chalk from "chalk";
-import clearConsole from "react-dev-utils/clearConsole";
-import openBrowser from "react-dev-utils/openBrowser";
-import WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
 import webpack from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import Application from "./app/Application";
 import WebpackDevelopmentConfig from "./app/configs/webpack.config.development";
-import WebpackDevServerConfig from "./app/WebpackDevServerConfig";
+import {
+    clearConsole,
+    openBrowser,
+    WebpackDevServerUtils,
+} from "./app/libraries/ReactDevUtils";
+import WebpackDevServerConfig from "./app/libraries/WebpackDevServerConfig";
 
 /**
  * Get WebpackDevServerUtils functions

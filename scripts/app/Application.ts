@@ -25,7 +25,7 @@ class Application {
      * @param env
      */
     public static server(env: Environment): Server {
-        return servers[env];
+        return servers[env] as Server;
     }
 
     /**

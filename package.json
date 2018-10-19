@@ -140,8 +140,8 @@
     "deploy": "node build/server.js",
     "lint": "npm-run-all --aggregate-output --parallel lint-ts lint-scss",
     "lint-fix": "npm-run-all --aggregate-output --parallel lint-ts-fix lint-scss-fix",
-    "lint-ts": "tslint src/**/*.{ts,tsx}",
-    "lint-ts-fix": "tslint src/**/*.{ts,tsx} --fix",
+    "lint-ts": "tslint --project .",
+    "lint-ts-fix": "tslint --fix --project .",
     "lint-scss": "stylelint src/**/*.scss --syntax scss",
     "lint-scss-fix": "stylelint src/**/*.scss --syntax scss --fix",
     "precommit": "lint-staged",
@@ -154,7 +154,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "tslint src/**/*.{ts,tsx} --fix",
+      "tslint --fix --project .",
       "git add"
     ],
     "*.scss": [
@@ -176,9 +176,7 @@
       "src/**/*.{js,jsx,ts,tsx}"
     ],
     "setupFiles": [
-      "<rootDir>/config/polyfills.js",
-      "<rootDir>/config/jest/setup.js",
-      "<rootDir>/config/env.js"
+      "<rootDir>/scripts/boostrap/test.ts"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.(j|t)s?(x)",
