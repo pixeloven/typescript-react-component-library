@@ -1,3 +1,7 @@
+@import "../../../node_modules/semantic-ui-sass/semantic-ui";
+
+// TODO move away from node-sass-chokidar since webpack will do this anyway
+// TODO also might want to remove the run-p stuff
 body {
   margin: 0;
   padding: 0;

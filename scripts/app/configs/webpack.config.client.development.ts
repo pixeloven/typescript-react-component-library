@@ -174,6 +174,7 @@ const clientConfig = {
                     // "style" loader turns CSS into JS modules that inject <style> tags.
                     // In production, we use a plugin to extract that CSS to a file, but
                     // in development "style" loader enables hot editing of CSS.
+                    // TODO how to add scss here???
                     {
                         test: /\.css$/,
                         use: [
