@@ -20,6 +20,8 @@ import assert from "assert";
 import chalk from "chalk";
 import fs from "fs-extra";
 import path from "path";
+// TODO react move to lib
+// TODO fix build pathing so server script is out of public path.
 import FileSizeReporter from "react-dev-utils/FileSizeReporter";
 import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
 import printBuildError from "react-dev-utils/printBuildError";
