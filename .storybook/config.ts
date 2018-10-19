@@ -1,16 +1,16 @@
-import { configure, addDecorator } from "@storybook/react";
-import { setOptions } from "@storybook/addon-options";
 import { withKnobs } from "@storybook/addon-knobs";
-import '../src/client/assets/semantic.css';
-import './index.css';
+import { setOptions } from "@storybook/addon-options";
+import { addDecorator, configure } from "@storybook/react";
+import "../src/client/assets/semantic.css";
+import "./index.css";
 
 setOptions({
-    name: 'TypeScript React',
+    downPanelInRight: true,
     goFullScreen: false,
-    showLeftPanel: true,
+    name: "TypeScript React",
     showDownPanel: true,
+    showLeftPanel: true,
     showSearchBox: false,
-    downPanelInRight: true
 });
 addDecorator(withKnobs);
 

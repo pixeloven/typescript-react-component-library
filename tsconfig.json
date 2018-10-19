@@ -34,18 +34,15 @@
     "jest"
   ],
   "include": [
+    ".storybook",
     "./definitions",
     "./scripts",
     "./src"
   ],
   "exclude": [
-    ".docker",
-    ".storybook",
     "build",
-    "jest",
+    "coverage",
     "node_modules",
-    "public",
-    "src/**/*.storybook.ts",
-    "src/**/*.test.ts"
+    "public"
   ]
 }
