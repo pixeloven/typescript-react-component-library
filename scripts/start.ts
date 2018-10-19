@@ -1,38 +1,23 @@
-
 /**
- * Initialize env vars
+ * Bootstrap development env
  */
-process.env.BABEL_ENV = "development";
-process.env.NODE_ENV = "development"; // TODO read from .env
-import "../config/env"; // TODO make ENV a type script enforced req
-
-/**
- * Makes the script crash on unhandled rejections instead of silently
- * ignoring them. In the future, promise rejections that are not handled will
- * terminate the Node.js process with a non-zero exit code.
- */
-process.on("unhandledRejection", err => {
-    throw err;
-});
+import "./boostrap/development";
 
 /**
  * Import dependencies
  */
-// TODO remove react-dev-utils if possible
-// TODO import configs from another class
-/* tslint:disable no-var-requires */
-const config = require("../config/webpack.config.dev");
-const createDevServerConfig = require("../config/webpackDevServer.config");
-/* tslint:enable no-var-requires */
-import * as assert from "assert";
+import assert from "assert";
 import chalk from "chalk";
-import * as clearConsole from "react-dev-utils/clearConsole";
-import * as openBrowser from "react-dev-utils/openBrowser";
-import * as WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
-import * as webpack from "webpack";
-import * as WebpackDevServer from "webpack-dev-server";
-
-import Application from "./Application";
+import webpack from "webpack";
+import WebpackDevServer from "webpack-dev-server";
+import Application from "./app/Application";
+import WebpackDevelopmentConfig from "./app/configs/webpack.config.development";
+import {
+    clearConsole,
+    openBrowser,
+    WebpackDevServerUtils,
+} from "./app/libraries/ReactDevUtils";
+import WebpackDevServerConfig from "./app/libraries/WebpackDevServerConfig";
 
 /**
  * Get WebpackDevServerUtils functions
@@ -52,7 +37,6 @@ const signals: Signals[] = ["SIGINT", "SIGTERM"];
 
 /**
  * Set default constants
- * TODO move to config
  */
 const isInteractive = process.stdout.isTTY;
 
@@ -72,6 +56,7 @@ function sleep(milliseconds: number) {
 /**
  * Warn and crash if required files are missing
  */
+// TODO seems to re compile a few times right after server starts
 try {
     // TODO can remove once we use this in our webpack setup
     assert(Application.clientEntryPoint);
@@ -79,14 +64,14 @@ try {
 
     /**
      * Get application settings
-     * @throws Error if defined
+     * @throws Error if not defined
      */
     const appName = Application.appName;
     const proxySettings = Application.proxySettings;
     const publicPath = Application.publicPath;
+    const srcPath = Application.srcPath;
     const usingYarn = Application.usingYarn;
-
-    const server = Application.serve("development");
+    const server = Application.server("development");
 
     /**
      * We attempt to use the default port but if it is busy, we offer the user to
@@ -100,10 +85,12 @@ try {
         console.log();
         sleep(1000);
 
+        // TODO rewrite all of this instead of importing react-utils
         const urls = prepareUrls(server.protocol, server.host, port);
-        const compiler = createCompiler(webpack, config, appName, urls, usingYarn);
+        const compiler = createCompiler(webpack, WebpackDevelopmentConfig, appName, urls, usingYarn);
         const proxyConfig = prepareProxy(proxySettings, publicPath);
-        const serverConfig = createDevServerConfig(
+        const webpackDevServerConfg = new WebpackDevServerConfig(server, publicPath, srcPath);
+        const serverConfig = webpackDevServerConfg.create(
             proxyConfig,
             urls.lanUrlForConfig,
         );

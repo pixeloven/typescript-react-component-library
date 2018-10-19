@@ -1,12 +1,8 @@
-import * as assert from "assert";
-
 /**
  * Initialize env vars
  */
 process.env.BABEL_ENV = "production";
 process.env.NODE_ENV = "production";
-process.env.HOST = process.env.HOST || "0.0.0.0";
-process.env.PORT = process.env.PORT || "3000";
 
 /**
  * Makes the script crash on unhandled rejections instead of silently
@@ -20,24 +16,19 @@ process.on("unhandledRejection", err => {
 /**
  * Import dependencies
  */
-// import * as paths from "@config/paths";
-// import * as config from "@config/webpack.config.dev";
-
-/* tslint:disable no-var-requires */
-const config = require("../config/webpack.config.prod");
-/* tslint:enable no-var-requires */
-
+import assert from "assert";
 import chalk from "chalk";
-import * as fs from "fs-extra";
-import * as path from "path";
-import * as FileSizeReporter from "react-dev-utils/FileSizeReporter";
-import * as formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
-import * as printBuildError from "react-dev-utils/printBuildError";
-import * as printHostingInstructions from "react-dev-utils/printHostingInstructions";
-import * as webpack from "webpack";
-import {Stats} from "webpack";
-import "../config/env";
-import Application from "./Application";
+import fs from "fs-extra";
+import path from "path";
+// TODO react move to lib
+// TODO fix build pathing so server script is out of public path.
+import FileSizeReporter from "react-dev-utils/FileSizeReporter";
+import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
+import printBuildError from "react-dev-utils/printBuildError";
+import printHostingInstructions from "react-dev-utils/printHostingInstructions";
+import webpack, {Stats} from "webpack";
+import Application from "./app/Application";
+import WebpackProductionConfig from "./app/configs/webpack.config.production";
 
 /**
  * Get FileSizeReporter functions
@@ -76,7 +67,7 @@ try {
     measureFileSizesBeforeBuild(buildPath)
         .then((previousFileSizes: OpaqueFileSizes) => {
             copyPublicDirIntoFreshBuildDir();
-            return build(previousFileSizes);
+            return build(WebpackProductionConfig, previousFileSizes);
         }).then(({ stats, previousFileSizes, warnings }: BuildInformation) => {
             if (warnings.length) {
                 console.log(chalk.yellow("Compiled with warnings.\n"));
@@ -97,7 +88,7 @@ try {
             console.log();
 
             // TODO how do we get server stuff here too
-            const publicPath = config[0].output.publicPath;
+            const publicPath = WebpackProductionConfig[0].output.publicPath;
             const buildRelativePath = path.relative(process.cwd(), buildPath);
 
             // TODO we should copy and write this custom for a real deploy process
@@ -134,10 +125,11 @@ interface BuildInformation {
 
 /**
  * Create the production build and print the deployment instructions.
+ * @param config
  * @param previousFileSizes
  * TODO move to class
  */
-function build(previousFileSizes: OpaqueFileSizes) {
+function build(config: object, previousFileSizes: OpaqueFileSizes) {
     console.log("Creating an optimized production build...");
     const compiler = webpack(config);
     return new Promise((resolve, reject) => {

@@ -1,9 +1,4 @@
-/**
- * Initialize env vars
- */
-process.env.BABEL_ENV = "test";
-process.env.NODE_ENV = "test";
-process.env.PUBLIC_URL = "";
+import Env, {Environment} from "../app/configs/env";
 
 /**
  * Makes the script crash on unhandled rejections instead of silently
@@ -14,3 +9,14 @@ process.on("unhandledRejection", err => {
     throw err;
 });
 
+/**
+ * Initialize env vars
+ */
+Env.load();
+
+/**
+ * Set test environment
+ */
+const environment: Environment = "production";
+Env.define("BABEL_ENV", environment);
+Env.define("NODE_ENV", environment);
