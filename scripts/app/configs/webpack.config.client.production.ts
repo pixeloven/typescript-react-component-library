@@ -93,7 +93,7 @@ const clientConfig = {
         Application.clientEntryPoint,
     ],
     output: {
-        path: Application.buildPath,
+        path: `${Application.buildPath}/public`,
         filename: files.outputPattern.js,
         chunkFilename: files.outputPattern.jsChunk,
         // We inferred the "public path" (such as / or /my-project) from homepage.

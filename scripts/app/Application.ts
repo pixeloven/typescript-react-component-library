@@ -41,7 +41,7 @@ class Application {
      * @returns {string}
      */
     public static get buildPath(): string {
-        return Application.resolvePath(paths.build);
+        return Application.resolvePath(paths.build, false);
     }
 
     /**

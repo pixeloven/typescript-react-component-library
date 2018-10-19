@@ -1,6 +1,8 @@
 # TypeScript React Component Library
 This library is meant to show case advanced React/JavaScript development for highly scalable applications.
 
+[![CircleCI](https://circleci.com/gh/pixeloven/typescript-react-component-library.svg?style=svg)](https://circleci.com/gh/pixeloven/typescript-react-component-library)
+
 ## Table of Contents
 
 - [Requirements](#requirements)
