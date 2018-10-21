@@ -1,7 +1,7 @@
-@import "../../../node_modules/semantic-ui-sass/semantic-ui";
+$icons-font-path: "~semantic-ui-sass/icons";
+$flags-image-path: "~semantic-ui-sass/images";
+@import "~semantic-ui-sass/semantic-ui";
 
-// TODO move away from node-sass-chokidar since webpack will do this anyway
-// TODO also might want to remove the run-p stuff
 body {
   margin: 0;
   padding: 0;
