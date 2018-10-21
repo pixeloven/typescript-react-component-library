@@ -121,7 +121,7 @@ const clientConfig = {
                     // "url" loader works just like "file" loader but it also embeds
                     // assets smaller than specified size as data URLs to avoid requests.
                     {
-                        test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+                        test: /\.(bmp|png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
                         loader: require.resolve("url-loader"),
                         options: {
                             limit: 10000,
@@ -163,7 +163,7 @@ const clientConfig = {
                     // use the "style" loader inside the async code so CSS from them won't be
                     // in the main CSS file.
                     {
-                        test: /\.css$/,
+                        test: /\.(scss|sass|css)$/i,
                         loader: ExtractTextPlugin.extract(
                             Object.assign(
                                 {
@@ -181,6 +181,9 @@ const clientConfig = {
                                                 minimize: true,
                                                 sourceMap: shouldUseSourceMap,
                                             },
+                                        },
+                                        {
+                                            loader: require.resolve("sass-loader"),
                                         },
                                         {
                                             loader: require.resolve("postcss-loader"),

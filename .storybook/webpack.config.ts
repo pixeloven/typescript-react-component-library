@@ -3,7 +3,7 @@ import path from "path";
 import {Configuration, Module, Rule} from "webpack";
 
 export default (baseConfig: Configuration, env: object, defaultConfig: Configuration) => {
-    const newRule: Rule = {
+    const newTsRule: Rule = {
         include: path.resolve(__dirname, "../src/shared/components"),
         loader: require.resolve("ts-loader"),
         options: {
@@ -11,8 +11,12 @@ export default (baseConfig: Configuration, env: object, defaultConfig: Configura
         },
         test: /\.(ts|tsx)$/,
     };
+    const newScssRule: Rule = {
+        loaders: ["style-loader", "css-loader", "sass-loader"],
+        test: /\.(scss|sass|css)$/i,
+    };
     const newModule: Module = {
-        rules: [newRule],
+        rules: [newTsRule, newScssRule],
     };
     if (defaultConfig.module) {
         defaultConfig.module = deepmerge(defaultConfig.module, newModule);
