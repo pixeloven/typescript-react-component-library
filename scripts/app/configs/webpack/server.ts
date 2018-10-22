@@ -13,9 +13,6 @@ const serverConfig = {
     externals: [webpackNodeExternals()], // https://www.npmjs.com/package/webpack-node-externals TODO for all configs????
     module,
     output,
-    performance: {
-        hints: false,
-    },
     plugins,
     resolve,
     target: "node",
