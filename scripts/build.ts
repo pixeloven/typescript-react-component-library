@@ -167,7 +167,7 @@ try {
     assert(Application.publicEntryPoint);
 
     const buildPath = Application.buildPath;
-
+    const publicPath = Application.servedPath;
     setupBuildDirectory();
 
     /**
@@ -181,7 +181,6 @@ try {
         }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
             printBuildStatus(warnings);
             printBuildFileSizesAfterGzip(buildPath, stats, previousFileSizes);
-            const publicPath = WebpackProductionServerConfig.output.publicPath;
             const buildRelativePath = path.relative(process.cwd(), buildPath);
             printDeploymentInstructions(publicPath, buildRelativePath);
         },
@@ -203,7 +202,6 @@ try {
         }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
             printBuildStatus(warnings);
             printBuildFileSizesAfterGzip(clientBuildPath, stats, previousFileSizes);
-            const publicPath = WebpackProductionClientConfig.output.publicPath;
             const buildRelativePath = path.relative(process.cwd(), buildPath);
             printDeploymentInstructions(publicPath, buildRelativePath);
         },

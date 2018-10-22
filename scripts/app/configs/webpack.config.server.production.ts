@@ -24,25 +24,12 @@ const definePluginSettings = {
 };
 
 /**
- * Webpack uses `publicPath` to determine where the app is being served from.
- * It requires a trailing slash, or the file assets will get an incorrect path.
- */
-const publicPath = Application.servedPath;
-
-/**
- * publicUrl is just like `publicPath`, but we will provide it to our app
- * as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript
- * Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
- */
-// const publicUrl = publicPath.slice(0, -1);
-
-/**
  * Source maps are resource heavy and can cause out of memory issue for large source files.
  * We generate sourcemaps in production. This is slow but gives good results.
  * You can exclude the *.map files from the build during deployment.
  * @type {boolean}
  */
-const shouldUseSourceMap: boolean = Env.config("GENERATE_SOURCE_MAP") !== "false";
+const shouldUseSourceMap = Env.config("GENERATE_SOURCE_MAP") !== "false";
 
 /**
  * Assert this just to be safe.
@@ -65,7 +52,7 @@ const serverConfig: Configuration = {
     output: {
         filename: files.outputPattern.jsServer,
         path: Application.buildPath,
-        publicPath,
+        publicPath: Application.servedPath,
     },
     plugins: [
         // Makes some environment variables available in index.html.

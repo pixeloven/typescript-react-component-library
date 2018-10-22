@@ -1,4 +1,3 @@
-// TODO remove these eventually
 /* tslint:disable object-literal-sort-keys */
 import autoprefixer from "autoprefixer";
 import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
@@ -9,11 +8,14 @@ import webpack, {DevtoolModuleFilenameTemplateInfo} from "webpack";
 import Application from "../Application";
 import {
     InterpolateHtmlPlugin,
-    ModuleScopePlugin,
-    TsconfigPathsPlugin,
     WatchMissingNodeModulesPlugin,
 } from "../libraries/ReactDevUtils";
 import Env from "./env";
+import resolve from "./webpack/common/resolve";
+import {
+    staticFileRule,
+    typeScriptRule,
+} from "./webpack/common/rules";
 
 /**
  * Stringify all values so we can feed into Webpack DefinePlugin
@@ -74,46 +76,7 @@ const clientConfig = {
         devtoolModuleFilenameTemplate: (info: DevtoolModuleFilenameTemplateInfo) =>
             path.resolve(info.absoluteResourcePath).replace(/\\/g, "/"),
     },
-    resolve: {
-        // This allows you to set a fallback for where Webpack should look for modules.
-        // We placed these paths second because we want `node_modules` to "win"
-        // if there are any conflicts. This matches Node resolution mechanism.
-        // https://github.com/facebookincubator/create-react-app/issues/253
-        modules: ["node_modules", Application.nodeModulesPath],
-        // These are the reasonable defaults supported by the Node ecosystem.
-        // We also include JSX as a common component filename extension to support
-        // some tools, although we do not recommend using it, see:
-        // https://github.com/facebookincubator/create-react-app/issues/290
-        // `web` extension prefixes have been added for better support
-        // for React Native Web.
-        extensions: [
-            ".mjs",
-            ".web.ts",
-            ".ts",
-            ".web.tsx",
-            ".tsx",
-            ".web.js",
-            ".js",
-            ".json",
-            ".web.jsx",
-            ".jsx",
-        ],
-        alias: {
-
-            // Support React Native Web
-            // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-            "react-native": "react-native-web",
-        },
-        plugins: [
-            // Prevents users from importing files from outside of src/ (or node_modules/).
-            // This often causes confusion because we only process files within src/ with babel.
-            // To fix this, we prevent you from importing files out of src/ -- if you"d like to,
-            // please link the files into your node_modules/ and let module-resolution kick in.
-            // Make sure your source files are compiled, as they will not be processed in any way.
-            new ModuleScopePlugin(Application.srcPath, [Application.package]),
-            new TsconfigPathsPlugin({ configFile: Application.tsConfig }),
-        ],
-    },
+    resolve,
     module: {
         strictExportPresence: true,
         rules: [
@@ -132,18 +95,7 @@ const clientConfig = {
                 // match the requirements. When no loader matches it will fall
                 // back to the "file" loader at the end of the loader list.
                 oneOf: [
-                    // "url" loader works like "file" loader except that it embeds assets
-                    // smaller than specified limit in bytes as data URLs to avoid requests.
-                    // A missing `test` is equivalent to a match.
-                    {
-                        // test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-                        test: /\.(bmp|png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-                        loader: require.resolve("url-loader"),
-                        options: {
-                            limit: 10000,
-                            name: "static/media/[name].[hash:8].[ext]",
-                        },
-                    },
+                    staticFileRule,
                     {
                         test: /\.(js|jsx|mjs)$/,
                         include: Application.srcPath,
@@ -152,21 +104,7 @@ const clientConfig = {
                             compact: true,
                         },
                     },
-
-                    // Compile .tsx?
-                    {
-                        test: /\.(ts|tsx)$/,
-                        include: Application.srcPath,
-                        use: [
-                            {
-                                loader: require.resolve("ts-loader"),
-                                options: {
-                                    // disable type checker - we will use it in fork plugin
-                                    transpileOnly: true,
-                                },
-                            },
-                        ],
-                    },
+                    typeScriptRule,
                     // "postcss" loader applies autoprefixer to our CSS.
                     // "css" loader resolves paths in CSS and adds assets as dependencies.
                     // "style" loader turns CSS into JS modules that inject <style> tags.
