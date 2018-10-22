@@ -1,5 +1,4 @@
 /* tslint:disable object-literal-sort-keys */
-import autoprefixer from "autoprefixer";
 import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
@@ -13,8 +12,11 @@ import {
 import Env from "./env";
 import resolve from "./webpack/common/resolve";
 import {
+    catchAllRule,
+    scssRule,
     staticFileRule,
     typeScriptRule,
+
 } from "./webpack/common/rules";
 
 /**
@@ -30,19 +32,8 @@ const definePluginSettings = {
     ),
 };
 
-// Webpack uses `publicPath` to determine where the app is being served from.
-// In development, we always serve from the root. This makes config easier.
-const publicPath = "/"; // TODO get from .env
-// This is the development configuration.
-// It is focused on developer experience and fast rebuilds.
-// The production configuration is different and lives in a separate file.
 const clientConfig = {
-    // You may want "eval" instead if you prefer to see the compiled output in DevTools.
-    // See the discussion in https://github.com/facebookincubator/create-react-app/issues/343.
-    devtool: "cheap-module-source-map",
-    // These are the "entry points" to our application.
-    // This means they will be the "root" imports that are included in JS bundle.
-    // The first two entry points enable "hot" CSS and auto-refreshes for JS.
+    devtool: Application.sourceMapType,
     entry: [
         // Include an alternative client for WebpackDevServer. A client"s job is to
         // connect to WebpackDevServer by a socket and get notified about changes.
@@ -62,16 +53,10 @@ const clientConfig = {
         // changing JS code would still trigger a refresh.
     ],
     output: {
-        // Add /* filename */ comments to generated require()s in the output.
         pathinfo: true,
-        // This does not produce a real file. It"s just the virtual path that is
-        // served by WebpackDevServer in development. This is the JS bundle
-        // containing code from all our entry points, and the Webpack runtime.
         filename: "static/js/bundle.js",
-        // There are also additional JS chunk files if you use code splitting.
         chunkFilename: "static/js/[name].chunk.js",
-        // This is the URL that app is served from. We use "/" in development.
-        publicPath,
+        publicPath: "/",
         // Point sourcemap entries to original disk location (format as URL on Windows)
         devtoolModuleFilenameTemplate: (info: DevtoolModuleFilenameTemplateInfo) =>
             path.resolve(info.absoluteResourcePath).replace(/\\/g, "/"),
@@ -80,97 +65,16 @@ const clientConfig = {
     module: {
         strictExportPresence: true,
         rules: [
-            // TODO: Disable require.ensure as it"s not a standard language feature.
-            // We are waiting for https://github.com/facebookincubator/create-react-app/issues/2176.
-            // { parser: { requireEnsure: false } },
-
+            // javaScriptSourceMapRule,
             {
-                test: /\.(js|jsx|mjs)$/,
-                loader: require.resolve("source-map-loader"),
-                enforce: "pre",
-                include: Application.srcPath,
-            },
-            {
-                // "oneOf" will traverse all following loaders until one will
-                // match the requirements. When no loader matches it will fall
-                // back to the "file" loader at the end of the loader list.
                 oneOf: [
                     staticFileRule,
-                    {
-                        test: /\.(js|jsx|mjs)$/,
-                        include: Application.srcPath,
-                        loader: require.resolve("babel-loader"),
-                        options: {
-                            compact: true,
-                        },
-                    },
+                    // javaScriptRule,
                     typeScriptRule,
-                    // "postcss" loader applies autoprefixer to our CSS.
-                    // "css" loader resolves paths in CSS and adds assets as dependencies.
-                    // "style" loader turns CSS into JS modules that inject <style> tags.
-                    // In production, we use a plugin to extract that CSS to a file, but
-                    // in development "style" loader enables hot editing of CSS.
-                    // TODO how to add scss here???
-                    // TODO move away from node-sass-chokidar since webpack will do this anyway
-                    // TODO also might want to remove the run-p stuff
-                    {
-                        test: /\.(scss|sass|css)$/i,
-                        use: [
-                            {
-                                loader: require.resolve("style-loader"),
-                            },
-                            {
-                                loader: require.resolve("css-loader"),
-                                options: {
-                                    importLoaders: 1,
-                                },
-                            },
-                            {
-                                loader: require.resolve("sass-loader"),
-                            },
-                            {
-                                loader: require.resolve("postcss-loader"),
-                                options: {
-                                    // Necessary for external CSS imports to work
-                                    // https://github.com/facebookincubator/create-react-app/issues/2677
-                                    ident: "postcss",
-                                    plugins: () => [
-                                        require("postcss-flexbugs-fixes"),
-                                        autoprefixer({
-                                            browsers: [
-                                                ">1%",
-                                                "last 4 versions",
-                                                "Firefox ESR",
-                                                "not ie < 9", // React doesn"t support IE8 anyway
-                                            ],
-                                            flexbox: "no-2009",
-                                        }),
-                                    ],
-                                },
-                            },
-                        ],
-                    },
-                    // "file" loader makes sure those assets get served by WebpackDevServer.
-                    // When you `import` an asset, you get its (virtual) filename.
-                    // In production, they would get copied to the `build` folder.
-                    // This loader doesn"t use a "test" so it will catch all modules
-                    // that fall through the other loaders.
-                    {
-                        // Exclude `js` files to keep "css" loader working as it injects
-                        // its runtime that would otherwise processed through "file" loader.
-                        // Also exclude `html` and `json` extensions so they get processed
-                        // by webpacks internal loaders.
-                        exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
-                        loader: require.resolve("file-loader"),
-                        options: {
-                            name: "[name].[hash:8].[ext]",
-                            outputPath: "static/media/",
-                        },
-                    },
+                    scssRule,
+                    catchAllRule,
                 ],
             },
-            // ** STOP ** Are you adding a new loader?
-            // Make sure to add the new loader(s) before the "file" loader.
         ],
     },
     plugins: [

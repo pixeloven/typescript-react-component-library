@@ -1,6 +1,6 @@
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import InterpolateHtmlPlugin from "react-dev-utils/InterpolateHtmlPlugin";
-import webpack, {Configuration, Module} from "webpack";
+import webpack, {Module} from "webpack";
 import webpackNodeExternals from "webpack-node-externals";
 import Application from "../Application";
 import Env from "./env";
@@ -24,14 +24,6 @@ const definePluginSettings = {
 };
 
 /**
- * Source maps are resource heavy and can cause out of memory issue for large source files.
- * We generate sourcemaps in production. This is slow but gives good results.
- * You can exclude the *.map files from the build during deployment.
- * @type {boolean}
- */
-const shouldUseSourceMap = Env.config("GENERATE_SOURCE_MAP") !== "false";
-
-/**
  * Assert this just to be safe.
  */
 if (Env.current !== "production") {
@@ -43,9 +35,9 @@ const module: Module = {
     strictExportPresence: true,
 };
 
-const serverConfig: Configuration = {
+const serverConfig = {
     bail: true,
-    devtool: shouldUseSourceMap ? "source-map" : false,
+    devtool: Application.sourceMapType,
     entry: [Application.serverEntryPoint],
     externals: [webpackNodeExternals()],
     module,

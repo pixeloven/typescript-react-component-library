@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import url from "url";
 import {Environment} from "./configs/env";
+import Env from "./configs/env";
 import files from "./configs/files";
 import paths from "./configs/paths";
 import servers, {
@@ -20,12 +21,12 @@ export interface Package {
 // TODO once paths.js is removed we should remove the help getters and rely on just resolving from a config
 class Application {
 
-    /**
-     * Return server configuration for specific environment
-     * @param env
-     */
-    public static server(env: Environment): Server {
-        return servers[env] as Server;
+    public static get sourceMapType(): string | boolean {
+        if (Env.current === "production") {
+            const shouldUseSourceMap = Env.config("GENERATE_SOURCE_MAP") !== "false";
+            return shouldUseSourceMap ? "source-map" : false;
+        }
+        return "cheap-module-source-map";
     }
 
     /**
@@ -137,19 +138,6 @@ class Application {
     }
 
     /**
-     * Resolve relative path
-     * @param relativePath
-     * @param strict if true returns
-     */
-    public static resolvePath(relativePath: string, strict: boolean = true): string {
-        const absolutePath = path.resolve(Application.processPath, relativePath);
-        if (strict && !fs.existsSync(absolutePath)) {
-            throw new FileNotFoundException(`No such file or directory ${absolutePath}.`);
-        }
-        return absolutePath;
-    }
-
-    /**
      * Return src path
      * @returns {string}
      */
@@ -179,6 +167,27 @@ class Application {
      */
     public static get usingYarn(): boolean {
         return files.lock.includes("yarn");
+    }
+
+    /**
+     * Return server configuration for specific environment
+     * @param env
+     */
+    public static server(env: Environment): Server {
+        return servers[env] as Server;
+    }
+
+    /**
+     * Resolve relative path
+     * @param relativePath
+     * @param strict if true returns
+     */
+    public static resolvePath(relativePath: string, strict: boolean = true): string {
+        const absolutePath = path.resolve(Application.processPath, relativePath);
+        if (strict && !fs.existsSync(absolutePath)) {
+            throw new FileNotFoundException(`No such file or directory ${absolutePath}.`);
+        }
+        return absolutePath;
     }
 }
 

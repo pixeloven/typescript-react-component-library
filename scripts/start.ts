@@ -11,7 +11,7 @@ import chalk from "chalk";
 import webpack from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import Application from "./app/Application";
-import WebpackDevelopmentConfig from "./app/configs/webpack.config.development";
+import WebpackDevelopmentConfig from "./app/configs/webpack.config.client.development";
 import {
     clearConsole,
     openBrowser,

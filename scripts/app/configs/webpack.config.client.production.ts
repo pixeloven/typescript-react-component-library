@@ -1,21 +1,23 @@
-// TODO remove these eventually
 /* tslint:disable object-literal-sort-keys */
-/* tslint:disable no-var-requires */
 import autoprefixer from "autoprefixer";
 import ExtractTextPlugin from "extract-text-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "path";
 import InterpolateHtmlPlugin from "react-dev-utils/InterpolateHtmlPlugin";
-import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
-import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import webpack, {DevtoolModuleFilenameTemplateInfo} from "webpack";
 import ManifestPlugin from "webpack-manifest-plugin";
 import Application from "../Application";
 import Env from "./env";
 import files from "./files";
+import resolve from "./webpack/common/resolve";
+import {
+    catchAllRule,
+    scssRule,
+    typeScriptRule,
+} from "./webpack/common/rules";
 
 /**
  * Stringify all values so we can feed into Webpack DefinePlugin
@@ -88,7 +90,7 @@ const clientConfig = {
     bail: true,
     // We generate sourcemaps in production. This is slow but gives good results.
     // You can exclude the *.map files from the build during deployment.
-    devtool: shouldUseSourceMap ? "source-map" : false,
+    devtool: Application.sourceMapType,
     entry: [
         Application.clientEntryPoint,
     ],
@@ -97,7 +99,7 @@ const clientConfig = {
         filename: files.outputPattern.js,
         chunkFilename: files.outputPattern.jsChunk,
         // We inferred the "public path" (such as / or /my-project) from homepage.
-        publicPath,
+        publicPath: Application.servedPath,
         // Point sourcemap entries to original disk location (format as URL on Windows)
         devtoolModuleFilenameTemplate: (info: DevtoolModuleFilenameTemplateInfo) =>
             path
@@ -107,49 +109,12 @@ const clientConfig = {
     module: {
         strictExportPresence: true,
         rules: [
+            // javaScriptSourceMapRule,
             {
-                test: /\.(js|jsx|mjs)$/,
-                loader: require.resolve("source-map-loader"),
-                enforce: "pre",
-                include: Application.srcPath,
-            },
-            {
-                // "oneOf" will traverse all following loaders until one will
-                // match the requirements. When no loader matches it will fall
-                // back to the "file" loader at the end of the loader list.
                 oneOf: [
-                    // "url" loader works just like "file" loader but it also embeds
-                    // assets smaller than specified size as data URLs to avoid requests.
-                    {
-                        test: /\.(bmp|png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-                        loader: require.resolve("url-loader"),
-                        options: {
-                            limit: 10000,
-                            name: "static/media/[name].[hash:8].[ext]",
-                        },
-                    },
-                    {
-                        test: /\.(js|jsx|mjs)$/,
-                        include: Application.srcPath,
-                        loader: require.resolve("babel-loader"),
-                        options: {
-                            compact: true,
-                        },
-                    },
-                    {
-                        test: /\.(ts|tsx)$/,
-                        include: Application.srcPath,
-                        use: [
-                            {
-                                loader: require.resolve("ts-loader"),
-                                options: {
-                                    // disable type checker - we will use it in fork plugin
-                                    transpileOnly: true,
-                                    configFile: Application.tsConfig,
-                                },
-                            },
-                        ],
-                    },
+                    scssRule,
+                    // javaScriptRule,
+                    typeScriptRule,
                     // The notation here is somewhat confusing.
                     // "postcss" loader applies autoprefixer to our CSS.
                     // "css" loader resolves paths in CSS and adds assets as dependencies.
@@ -201,23 +166,7 @@ const clientConfig = {
                         ),
                         // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
                     },
-                    // "file" loader makes sure assets end up in the `build` folder.
-                    // When you `import` an asset, you get its filename.
-                    // This loader doesn't use a "test" so it will catch all modules
-                    // that fall through the other loaders.
-                    {
-                        loader: require.resolve("file-loader"),
-                        // Exclude `js` files to keep "css" loader working as it injects
-                        // it's runtime that would otherwise processed through "file" loader.
-                        // Also exclude `html` and `json` extensions so they get processed
-                        // by webpacks internal loaders.
-                        exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
-                        options: {
-                            name: "static/media/[name].[hash:8].[ext]",
-                        },
-                    },
-                    // ** STOP ** Are you adding a new loader?
-                    // Make sure to add the new loader(s) before the "file" loader.
+                    catchAllRule,
                 ],
             },
         ],
@@ -344,49 +293,7 @@ const clientConfig = {
         tls: "empty",
         child_process: "empty",
     },
-    resolve: {
-        alias: {
-
-            // Support React Native Web
-            // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-            "react-native": "react-native-web",
-        },
-        // These are the reasonable defaults supported by the Node ecosystem.
-        // We also include JSX as a common component filename extension to support
-        // some tools, although we do not recommend using it, see:
-        // https://github.com/facebookincubator/create-react-app/issues/290
-        // `web` extension prefixes have been added for better support
-        // for React Native Web.
-        extensions: [
-            ".mjs",
-            ".web.ts",
-            ".ts",
-            ".web.tsx",
-            ".tsx",
-            ".web.js",
-            ".js",
-            ".json",
-            ".web.jsx",
-            ".jsx",
-        ],
-        // This allows you to set a fallback for where Webpack should look for modules.
-        // We placed these paths second because we want `node_modules` to "win"
-        // if there are any conflicts. This matches Node resolution mechanism.
-        // https://github.com/facebookincubator/create-react-app/issues/253
-        modules: ["node_modules", Application.nodeModulesPath].concat(
-            // It is guaranteed to exist because we tweak it in `env.js`
-            Env.current.split(path.delimiter).filter(Boolean),
-        ),
-        plugins: [
-            // Prevents users from importing files from outside of src/ (or node_modules/).
-            // This often causes confusion because we only process files within src/ with babel.
-            // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
-            // please link the files into your node_modules/ and let module-resolution kick in.
-            // Make sure your source files are compiled, as they will not be processed in any way.
-            new ModuleScopePlugin(Application.srcPath, [Application.packagePath]),
-            new TsconfigPathsPlugin({ configFile: Application.tsConfig }),
-        ],
-    },
+    resolve,
 };
 
 export default clientConfig;
