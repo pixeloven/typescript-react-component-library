@@ -11,7 +11,7 @@ import chalk from "chalk";
 import webpack from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import Application from "./app/Application";
-import WebpackDevelopmentConfig from "./app/configs/webpack.config.client.development";
+import WebpackClientConfig from "./app/configs/webpack/client";
 import {
     clearConsole,
     openBrowser,
@@ -87,7 +87,7 @@ try {
 
         // TODO rewrite all of this instead of importing react-utils
         const urls = prepareUrls(server.protocol, server.host, port);
-        const compiler = createCompiler(webpack, WebpackDevelopmentConfig, appName, urls, usingYarn);
+        const compiler = createCompiler(webpack, WebpackClientConfig, appName, urls, usingYarn);
         const proxyConfig = prepareProxy(proxySettings, publicPath);
         const webpackDevServerConfg = new WebpackDevServerConfig(server, publicPath, srcPath);
         const serverConfig = webpackDevServerConfg.create(

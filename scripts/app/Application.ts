@@ -21,6 +21,21 @@ export interface Package {
 // TODO once paths.js is removed we should remove the help getters and rely on just resolving from a config
 class Application {
 
+    /**
+     * Stringify all values so we can feed into Webpack DefinePlugin
+     * @type Object
+     */
+    public static get definePluginSettings(): object {
+        const env = Env.config();
+        return {
+            "process.env": Object.keys(env).reduce((values, key) => {
+                    values[key] = JSON.stringify(env[key]);
+                    return values;
+                }, {},
+            ),
+        };
+    }
+
     public static get sourceMapType(): string | boolean {
         if (Env.current === "production") {
             const shouldUseSourceMap = Env.config("GENERATE_SOURCE_MAP") !== "false";

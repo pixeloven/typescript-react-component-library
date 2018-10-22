@@ -13,8 +13,8 @@ import path from "path";
 import Promise from "promise";
 import webpack, {Stats} from "webpack";
 import Application from "./app/Application";
-import WebpackProductionClientConfig from "./app/configs/webpack.config.client.production";
-import WebpackProductionServerConfig from "./app/configs/webpack.config.server.production";
+import WebpackClientConfig from "./app/configs/webpack/client";
+import WebpackServerConfig from "./app/configs/webpack/server";
 import {
     FileSizeReporter,
     formatWebpackMessages,
@@ -177,7 +177,7 @@ try {
     // TODO should re-write measureFileSizesBeforeBuild to be more specific for the different paths
     measureFileSizesBeforeBuild(buildPath)
         .then((previousFileSizes: OpaqueFileSizes) => {
-            return build(WebpackProductionServerConfig, previousFileSizes);
+            return build(WebpackServerConfig, previousFileSizes);
         }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
             printBuildStatus(warnings);
             printBuildFileSizesAfterGzip(buildPath, stats, previousFileSizes);
@@ -198,7 +198,7 @@ try {
     measureFileSizesBeforeBuild(clientBuildPath)
         .then((previousFileSizes: OpaqueFileSizes) => {
             copyPublicDirToBuild();
-            return build(WebpackProductionClientConfig, previousFileSizes);
+            return build(WebpackClientConfig, previousFileSizes);
         }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
             printBuildStatus(warnings);
             printBuildFileSizesAfterGzip(clientBuildPath, stats, previousFileSizes);
