@@ -145,7 +145,7 @@ const clientConfig = {
                                 options: {
                                     // disable type checker - we will use it in fork plugin
                                     transpileOnly: true,
-                                    configFile: Application.tsConfigProd,
+                                    configFile: Application.tsConfig,
                                 },
                             },
                         ],
@@ -331,7 +331,7 @@ const clientConfig = {
         // Perform type checking and linting in a separate process to speed up compilation
         new ForkTsCheckerWebpackPlugin({
             async: false,
-            tsconfig: Application.tsConfigProd,
+            tsconfig: Application.tsConfig,
             tslint: Application.tsLint,
         }),
     ],
@@ -384,7 +384,7 @@ const clientConfig = {
             // please link the files into your node_modules/ and let module-resolution kick in.
             // Make sure your source files are compiled, as they will not be processed in any way.
             new ModuleScopePlugin(Application.srcPath, [Application.packagePath]),
-            new TsconfigPathsPlugin({ configFile: Application.tsConfigProd }),
+            new TsconfigPathsPlugin({ configFile: Application.tsConfig }),
         ],
     },
 };

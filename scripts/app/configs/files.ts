@@ -14,7 +14,6 @@ export interface Files {
     };
     package: string;
     tsConfig: string;
-    tsConfigProd: string;
     tsLint: string;
 }
 
@@ -39,7 +38,6 @@ const files: Files = {
     },
     package: "package.json",
     tsConfig: "tsconfig.json", // TODO should use the ENV to determine this instead of hard coding
-    tsConfigProd: "tsconfig.json",
     tsLint: "tslint.json",
 };
 

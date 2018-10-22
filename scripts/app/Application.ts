@@ -166,14 +166,6 @@ class Application {
     }
 
     /**
-     * Return ts config
-     * @returns {string}
-     */
-    public static get tsConfigProd(): string {
-        return Application.resolvePath(files.tsConfigProd);
-    }
-
-    /**
      * Return ts lint
      * @returns {string}
      */

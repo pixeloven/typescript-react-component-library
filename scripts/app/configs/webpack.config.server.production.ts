@@ -1,17 +1,14 @@
-// TODO remove these eventually
-/* tslint:disable object-literal-sort-keys */
-/* tslint:disable no-var-requires */
-/* tslint:disable ordered-imports */
-import webpack from "webpack";
-import webpackNodeExternals from "webpack-node-externals";
-import InterpolateHtmlPlugin from "react-dev-utils/InterpolateHtmlPlugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
-import path from "path";
-import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
-import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
+import InterpolateHtmlPlugin from "react-dev-utils/InterpolateHtmlPlugin";
+import webpack, {Configuration, Module} from "webpack";
+import webpackNodeExternals from "webpack-node-externals";
 import Application from "../Application";
 import Env from "./env";
 import files from "./files";
+import resolve from "./webpack/common/resolve";
+import {
+    typeScriptRule,
+} from "./webpack/common/rules";
 
 /**
  * Stringify all values so we can feed into Webpack DefinePlugin
@@ -54,36 +51,21 @@ if (Env.current !== "production") {
     throw new Error("Production builds must have NODE_ENV=production.");
 }
 
-const serverConfig = {
-    entry: [Application.serverEntryPoint],
-    target: "node",
-    externals: [webpackNodeExternals()],
-    output: {
-        path: Application.buildPath,
-        filename: files.outputPattern.jsServer,
-        publicPath,
-    },
-    // Don't attempt to continue if there are any errors.
+const module: Module = {
+    rules: [typeScriptRule],
+    strictExportPresence: true,
+};
+
+const serverConfig: Configuration = {
     bail: true,
     devtool: shouldUseSourceMap ? "source-map" : false,
-    module: {
-        strictExportPresence: true,
-        rules: [
-            {
-                test: /\.(ts|tsx)$/,
-                include: Application.srcPath,
-                use: [
-                    {
-                        loader: require.resolve("ts-loader"),
-                        options: {
-                            // disable type checker - we will use it in fork plugin
-                            transpileOnly: true,
-                            configFile: Application.tsConfigProd,
-                        },
-                    },
-                ],
-            },
-        ],
+    entry: [Application.serverEntryPoint],
+    externals: [webpackNodeExternals()],
+    module,
+    output: {
+        filename: files.outputPattern.jsServer,
+        path: Application.buildPath,
+        publicPath,
     },
     plugins: [
         // Makes some environment variables available in index.html.
@@ -109,53 +91,12 @@ const serverConfig = {
         // Perform type checking and linting in a separate process to speed up compilation
         new ForkTsCheckerWebpackPlugin({
             async: false,
-            tsconfig: Application.tsConfigProd,
+            tsconfig: Application.tsConfig,
             tslint: Application.tsLint,
         }),
     ],
-    resolve: {
-        alias: {
-
-            // Support React Native Web
-            // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-            "react-native": "react-native-web",
-        },
-        // These are the reasonable defaults supported by the Node ecosystem.
-        // We also include JSX as a common component filename extension to support
-        // some tools, although we do not recommend using it, see:
-        // https://github.com/facebookincubator/create-react-app/issues/290
-        // `web` extension prefixes have been added for better support
-        // for React Native Web.
-        extensions: [
-            ".mjs",
-            ".web.ts",
-            ".ts",
-            ".web.tsx",
-            ".tsx",
-            ".web.js",
-            ".js",
-            ".json",
-            ".web.jsx",
-            ".jsx",
-        ],
-        // This allows you to set a fallback for where Webpack should look for modules.
-        // We placed these paths second because we want `node_modules` to "win"
-        // if there are any conflicts. This matches Node resolution mechanism.
-        // https://github.com/facebookincubator/create-react-app/issues/253
-        modules: ["node_modules", Application.nodeModulesPath].concat(
-            // It is guaranteed to exist because we tweak it in `env.js`
-            Env.current.split(path.delimiter).filter(Boolean),
-        ),
-        plugins: [
-            // Prevents users from importing files from outside of src/ (or node_modules/).
-            // This often causes confusion because we only process files within src/ with babel.
-            // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
-            // please link the files into your node_modules/ and let module-resolution kick in.
-            // Make sure your source files are compiled, as they will not be processed in any way.
-            new ModuleScopePlugin(Application.srcPath, [Application.packagePath]),
-            new TsconfigPathsPlugin({ configFile: Application.tsConfigProd }),
-        ],
-    },
+    resolve,
+    target: "node",
 };
 
 export default serverConfig;
