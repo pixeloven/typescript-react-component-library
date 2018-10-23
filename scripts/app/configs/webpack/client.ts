@@ -1,29 +1,35 @@
 import autoprefixer from "autoprefixer";
 import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
-import ExtractTextPlugin from "extract-text-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
+// TODO eventually remove once react-dev-utils cacthes up
+// import InterpolateHtmlPlugin from "react-dev-utils/InterpolateHtmlPlugin";
+import InterpolateHtmlPlugin from "interpolate-html-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
-import InterpolateHtmlPlugin from "react-dev-utils/InterpolateHtmlPlugin";
 import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
+import WatchMissingNodeModulesPlugin from "react-dev-utils/WatchMissingNodeModulesPlugin";
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
-import UglifyJsPlugin from "uglifyjs-webpack-plugin";
-import {DevtoolModuleFilenameTemplateInfo, Node, Output, Resolve} from "webpack";
 import webpack from "webpack";
+import {DevtoolModuleFilenameTemplateInfo, Node, Output, Resolve} from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
 import ManifestPlugin from "webpack-manifest-plugin";
 import Application from "../../Application";
-import {WatchMissingNodeModulesPlugin} from "../../libraries/ReactDevUtils";
 import Env from "../env";
 import files from "../files";
 import {catchAllRule, staticFileRule, typeScriptRule} from "./common/rules";
 
-// TODO upgrade to webpack 4 and add
-// import MiniCssExtractPlugin from "mini-css-extract-plugin";
+// TODO create isServer or isClient to merge server config here too
+// TODO upgrade to webpack 4
+// TODO import MiniCssExtractPlugin from "mini-css-extract-plugin"; and remove the other extract one
+// TODO restore all the react-dev-utils and remove special lib
+// TODO Back track from Application
 
-// TODO replace not prod with develop?
-const {ifProduction, ifNotProduction} = getIfUtils(Env.current);
+/**
+ * Utility functions to help segment configuration based on environment
+ */
+const {ifProduction, ifDevelopment} = getIfUtils(Env.current);
 
 /**
  * Webpack uses `publicPath` to determine where the app is being served from.
@@ -87,7 +93,7 @@ const output: Output = {
     devtoolModuleFilenameTemplate, // TODO do we need this if we don't do sourcemaps in prod??
     filename: files.outputPattern.js,
     path: ifProduction(`${Application.buildPath}/public`, "/"),
-    pathinfo: ifNotProduction(),
+    pathinfo: ifDevelopment(),
     publicPath: ifProduction(Application.servedPath, "/"),
 };
 
@@ -95,16 +101,6 @@ const output: Output = {
  * @description Plugins need to webpack to perform build
  */
 const plugins = removeEmpty([
-    /**
-     * Makes some environment variables available in index.html.
-     * The public URL is available as %PUBLIC_URL% in index.html, e.g.:
-     * <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-     * In development, this will be an empty string.
-     * TODO for this and the below comment shouldn't we just use the server side entry point??? or is this good for development only???
-     *
-     * @env all
-     */
-    new InterpolateHtmlPlugin(Env.config()),
     /**
      * Generates an `index.html` file with the <script> injected.
      *
@@ -127,65 +123,80 @@ const plugins = removeEmpty([
         template: Application.publicEntryPoint,
     })),
     /**
+     * Makes some environment variables available in index.html.
+     * The public URL is available as %PUBLIC_URL% in index.html, e.g.:
+     * <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+     * In development, this will be an empty string.
+     * TODO for this and the below comment shouldn't we just use the server side entry point??? or is this good for development only???
+     *
+     * @env all
+     */
+    new InterpolateHtmlPlugin(Env.config()),
+    /**
      * Add module names to factory functions so they appear in browser profiler.
      *
      * @env development
      */
-    ifNotProduction(new webpack.NamedModulesPlugin()),
+    // http://docs.w3cub.com/webpack/plugins/named-modules-plugin/
+    // ifDevelopment(new webpack.NamedModulesPlugin()),
     /**
      * Makes some environment variables available to the JS code, for example:
      * if (process.env.NODE_ENV === "development") { ... }. See `./env.js`.
      *
      * @env all
      */
-    new webpack.DefinePlugin(Application.definePluginSettings),
+    // TODO how to do this now?????
+    // new webpack.DefinePlugin(Application.definePluginSettings),
     /**
      * Minify the code.
      * Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
      *
      * @env production
      */
-    ifProduction(new UglifyJsPlugin({
-        // Enable file caching
-        cache: true,
-        // Use multi-process parallel running to improve the build speed
-        // Default number of concurrent runs: os.cpus().length - 1
-        parallel: true,
-        sourceMap: Env.config("GENERATE_SOURCE_MAP") !== "false",
-        uglifyOptions: {
-            compress: {
-                // Disabled because of an issue with Uglify breaking seemingly valid code:
-                // https://github.com/facebook/create-react-app/issues/2376
-                // Pending further investigation:
-                // https://github.com/mishoo/UglifyJS2/issues/2011
-                comparisons: false,
-                ecma: 5,
-                warnings: false,
-            },
-            mangle: {
-                safari10: true,
-            },
-            output: {
-                // Turned on because emoji and regex is not minified properly using default
-                // https://github.com/facebook/create-react-app/issues/2488
-                ascii_only: true,
-                comments: false,
-                ecma: 5,
-            },
-            parse: {
-                // we want uglify-js to parse ecma 8 code. However we want it to output
-                // ecma 5 compliant code, to avoid issues with older browsers, this is
-                // whey we put `ecma: 5` to the compress and output section
-                // https://github.com/facebook/create-react-app/pull/4234
-                ecma: 8,
-            },
-        },
-    })),
+    // TODO how to do this now????? optimization maybe?
+    // ifProduction(new UglifyJsPlugin({
+    //     // Enable file caching
+    //     cache: true,
+    //     // Use multi-process parallel running to improve the build speed
+    //     // Default number of concurrent runs: os.cpus().length - 1
+    //     parallel: true,
+    //     sourceMap: Env.config("GENERATE_SOURCE_MAP") !== "false",
+    //     uglifyOptions: {
+    //         compress: {
+    //             // Disabled because of an issue with Uglify breaking seemingly valid code:
+    //             // https://github.com/facebook/create-react-app/issues/2376
+    //             // Pending further investigation:
+    //             // https://github.com/mishoo/UglifyJS2/issues/2011
+    //             comparisons: false,
+    //             ecma: 5,
+    //             warnings: false,
+    //         },
+    //         mangle: {
+    //             safari10: true,
+    //         },
+    //         output: {
+    //             // Turned on because emoji and regex is not minified properly using default
+    //             // https://github.com/facebook/create-react-app/issues/2488
+    //             ascii_only: true,
+    //             comments: false,
+    //             ecma: 5,
+    //         },
+    //         parse: {
+    //             // we want uglify-js to parse ecma 8 code. However we want it to output
+    //             // ecma 5 compliant code, to avoid issues with older browsers, this is
+    //             // whey we put `ecma: 5` to the compress and output section
+    //             // https://github.com/facebook/create-react-app/pull/4234
+    //             ecma: 8,
+    //         },
+    //     },
+    // })),
     /**
      * Extract css to file
      * @env production
      */
-    ifProduction(new ExtractTextPlugin({
+    // TODO how can we keep the hash but also still server it form the server side???
+    ifProduction(new MiniCssExtractPlugin({
+        chunkFilename: files.outputPattern.css,
         filename: files.outputPattern.css,
     })),
     /**
@@ -232,7 +243,7 @@ const plugins = removeEmpty([
      *
      * @env development
      */
-    ifNotProduction(new webpack.HotModuleReplacementPlugin()),
+    ifDevelopment(new webpack.HotModuleReplacementPlugin()),
     /**
      * Watcher doesn"t work well if you mistype casing in a path so we use
      * a plugin that prints an error when you attempt to do this.
@@ -240,7 +251,7 @@ const plugins = removeEmpty([
      *
      * @env development
      */
-    ifNotProduction(new CaseSensitivePathsPlugin()),
+    ifDevelopment(new CaseSensitivePathsPlugin()),
 
     /**
      * If you require a missing module and then `npm install` it, you still have
@@ -250,7 +261,7 @@ const plugins = removeEmpty([
      *
      * @env development
      */
-    ifNotProduction(new WatchMissingNodeModulesPlugin(Application.nodeModulesPath)),
+    ifDevelopment(new WatchMissingNodeModulesPlugin(Application.nodeModulesPath)),
     /**
      * Moment.js is an extremely popular library that bundles large locale files
      * by default due to how Webpack interprets its code. This is a practical
@@ -309,9 +320,10 @@ export default {
     bail: ifProduction(),
     devtool: ifProduction("source-map", "cheap-module-source-map"), // TODO if prod should we even do this???
     entry: removeEmpty([
-        ifNotProduction(require.resolve("react-dev-utils/webpackHotDevClient")),
+        ifDevelopment(require.resolve("react-dev-utils/webpackHotDevClient")),
         Application.clientEntryPoint,
     ]),
+    mode: ifProduction("production", "development"),
     module: {
         rules: [
             {
@@ -321,8 +333,8 @@ export default {
                     {
                         test: /\.(scss|sass|css)$/i,
                         use: removeEmpty([
-                            // ifProduction(MiniCssExtractPlugin.loader), // TODO with upgrade to webpack 4
-                            ifNotProduction({loader: "style-loader", options: {sourceMap: true}}),
+                            ifProduction(MiniCssExtractPlugin.loader),
+                            ifDevelopment({loader: "style-loader", options: {sourceMap: true}}),
                             {loader: "css-loader", options: {sourceMap: true}},
                             {
                                 loader: "postcss-loader",

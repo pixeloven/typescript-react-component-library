@@ -11,16 +11,14 @@ import chalk from "chalk";
 import fs from "fs-extra";
 import path from "path";
 import Promise from "promise";
+import FileSizeReporter from "react-dev-utils/FileSizeReporter";
+import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
+import printBuildError from "react-dev-utils/printBuildError";
+import printHostingInstructions from "react-dev-utils/printHostingInstructions";
 import webpack, {Stats} from "webpack";
 import Application from "./app/Application";
 import WebpackClientConfig from "./app/configs/webpack/client";
 import WebpackServerConfig from "./app/configs/webpack/server";
-import {
-    FileSizeReporter,
-    formatWebpackMessages,
-    printBuildError,
-    printHostingInstructions,
-} from "./app/libraries/ReactDevUtils";
 
 /**
  * Get FileSizeReporter functions

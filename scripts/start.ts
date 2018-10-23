@@ -8,15 +8,13 @@ import "./boostrap/development";
  */
 import assert from "assert";
 import chalk from "chalk";
+import clearConsole from "react-dev-utils/clearConsole";
+import openBrowser from "react-dev-utils/openBrowser";
+import WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
 import webpack from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import Application from "./app/Application";
 import WebpackClientConfig from "./app/configs/webpack/client";
-import {
-    clearConsole,
-    openBrowser,
-    WebpackDevServerUtils,
-} from "./app/libraries/ReactDevUtils";
 import WebpackDevServerConfig from "./app/libraries/WebpackDevServerConfig";
 
 /**

@@ -11,6 +11,7 @@ declare module "*.md";
  * @description Consult DefinitelyTyped before declaring below
  * http://definitelytyped.org/
  */
+declare module "interpolate-html-plugin";
 declare module "react-dev-utils/errorOverlayMiddleware";
 declare module "react-dev-utils/clearConsole";
 declare module "react-dev-utils/FileSizeReporter";
