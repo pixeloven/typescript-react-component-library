@@ -11,6 +11,7 @@ import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
 import WatchMissingNodeModulesPlugin from "react-dev-utils/WatchMissingNodeModulesPlugin";
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
+import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import webpack from "webpack";
 import {DevtoolModuleFilenameTemplateInfo, Node, Output, Resolve} from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
@@ -21,8 +22,6 @@ import files from "../files";
 import {catchAllRule, staticFileRule, typeScriptRule} from "./common/rules";
 
 // TODO create isServer or isClient to merge server config here too
-// TODO upgrade to webpack 4
-// TODO import MiniCssExtractPlugin from "mini-css-extract-plugin"; and remove the other extract one
 // TODO restore all the react-dev-utils and remove special lib
 // TODO Back track from Application
 
@@ -104,7 +103,7 @@ const plugins = removeEmpty([
     /**
      * Generates an `index.html` file with the <script> injected.
      *
-     * @env all
+     * @env all // TODO not really need for prod unless we server html instead of a react template
      */
     new HtmlWebpackPlugin(removeEmpty({
         inject: true,
@@ -131,7 +130,7 @@ const plugins = removeEmpty([
      *
      * @env all
      */
-    new InterpolateHtmlPlugin(Env.config()),
+    new InterpolateHtmlPlugin(HtmlWebpackPlugin, Env.config()),
     /**
      * Add module names to factory functions so they appear in browser profiler.
      *
@@ -147,49 +146,6 @@ const plugins = removeEmpty([
      */
     // TODO how to do this now?????
     // new webpack.DefinePlugin(Application.definePluginSettings),
-    /**
-     * Minify the code.
-     * Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-     *
-     * @env production
-     */
-    // TODO how to do this now????? optimization maybe?
-    // ifProduction(new UglifyJsPlugin({
-    //     // Enable file caching
-    //     cache: true,
-    //     // Use multi-process parallel running to improve the build speed
-    //     // Default number of concurrent runs: os.cpus().length - 1
-    //     parallel: true,
-    //     sourceMap: Env.config("GENERATE_SOURCE_MAP") !== "false",
-    //     uglifyOptions: {
-    //         compress: {
-    //             // Disabled because of an issue with Uglify breaking seemingly valid code:
-    //             // https://github.com/facebook/create-react-app/issues/2376
-    //             // Pending further investigation:
-    //             // https://github.com/mishoo/UglifyJS2/issues/2011
-    //             comparisons: false,
-    //             ecma: 5,
-    //             warnings: false,
-    //         },
-    //         mangle: {
-    //             safari10: true,
-    //         },
-    //         output: {
-    //             // Turned on because emoji and regex is not minified properly using default
-    //             // https://github.com/facebook/create-react-app/issues/2488
-    //             ascii_only: true,
-    //             comments: false,
-    //             ecma: 5,
-    //         },
-    //         parse: {
-    //             // we want uglify-js to parse ecma 8 code. However we want it to output
-    //             // ecma 5 compliant code, to avoid issues with older browsers, this is
-    //             // whey we put `ecma: 5` to the compress and output section
-    //             // https://github.com/facebook/create-react-app/pull/4234
-    //             ecma: 8,
-    //         },
-    //     },
-    // })),
     /**
      * Extract css to file
      * @env production
@@ -353,6 +309,32 @@ export default {
         ],
     },
     node,
+    optimization: {
+        /**
+         * Minify the code.
+         * Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
+         *
+         * @env production
+         */
+        minimize: ifProduction(),
+        minimizer: ifProduction([
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: true, // TODO should we do this in prod??
+                uglifyOptions: {
+                    compress: {
+                        comparisons: false,
+                        warnings: false,
+                    },
+                    output: {
+                        ascii_only: true,
+                        comments: false,
+                    },
+                },
+            }),
+        ], false),
+    },
     output,
     performance: { // TODO only for dev????
         hints: false,

@@ -13,7 +13,7 @@
     "allowJs": false,
     "jsx": "react",
     "moduleResolution": "node",
-    "rootDir": "src",
+    "rootDir": ".",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
