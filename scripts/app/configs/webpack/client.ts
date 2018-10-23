@@ -12,14 +12,13 @@ import WatchMissingNodeModulesPlugin from "react-dev-utils/WatchMissingNodeModul
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
-import webpack from "webpack";
+import webpack, {RuleSetRule} from "webpack";
 import {DevtoolModuleFilenameTemplateInfo, Node, Output, Resolve} from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
 import ManifestPlugin from "webpack-manifest-plugin";
 import Application from "../../Application";
 import Env from "../env";
 import files from "../files";
-import {catchAllRule, staticFileRule, typeScriptRule} from "./common/rules";
 
 // TODO create isServer or isClient to merge server config here too
 // TODO restore all the react-dev-utils and remove special lib
@@ -244,6 +243,76 @@ const plugins = removeEmpty([
 ]);
 
 /**
+ * All other files that aren't caught by the other loaders will go through this one.
+ * @description "file" loader makes sure those assets get served by WebpackDevServer.
+ * When you `import` an asset, you get its (virtual) filename.
+ * In production, they would get copied to the `build` folder.
+ * This loader doesn"t use a "test" so it will catch all modules
+ * that fall through the other loaders.
+ */
+const catchAllRule = {
+    exclude: [/\.(js|jsx|mjs)$/, /\.(ts|tsx)$/, /\.html$/, /\.json$/],
+    loader: require.resolve("file-loader"),
+    options: {
+        name: "[name].[hash:8].[ext]",
+        outputPath: "static/media/",
+    },
+};
+
+/**
+ * Handle css/scss
+ */
+const scssRule: RuleSetRule = {
+    test: /\.(scss|sass|css)$/i,
+    use: removeEmpty([
+        ifProduction(MiniCssExtractPlugin.loader),
+        ifDevelopment({loader: "style-loader", options: {sourceMap: true}}),
+        {loader: "css-loader", options: {sourceMap: true}},
+        {
+            loader: "postcss-loader",
+            options: {
+                ident: "postcss",
+                plugins: postCssPlugin,
+                sourceMap: true,
+            },
+        },
+        {loader: "sass-loader", options: {sourceMap: true}},
+    ]),
+};
+
+/**
+ * Define rule for static assets
+ * @description "url" loader works like "file" loader except that it embeds assets
+ * smaller than specified limit in bytes as data URLs to avoid requests.
+ */
+const staticFileRule: RuleSetRule = {
+    loader: require.resolve("url-loader"),
+    options: {
+        limit: 10000,
+        name: "static/media/[name].[hash:8].[ext]",
+    },
+    test: /\.(bmp|png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+};
+
+/**
+ * Define rule for transpiling TypeScript
+ * @description Disable type checker - we will use it in ForkTsCheckerWebpackPlugin
+ */
+const typeScriptRule: RuleSetRule = {
+    include: Application.srcPath,
+    test: /\.(ts|tsx)$/,
+    use: [
+        {
+            loader: require.resolve("ts-loader"),
+            options: {
+                configFile: Application.tsConfig,
+                transpileOnly: true,
+            },
+        },
+    ],
+};
+
+/**
  * @description Tell webpack how to resolve files and modules
  * Prevents users from importing files from outside of src/ (or node_modules/).
  * This often causes confusion because we only process files within src/ with babel.
@@ -281,35 +350,10 @@ export default {
     ]),
     mode: ifProduction("production", "development"),
     module: {
-        rules: [
-            {
-                oneOf: [
-                    staticFileRule,
-                    typeScriptRule,
-                    {
-                        test: /\.(scss|sass|css)$/i,
-                        use: removeEmpty([
-                            ifProduction(MiniCssExtractPlugin.loader),
-                            ifDevelopment({loader: "style-loader", options: {sourceMap: true}}),
-                            {loader: "css-loader", options: {sourceMap: true}},
-                            {
-                                loader: "postcss-loader",
-                                options: {
-                                    ident: "postcss",
-                                    plugins: postCssPlugin,
-                                    sourceMap: true,
-                                },
-                            },
-                            {loader: "sass-loader", options: {sourceMap: true}},
-                        ]),
-                    },
-                    catchAllRule,
-                ],
-            },
-        ],
+        rules: [{oneOf: [staticFileRule, typeScriptRule, scssRule, catchAllRule]}],
     },
     node,
-    optimization: {
+    optimization: removeEmpty({
         /**
          * Minify the code.
          * Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
@@ -333,8 +377,8 @@ export default {
                     },
                 },
             }),
-        ], false),
-    },
+        ]),
+    }),
     output,
     performance: { // TODO only for dev????
         hints: false,

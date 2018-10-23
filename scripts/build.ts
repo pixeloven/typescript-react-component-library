@@ -18,7 +18,7 @@ import printHostingInstructions from "react-dev-utils/printHostingInstructions";
 import webpack, {Stats} from "webpack";
 import Application from "./app/Application";
 import WebpackClientConfig from "./app/configs/webpack/client";
-// import WebpackServerConfig from "./app/configs/webpack/server";
+import WebpackServerConfig from "./app/configs/webpack/server";
 
 /**
  * Get FileSizeReporter functions
@@ -172,22 +172,21 @@ try {
      * Handle build for server side JavaScript
      * @description This lets us display how files changed
      */
-    // TODO should re-write measureFileSizesBeforeBuild to be more specific for the different paths
-    // measureFileSizesBeforeBuild(buildPath)
-    //     .then((previousFileSizes: OpaqueFileSizes) => {
-    //         return build(WebpackServerConfig, previousFileSizes);
-    //     }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
-    //         printBuildStatus(warnings);
-    //         printBuildFileSizesAfterGzip(buildPath, stats, previousFileSizes);
-    //         const buildRelativePath = path.relative(process.cwd(), buildPath);
-    //         printDeploymentInstructions(publicPath, buildRelativePath);
-    //     },
-    //     (error: Error) => {
-    //         console.log(chalk.red("Failed to compile.\n"));
-    //         printBuildError(error);
-    //         process.exit(1);
-    //     },
-    // );
+    measureFileSizesBeforeBuild(buildPath)
+        .then((previousFileSizes: OpaqueFileSizes) => {
+            return build(WebpackServerConfig, previousFileSizes);
+        }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
+            printBuildStatus(warnings);
+            printBuildFileSizesAfterGzip(buildPath, stats, previousFileSizes);
+            const buildRelativePath = path.relative(process.cwd(), buildPath);
+            printDeploymentInstructions(publicPath, buildRelativePath);
+        },
+        (error: Error) => {
+            console.log(chalk.red("Failed to compile.\n"));
+            printBuildError(error);
+            process.exit(1);
+        },
+    );
     /**
      * Handle build for client side JavaScript
      * @description This lets us display how files changed
