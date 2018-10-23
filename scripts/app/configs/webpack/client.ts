@@ -1,28 +1,18 @@
-import autoprefixer from "autoprefixer";
-import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
-import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 // TODO eventually remove once react-dev-utils cacthes up
 // import InterpolateHtmlPlugin from "react-dev-utils/InterpolateHtmlPlugin";
 import InterpolateHtmlPlugin from "interpolate-html-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
-import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
-import WatchMissingNodeModulesPlugin from "react-dev-utils/WatchMissingNodeModulesPlugin";
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
-import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
-import UglifyJsPlugin from "uglifyjs-webpack-plugin";
-import webpack, {RuleSetRule} from "webpack";
-import {DevtoolModuleFilenameTemplateInfo, Node, Output, Resolve} from "webpack";
+import {DevtoolModuleFilenameTemplateInfo, Output, Plugin} from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
 import ManifestPlugin from "webpack-manifest-plugin";
+import merge from "webpack-merge";
 import Application from "../../Application";
 import Env from "../env";
 import files from "../files";
-
-// TODO create isServer or isClient to merge server config here too
-// TODO restore all the react-dev-utils and remove special lib
-// TODO Back track from Application
+import common from "./common";
 
 /**
  * Utility functions to help segment configuration based on environment
@@ -43,22 +33,6 @@ const publicPath = Application.servedPath;
 const publicUrl = publicPath.slice(0, -1);
 
 /**
- * Post CSS fixes
- */
-const postCssPlugin = () => [
-    require("postcss-flexbugs-fixes"),
-    autoprefixer({
-        browsers: [
-            ">1%",
-            "last 4 versions",
-            "Firefox ESR",
-            "not ie < 9", // React doesn"t support IE8 anyway
-        ],
-        flexbox: "no-2009",
-    }),
-];
-
-/**
  * Describe source pathing in dev tools
  * @param info
  */
@@ -72,19 +46,15 @@ const devtoolModuleFilenameTemplate = (info: DevtoolModuleFilenameTemplateInfo) 
 };
 
 /**
- * @description Some libraries import Node modules but don"t use them in the browser.
- * Tell Webpack to provide empty mocks for them so importing them works.
+ * Define entrypoint(s) for client
  */
-const node: Node = {
-    child_process: "empty",
-    dgram: "empty",
-    fs: "empty",
-    net: "empty",
-    tls: "empty",
-};
+const entry = removeEmpty([
+    ifDevelopment(require.resolve("react-dev-utils/webpackHotDevClient"), undefined),
+    Application.clientEntryPoint,
+]);
 
 /**
- * @description Define output file and paths.
+ * @description Output instructions for client build
  */
 const output: Output = {
     chunkFilename: files.outputPattern.jsChunk, // TODO need to add support for hash pattern
@@ -96,9 +66,9 @@ const output: Output = {
 };
 
 /**
- * @description Plugins need to webpack to perform build
+ * @description Plugins for client specific builds
  */
-const plugins = removeEmpty([
+const plugins: Plugin[] = removeEmpty([
     /**
      * Generates an `index.html` file with the <script> injected.
      *
@@ -129,22 +99,7 @@ const plugins = removeEmpty([
      *
      * @env all
      */
-    new InterpolateHtmlPlugin(HtmlWebpackPlugin, Env.config()),
-    /**
-     * Add module names to factory functions so they appear in browser profiler.
-     *
-     * @env development
-     */
-    // http://docs.w3cub.com/webpack/plugins/named-modules-plugin/
-    // ifDevelopment(new webpack.NamedModulesPlugin()),
-    /**
-     * Makes some environment variables available to the JS code, for example:
-     * if (process.env.NODE_ENV === "development") { ... }. See `./env.js`.
-     *
-     * @env all
-     */
-    // TODO how to do this now?????
-    // new webpack.DefinePlugin(Application.definePluginSettings),
+    new InterpolateHtmlPlugin(HtmlWebpackPlugin, Env.config()), // TODO dones't seem to be working
     /**
      * Extract css to file
      * @env production
@@ -153,7 +108,7 @@ const plugins = removeEmpty([
     ifProduction(new MiniCssExtractPlugin({
         chunkFilename: files.outputPattern.css,
         filename: files.outputPattern.css,
-    })),
+    }), undefined),
     /**
      * Generate a manifest file which contains a mapping of all asset filenames
      * to their corresponding output file so that tools can pick it up without
@@ -163,7 +118,7 @@ const plugins = removeEmpty([
      */
     ifProduction(new ManifestPlugin({
         fileName: "asset-manifest.json",
-    })), // TODO again should we be doing this in prod????
+    }), undefined),
     /**
      * Generate a service worker script that will precache, and keep up to date,
      * the HTML & assets that are part of the Webpack build.
@@ -192,198 +147,16 @@ const plugins = removeEmpty([
         navigateFallbackWhitelist: [/^(?!\/__).*/],
         // Don't precache sourcemaps (they're large) and build asset manifest:
         staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
-    })),
-    /**
-     * This is necessary to emit hot updates (currently CSS only):
-     *
-     * @env development
-     */
-    ifDevelopment(new webpack.HotModuleReplacementPlugin()),
-    /**
-     * Watcher doesn"t work well if you mistype casing in a path so we use
-     * a plugin that prints an error when you attempt to do this.
-     * See https://github.com/facebookincubator/create-react-app/issues/240
-     *
-     * @env development
-     */
-    ifDevelopment(new CaseSensitivePathsPlugin()),
-
-    /**
-     * If you require a missing module and then `npm install` it, you still have
-     * to restart the development server for Webpack to discover it. This plugin
-     * makes the discovery automatic so you don"t have to restart.
-     * See https://github.com/facebookincubator/create-react-app/issues/186
-     *
-     * @env development
-     */
-    ifDevelopment(new WatchMissingNodeModulesPlugin(Application.nodeModulesPath)),
-    /**
-     * Moment.js is an extremely popular library that bundles large locale files
-     * by default due to how Webpack interprets its code. This is a practical
-     * solution that requires the user to opt into importing specific locales.
-     * @url https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-     * @env all
-     */
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    /**
-     * Perform type checking and linting in a separate process to speed up compilation
-     *
-     * @env all
-     */
-    ifProduction(new ForkTsCheckerWebpackPlugin({
-        async: false,
-        tsconfig: Application.tsConfig,
-        tslint: Application.tsLint,
-    }), new ForkTsCheckerWebpackPlugin({
-        async: false,
-        tsconfig: Application.tsConfig,
-        tslint: Application.tsLint,
-        watch: Application.srcPath,
-    })),
+    }), undefined),
 ]);
 
 /**
- * All other files that aren't caught by the other loaders will go through this one.
- * @description "file" loader makes sure those assets get served by WebpackDevServer.
- * When you `import` an asset, you get its (virtual) filename.
- * In production, they would get copied to the `build` folder.
- * This loader doesn"t use a "test" so it will catch all modules
- * that fall through the other loaders.
+ * Client side configuration
  */
-const catchAllRule = {
-    exclude: [/\.(js|jsx|mjs)$/, /\.(ts|tsx)$/, /\.html$/, /\.json$/],
-    loader: require.resolve("file-loader"),
-    options: {
-        name: "[name].[hash:8].[ext]",
-        outputPath: "static/media/",
-    },
-};
-
-/**
- * Handle css/scss
- */
-const scssRule: RuleSetRule = {
-    test: /\.(scss|sass|css)$/i,
-    use: removeEmpty([
-        ifProduction(MiniCssExtractPlugin.loader),
-        ifDevelopment({loader: "style-loader", options: {sourceMap: true}}),
-        {loader: "css-loader", options: {sourceMap: true}},
-        {
-            loader: "postcss-loader",
-            options: {
-                ident: "postcss",
-                plugins: postCssPlugin,
-                sourceMap: true,
-            },
-        },
-        {loader: "sass-loader", options: {sourceMap: true}},
-    ]),
-};
-
-/**
- * Define rule for static assets
- * @description "url" loader works like "file" loader except that it embeds assets
- * smaller than specified limit in bytes as data URLs to avoid requests.
- */
-const staticFileRule: RuleSetRule = {
-    loader: require.resolve("url-loader"),
-    options: {
-        limit: 10000,
-        name: "static/media/[name].[hash:8].[ext]",
-    },
-    test: /\.(bmp|png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-};
-
-/**
- * Define rule for transpiling TypeScript
- * @description Disable type checker - we will use it in ForkTsCheckerWebpackPlugin
- */
-const typeScriptRule: RuleSetRule = {
-    include: Application.srcPath,
-    test: /\.(ts|tsx)$/,
-    use: [
-        {
-            loader: require.resolve("ts-loader"),
-            options: {
-                configFile: Application.tsConfig,
-                transpileOnly: true,
-            },
-        },
-    ],
-};
-
-/**
- * @description Tell webpack how to resolve files and modules
- * Prevents users from importing files from outside of src/ (or node_modules/).
- * This often causes confusion because we only process files within src/ with babel.
- * To fix this, we prevent you from importing files out of src/ -- if you'd like to,
- * please link the files into your node_modules/ and let module-resolution kick in.
- * Make sure your source files are compiled, as they will not be processed in any way.
- */
-const resolve: Resolve = {
-    extensions: [
-        ".mjs",
-        ".web.ts",
-        ".ts",
-        ".web.tsx",
-        ".tsx",
-        ".web.js",
-        ".js",
-        ".json",
-        ".web.jsx",
-        ".jsx",
-    ],
-    modules: ["node_modules", Application.nodeModulesPath],
-    plugins: [
-        new ModuleScopePlugin(Application.srcPath, [Application.packagePath]),
-        new TsconfigPathsPlugin({ configFile: Application.tsConfig }),
-    ],
-};
-
-// TODO unify server and client configs for entry
-export default {
-    bail: ifProduction(),
+export default merge(common, {
     devtool: ifProduction("source-map", "cheap-module-source-map"), // TODO if prod should we even do this???
-    entry: removeEmpty([
-        ifDevelopment(require.resolve("react-dev-utils/webpackHotDevClient")),
-        Application.clientEntryPoint,
-    ]),
-    mode: ifProduction("production", "development"),
-    module: {
-        rules: [{oneOf: [staticFileRule, typeScriptRule, scssRule, catchAllRule]}],
-    },
-    node,
-    optimization: removeEmpty({
-        /**
-         * Minify the code.
-         * Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-         *
-         * @env production
-         */
-        minimize: ifProduction(),
-        minimizer: ifProduction([
-            new UglifyJsPlugin({
-                cache: true,
-                parallel: true,
-                sourceMap: true, // TODO should we do this in prod??
-                uglifyOptions: {
-                    compress: {
-                        comparisons: false,
-                        warnings: false,
-                    },
-                    output: {
-                        ascii_only: true,
-                        comments: false,
-                    },
-                },
-            }),
-        ]),
-    }),
+    entry,
     output,
-    performance: { // TODO only for dev????
-        hints: false,
-    },
     plugins,
-    resolve,
     target: "web",
-};
+});

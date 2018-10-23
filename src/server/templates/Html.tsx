@@ -4,6 +4,7 @@ interface Props {
     children: React.ReactNode;
 }
 
+// TODO inject in css and js file so we can use the hash
 const Html = (props: Props) => {
     return (
         <html lang="en">
