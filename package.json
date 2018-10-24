@@ -76,7 +76,7 @@
     "@types/storybook__addon-options": "^3.2.2",
     "@types/storybook__react": "^3.0.9",
     "@types/sw-precache-webpack-plugin": "^0.11.0",
-    "@types/tapable": "1.0.4",
+    "@types/tapable": "0.2.5",
     "@types/uglifyjs-webpack-plugin": "^1.1.0",
     "@types/webpack": "^4.4.17",
     "@types/webpack-config-utils": "^2.3.0",
@@ -139,9 +139,6 @@
   },
   "devEngines": {
     "node": "8.x || 9.x || 10.x"
-  },
-  "resolutions": {
-    "@types/tapable": "1.0.4"
   },
   "scripts": {
     "build": "run-s build-ts build-story",
