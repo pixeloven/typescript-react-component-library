@@ -273,6 +273,7 @@ With all of the items below we need to consider whether we want to maintain a si
     * Use reselect to prevent immutableJS for breaking into components
 * Look into MVCish frameworks for the client server
 * Does it still make sense to use `yarn`? `npm`? Or another alternative?
+* Cleanup package.json
 
 ## References
 1) https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2

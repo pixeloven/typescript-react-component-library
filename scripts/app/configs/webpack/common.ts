@@ -170,7 +170,7 @@ const plugins: Plugin[] = removeEmpty([
      *
      * @env development
      */
-    ifDevelopment(new webpack.HotModuleReplacementPlugin(), undefined),
+    ifDevelopment(new webpack.HotModuleReplacementPlugin(), undefined), // TODO client only???
     /**
      * Watcher doesn"t work well if you mistype casing in a path so we use
      * a plugin that prints an error when you attempt to do this.

@@ -26,13 +26,16 @@ class DefaultController {
      * @param res
      */
     public render = (req: Request, res: Response): void => {
+        // TODO need to handle 404s
+        const context = {};
         const activeRoute = routes.find((route: RouteProps) => !!matchPath(req.url, route));
         if (activeRoute) {
+            // `<!doctype html>` add tp stream???
             renderToNodeStream(
                 <Html>
-                <StaticRouter location={req.url} context={{}}>
-                    <App />
-                </StaticRouter>
+                    <StaticRouter location={req.url} context={context}>
+                        <App />
+                    </StaticRouter>
                 </Html>,
             ).pipe(res);
         } else {
