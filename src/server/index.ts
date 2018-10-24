@@ -5,6 +5,7 @@ import winston from "winston";
 import {config} from "./config";
 import {DefaultController} from "./controllers";
 
+// TODO make it so you can build just the server and not client too
 // TODO should explore mvc frameworks for express
 /**
  * Create express application
@@ -28,7 +29,7 @@ app.use(expressWinston.logger({
  * TODO read this from env
  * TODO ignore html file for build
  */
-app.use("/public", express.static("build"));
+app.use("/public", express.static("build/public"));
 
 /**
  * This defines a catch all route for serving all react pages

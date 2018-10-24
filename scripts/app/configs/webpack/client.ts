@@ -1,7 +1,4 @@
 import HtmlWebpackPlugin from "html-webpack-plugin";
-// TODO eventually remove once react-dev-utils cacthes up
-// import InterpolateHtmlPlugin from "react-dev-utils/InterpolateHtmlPlugin";
-import InterpolateHtmlPlugin from "interpolate-html-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
@@ -18,13 +15,11 @@ import common from "./common";
  * Utility functions to help segment configuration based on environment
  */
 const {ifProduction, ifDevelopment} = getIfUtils(Env.current);
-
 /**
  * Webpack uses `publicPath` to determine where the app is being served from.
  * It requires a trailing slash, or the file assets will get an incorrect path.
  */
-const publicPath = Application.servedPath;
-
+const publicPath = Env.config("PUBLIC_URL", "/"); // TODO need to redo webpack adn then build scripts to use the proper env vrs
 /**
  * publicUrl is just like `publicPath`, but we will provide it to our app
  * as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript
@@ -60,9 +55,9 @@ const output: Output = {
     chunkFilename: files.outputPattern.jsChunk, // TODO need to add support for hash pattern
     devtoolModuleFilenameTemplate, // TODO do we need this if we don't do sourcemaps in prod??
     filename: files.outputPattern.js,
-    path: ifProduction(`${Application.buildPath}/public`, "/"),
+    path: ifProduction(`${Application.buildPath}/public/`, "/"),
     pathinfo: ifDevelopment(),
-    publicPath: ifProduction(Application.servedPath, "/"),
+    publicPath: ifProduction(publicPath, "/"), // TODO ONE OF THESE IS BREAKING THE FONTS
 };
 
 /**
@@ -90,16 +85,6 @@ const plugins: Plugin[] = removeEmpty([
         }),
         template: Application.publicEntryPoint,
     })),
-    /**
-     * Makes some environment variables available in index.html.
-     * The public URL is available as %PUBLIC_URL% in index.html, e.g.:
-     * <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-     * In development, this will be an empty string.
-     * TODO for this and the below comment shouldn't we just use the server side entry point??? or is this good for development only???
-     *
-     * @env all
-     */
-    new InterpolateHtmlPlugin(HtmlWebpackPlugin, Env.config()), // TODO dones't seem to be working
     /**
      * Extract css to file
      * @env production

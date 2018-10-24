@@ -9,6 +9,6 @@ storiesOf("Components/Atoms/Example", module)
     .addDecorator(withReadme(Readme))
     .add("default", () => {
         return (
-            <Example />
+            <Example example={"example"} />
         );
     });

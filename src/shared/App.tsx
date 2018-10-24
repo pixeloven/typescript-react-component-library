@@ -4,6 +4,9 @@ import {SingleRoute} from "./components/atoms";
 import {NoMatch} from "./components/pages";
 import routes from "./routes";
 
+// TODO https://github.com/diegohaz/arc/blob/master/src-example/components/App.js
+// TODO template should be here not in pages
+// TODO this should also be stateless
 class App extends React.Component {
     public render(): React.ReactNode {
         return (

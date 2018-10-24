@@ -45,7 +45,7 @@ const catchAllRule = {
     loader: require.resolve("file-loader"),
     options: {
         name: "[name].[hash:8].[ext]",
-        outputPath: "static/media/",
+        outputPath: "static/media/", // TODO config
     },
 };
 
@@ -79,7 +79,7 @@ const staticFileRule: RuleSetRule = {
     loader: require.resolve("url-loader"),
     options: {
         limit: 10000,
-        name: "static/media/[name].[hash:8].[ext]",
+        name: "static/media/[name].[hash:8].[ext]", // TODO is this needed I don't think so
     },
     test: /\.(bmp|png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
 };

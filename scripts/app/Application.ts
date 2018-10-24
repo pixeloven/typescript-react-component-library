@@ -2,7 +2,6 @@ import fs from "fs";
 import path from "path";
 import url from "url";
 import {Environment} from "./configs/env";
-import Env from "./configs/env";
 import files from "./configs/files";
 import paths from "./configs/paths";
 import servers, {
@@ -20,29 +19,6 @@ export interface Package {
 // TODO consolidate this under either source or lib or something else.
 // TODO once paths.js is removed we should remove the help getters and rely on just resolving from a config
 class Application {
-
-    /**
-     * Stringify all values so we can feed into Webpack DefinePlugin
-     * @type Object
-     */
-    public static get definePluginSettings(): object {
-        const env = Env.config();
-        return {
-            "process.env": Object.keys(env).reduce((values, key) => {
-                    values[key] = JSON.stringify(env[key]);
-                    return values;
-                }, {},
-            ),
-        };
-    }
-
-    public static get sourceMapType(): string | boolean {
-        if (Env.current === "production") {
-            const shouldUseSourceMap = Env.config("GENERATE_SOURCE_MAP") !== "false";
-            return shouldUseSourceMap ? "source-map" : false;
-        }
-        return "cheap-module-source-map";
-    }
 
     /**
      * Return Application name
