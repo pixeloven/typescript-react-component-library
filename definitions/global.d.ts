@@ -20,7 +20,6 @@ declare module "react-dev-utils/noopServiceWorkerMiddleware";
 declare module "react-dev-utils/openBrowser";
 declare module "react-dev-utils/printBuildError";
 declare module "react-dev-utils/printHostingInstructions";
-declare module "react-dev-utils/InterpolateHtmlPlugin";
 declare module "react-dev-utils/ModuleScopePlugin";
 declare module "react-dev-utils/WatchMissingNodeModulesPlugin";
 declare module "react-dev-utils/WebpackDevServerUtils";

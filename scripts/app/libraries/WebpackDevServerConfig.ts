@@ -1,13 +1,11 @@
 import {Application} from "express-serve-static-core";
+import errorOverlayMiddleware from "react-dev-utils/errorOverlayMiddleware";
+import ignoredFiles from "react-dev-utils/ignoredFiles";
+import noopServiceWorkerMiddleware from "react-dev-utils/noopServiceWorkerMiddleware";
 import {
     Proxy,
     Server,
 } from "../configs/servers";
-import {
-    errorOverlayMiddleware,
-    ignoredFiles,
-    noopServiceWorkerMiddleware,
-} from "./ReactDevUtils";
 
 // TODO there might be some official typescript things here
 class WebpackDevServerConfig {

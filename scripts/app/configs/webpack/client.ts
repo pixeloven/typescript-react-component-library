@@ -1,0 +1,147 @@
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import path from "path";
+import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
+import {DevtoolModuleFilenameTemplateInfo, Output, Plugin} from "webpack";
+import {getIfUtils, removeEmpty} from "webpack-config-utils";
+import ManifestPlugin from "webpack-manifest-plugin";
+import merge from "webpack-merge";
+import Application from "../../Application";
+import Env from "../env";
+import files from "../files";
+import common from "./common";
+
+/**
+ * Utility functions to help segment configuration based on environment
+ */
+const {ifProduction, ifDevelopment} = getIfUtils(Env.current);
+/**
+ * Webpack uses `publicPath` to determine where the app is being served from.
+ * It requires a trailing slash, or the file assets will get an incorrect path.
+ */
+const publicPath = Env.config("PUBLIC_URL", "/"); // TODO need to redo webpack adn then build scripts to use the proper env vrs
+/**
+ * publicUrl is just like `publicPath`, but we will provide it to our app
+ * as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript
+ * Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
+ */
+const publicUrl = publicPath.slice(0, -1);
+
+/**
+ * Describe source pathing in dev tools
+ * @param info
+ */
+const devtoolModuleFilenameTemplate = (info: DevtoolModuleFilenameTemplateInfo) => {
+    if (ifProduction()) {
+        return path
+            .relative(Application.srcPath, info.absoluteResourcePath)
+            .replace(/\\/g, "/");
+    }
+    return path.resolve(info.absoluteResourcePath).replace(/\\/g, "/");
+};
+
+/**
+ * Define entrypoint(s) for client
+ */
+const entry = removeEmpty([
+    ifDevelopment(require.resolve("react-dev-utils/webpackHotDevClient"), undefined),
+    Application.clientEntryPoint,
+]);
+
+/**
+ * @description Output instructions for client build
+ */
+const output: Output = {
+    chunkFilename: files.outputPattern.jsChunk, // TODO need to add support for hash pattern
+    devtoolModuleFilenameTemplate, // TODO do we need this if we don't do sourcemaps in prod??
+    filename: files.outputPattern.js,
+    path: ifProduction(`${Application.buildPath}/public/`, "/"),
+    pathinfo: ifDevelopment(),
+    publicPath: ifProduction(publicPath, "/"), // TODO ONE OF THESE IS BREAKING THE FONTS
+};
+
+/**
+ * @description Plugins for client specific builds
+ */
+const plugins: Plugin[] = removeEmpty([
+    /**
+     * Generates an `index.html` file with the <script> injected.
+     *
+     * @env all // TODO not really need for prod unless we server html instead of a react template
+     */
+    new HtmlWebpackPlugin(removeEmpty({
+        inject: true,
+        minify: ifProduction({
+            collapseWhitespace: true,
+            keepClosingSlash: true,
+            minifyCSS: true,
+            minifyJS: true,
+            minifyURLs: true,
+            removeComments: true,
+            removeEmptyAttributes: true,
+            removeRedundantAttributes: true,
+            removeStyleLinkTypeAttributes: true,
+            useShortDoctype: true,
+        }),
+        template: Application.publicEntryPoint,
+    })),
+    /**
+     * Extract css to file
+     * @env production
+     */
+    // TODO how can we keep the hash but also still server it form the server side???
+    ifProduction(new MiniCssExtractPlugin({
+        chunkFilename: files.outputPattern.css,
+        filename: files.outputPattern.css,
+    }), undefined),
+    /**
+     * Generate a manifest file which contains a mapping of all asset filenames
+     * to their corresponding output file so that tools can pick it up without
+     * having to parse `index.html`.
+     *
+     * @env production
+     */
+    ifProduction(new ManifestPlugin({
+        fileName: "asset-manifest.json",
+    }), undefined),
+    /**
+     * Generate a service worker script that will precache, and keep up to date,
+     * the HTML & assets that are part of the Webpack build.
+     *
+     * @env production
+     */
+    ifProduction(new SWPrecacheWebpackPlugin({
+        // By default, a cache-busting query parameter is appended to requests
+        // used to populate the caches, to ensure the responses are fresh.
+        // If a URL is already hashed by Webpack, then there is no concern
+        // about it being stale, and the cache-busting can be skipped.
+        dontCacheBustUrlsMatching: /\.\w{8}\./,
+        filename: "service-worker.js",
+        logger: (message: string): void => {
+            const totalPrecacheMsg = message.indexOf("Total precache size is") === 0;
+            const skippingStaticResourceMsg = message.indexOf("Skipping static resource") === 0;
+            if (!totalPrecacheMsg && !skippingStaticResourceMsg) {
+                console.log(message);
+            }
+        },
+        minify: true,
+        // For unknown URLs, fallback to the index page
+        navigateFallback: publicUrl + "/index.html",
+        // Ignores URLs starting from /__ (useful for Firebase):
+        // https://github.com/facebookincubator/create-react-app/issues/2237#issuecomment-302693219
+        navigateFallbackWhitelist: [/^(?!\/__).*/],
+        // Don't precache sourcemaps (they're large) and build asset manifest:
+        staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
+    }), undefined),
+]);
+
+/**
+ * Client side configuration
+ */
+export default merge(common, {
+    devtool: ifProduction("source-map", "cheap-module-source-map"), // TODO if prod should we even do this???
+    entry,
+    output,
+    plugins,
+    target: "web",
+});

@@ -244,17 +244,15 @@ REACT_APP_BAR=$DOMAIN/bar
 
 ## Current Tasks
 With all of the items below we need to consider whether we want to maintain a single application or multiple applications. Now that we are doing PWA, SSR, etc it might make sense to maintian a single app and just break it into templates and pages.
-* Write config in type script
-    * Create definitions https://medium.com/webpack/unambiguous-webpack-config-with-typescript-8519def2cac7
+* Create development entry point for server side code
+    * eliminate the .html file and plugins
+    * cleanup build scripts even more
+    * Add CSS minification https://github.com/NMFR/optimize-css-assets-webpack-plugin
+* Implement Router config 
+    * https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
+    * Or write our own
 * Add aliases for the atomic design stuff
     * https://stackoverflow.com/questions/43281741/how-to-use-paths-in-tsconfig-json
-* Add linting to all files
-    * First need to port everything to TS
-    * Second update lint scripts to check all files and prevent JS
-* Create a build step for importing in semantic ui scss (might not be a good idea yet)
-* Upgrade to webpack 4
-    * More than likely required to gt storybook working
-    * likely need to find alternatives for the .env import and uglify
 * Define where `connect` and `reduxForm` will be defined. (Should be outside component)
     * Might make sense to put in the index.ts definition or somewhere else?
 * Define where redux-sagas are going to go and build out infrastructure for them
@@ -273,26 +271,6 @@ With all of the items below we need to consider whether we want to maintain a si
         Could be one option? 
     * API/Data should use immutable JS... perhaps everything should?
     * Use reselect to prevent immutableJS for breaking into components
-* Need to convert node to TypeScript
-    * Fork and rewrite client
-    * Possibly fork and rewrite server or write definitions
-* Update TSLint/ TS Config
-    *  Prevent the use of standard JS.
-    * Do we want this? https://www.npmjs.com/package/tslint-config-airbnb
-    * "src/**.js" adn make it pure TS
-    * tsconfig __snapshot__ vs __mocks__
-* Test out hypernova and variants for SSR as a service
-    * Might be able to add a .ssr in source to designate that a component can be rendered server side.
-    * Need to generate a distribution library not just a standard build
-* Might use nwb vs neutrino instead of create react app
-    * We might need to eject the current config. (Currently trying to keep it all simple until ready for prod)
-* Move storybook down or upgrade scripts but either way we should consolidate some of the babel deps
-* See if we can also write node code in typescript
-* ejected config
-    * can add scss loader instead of the hack job I have
-    * cleanup dependecies
-    * can get watch to work with the server too?
-* Need to hide build scripts that shouldn't be public
 * Look into MVCish frameworks for the client server
 * Does it still make sense to use `yarn`? `npm`? Or another alternative?
 

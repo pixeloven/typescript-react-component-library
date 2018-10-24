@@ -8,13 +8,13 @@ export interface Files {
     lock: string;
     outputPattern: {
         css: string;
+        cssChunk: string;
         js: string;
         jsChunk: string;
         jsServer: string;
     };
     package: string;
     tsConfig: string;
-    tsConfigProd: string;
     tsLint: string;
 }
 
@@ -26,10 +26,8 @@ const files: Files = {
     },
     lock: "yarn.lock",
     outputPattern: {
-        // TODO how can we keep the hash but also still server it form the server side???
-        // TODO need to only extract once... right now we do it for both server and browser builds
-        // const cssFilename = "static/css/[name].[contenthash:8].css";
         css: "static/css/[name].css",
+        cssChunk: "static/css/[name].[contenthash:8].css",
         // jsOutputFilePattern: "static/js/[name].[chunkhash:8].js",
         js: "static/js/[name].js",
         // TODO implement hashing and chunking again
@@ -39,7 +37,6 @@ const files: Files = {
     },
     package: "package.json",
     tsConfig: "tsconfig.json", // TODO should use the ENV to determine this instead of hard coding
-    tsConfigProd: "tsconfig.json",
     tsLint: "tslint.json",
 };
 

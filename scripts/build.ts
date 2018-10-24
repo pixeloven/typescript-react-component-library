@@ -11,16 +11,14 @@ import chalk from "chalk";
 import fs from "fs-extra";
 import path from "path";
 import Promise from "promise";
+import FileSizeReporter from "react-dev-utils/FileSizeReporter";
+import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
+import printBuildError from "react-dev-utils/printBuildError";
+import printHostingInstructions from "react-dev-utils/printHostingInstructions";
 import webpack, {Stats} from "webpack";
 import Application from "./app/Application";
-import WebpackProductionClientConfig from "./app/configs/webpack.config.client.production";
-import WebpackProductionServerConfig from "./app/configs/webpack.config.server.production";
-import {
-    FileSizeReporter,
-    formatWebpackMessages,
-    printBuildError,
-    printHostingInstructions,
-} from "./app/libraries/ReactDevUtils";
+import WebpackClientConfig from "./app/configs/webpack/client";
+import WebpackServerConfig from "./app/configs/webpack/server";
 
 /**
  * Get FileSizeReporter functions
@@ -167,21 +165,19 @@ try {
     assert(Application.publicEntryPoint);
 
     const buildPath = Application.buildPath;
-
+    const publicPath = Application.servedPath;
     setupBuildDirectory();
 
     /**
      * Handle build for server side JavaScript
      * @description This lets us display how files changed
      */
-    // TODO should re-write measureFileSizesBeforeBuild to be more specific for the different paths
     measureFileSizesBeforeBuild(buildPath)
         .then((previousFileSizes: OpaqueFileSizes) => {
-            return build(WebpackProductionServerConfig, previousFileSizes);
+            return build(WebpackServerConfig, previousFileSizes);
         }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
             printBuildStatus(warnings);
             printBuildFileSizesAfterGzip(buildPath, stats, previousFileSizes);
-            const publicPath = WebpackProductionServerConfig.output.publicPath;
             const buildRelativePath = path.relative(process.cwd(), buildPath);
             printDeploymentInstructions(publicPath, buildRelativePath);
         },
@@ -199,11 +195,10 @@ try {
     measureFileSizesBeforeBuild(clientBuildPath)
         .then((previousFileSizes: OpaqueFileSizes) => {
             copyPublicDirToBuild();
-            return build(WebpackProductionClientConfig, previousFileSizes);
+            return build(WebpackClientConfig, previousFileSizes);
         }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
             printBuildStatus(warnings);
             printBuildFileSizesAfterGzip(clientBuildPath, stats, previousFileSizes);
-            const publicPath = WebpackProductionClientConfig.output.publicPath;
             const buildRelativePath = path.relative(process.cwd(), buildPath);
             printDeploymentInstructions(publicPath, buildRelativePath);
         },

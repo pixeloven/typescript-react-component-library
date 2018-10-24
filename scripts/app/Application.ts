@@ -21,14 +21,6 @@ export interface Package {
 class Application {
 
     /**
-     * Return server configuration for specific environment
-     * @param env
-     */
-    public static server(env: Environment): Server {
-        return servers[env] as Server;
-    }
-
-    /**
      * Return Application name
      * @returns {string}
      */
@@ -137,19 +129,6 @@ class Application {
     }
 
     /**
-     * Resolve relative path
-     * @param relativePath
-     * @param strict if true returns
-     */
-    public static resolvePath(relativePath: string, strict: boolean = true): string {
-        const absolutePath = path.resolve(Application.processPath, relativePath);
-        if (strict && !fs.existsSync(absolutePath)) {
-            throw new FileNotFoundException(`No such file or directory ${absolutePath}.`);
-        }
-        return absolutePath;
-    }
-
-    /**
      * Return src path
      * @returns {string}
      */
@@ -166,14 +145,6 @@ class Application {
     }
 
     /**
-     * Return ts config
-     * @returns {string}
-     */
-    public static get tsConfigProd(): string {
-        return Application.resolvePath(files.tsConfigProd);
-    }
-
-    /**
      * Return ts lint
      * @returns {string}
      */
@@ -187,6 +158,27 @@ class Application {
      */
     public static get usingYarn(): boolean {
         return files.lock.includes("yarn");
+    }
+
+    /**
+     * Return server configuration for specific environment
+     * @param env
+     */
+    public static server(env: Environment): Server {
+        return servers[env] as Server;
+    }
+
+    /**
+     * Resolve relative path
+     * @param relativePath
+     * @param strict if true returns
+     */
+    public static resolvePath(relativePath: string, strict: boolean = true): string {
+        const absolutePath = path.resolve(Application.processPath, relativePath);
+        if (strict && !fs.existsSync(absolutePath)) {
+            throw new FileNotFoundException(`No such file or directory ${absolutePath}.`);
+        }
+        return absolutePath;
     }
 }
 
