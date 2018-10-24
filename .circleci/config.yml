@@ -9,11 +9,6 @@ jobs:
     # specify the version you desire here
     - image: circleci/node:8.10
 
-    # Specify service dependencies here if necessary
-    # CircleCI maintains a library of pre-built images
-    # documented at https://circleci.com/docs/2.0/circleci-images/
-    # - image: circleci/mongo:3.4.4
-
     working_directory: ~/repo
 
     steps:
@@ -28,11 +23,11 @@ jobs:
 
     - run:
         name: Update NPM
-        command: npm install -g npm
+        command: sudo npm install -g npm
 
     - run:
         name: Update Yarn
-        command: npm install -g yarn
+        command: sudo npm install -g yarn
 
     - run:
         name: Install Dependencies
