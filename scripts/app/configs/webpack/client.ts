@@ -3,6 +3,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
 import {DevtoolModuleFilenameTemplateInfo, Output, Plugin} from "webpack";
+import webpack from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
 import ManifestPlugin from "webpack-manifest-plugin";
 import merge from "webpack-merge";
@@ -15,17 +16,12 @@ import common from "./common";
  * Utility functions to help segment configuration based on environment
  */
 const {ifProduction, ifDevelopment} = getIfUtils(Env.current);
+
 /**
  * Webpack uses `publicPath` to determine where the app is being served from.
  * It requires a trailing slash, or the file assets will get an incorrect path.
  */
-const publicPath = Env.config("PUBLIC_URL", "/"); // TODO need to redo webpack adn then build scripts to use the proper env vrs
-/**
- * publicUrl is just like `publicPath`, but we will provide it to our app
- * as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript
- * Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
- */
-const publicUrl = publicPath.slice(0, -1);
+const publicPath = Env.config("PUBLIC_URL", "/public/");
 
 /**
  * Describe source pathing in dev tools
@@ -55,9 +51,8 @@ const output: Output = {
     chunkFilename: files.outputPattern.jsChunk, // TODO need to add support for hash pattern
     devtoolModuleFilenameTemplate, // TODO do we need this if we don't do sourcemaps in prod??
     filename: files.outputPattern.js,
-    path: ifProduction(`${Application.buildPath}/public/`, "/"),
-    pathinfo: ifDevelopment(),
-    publicPath: ifProduction(publicPath, "/"), // TODO ONE OF THESE IS BREAKING THE FONTS
+    path: `${Application.buildPath}/public/`,
+    publicPath: ifProduction(publicPath, "/"),
 };
 
 /**
@@ -126,13 +121,19 @@ const plugins: Plugin[] = removeEmpty([
         },
         minify: true,
         // For unknown URLs, fallback to the index page
-        navigateFallback: publicUrl + "/index.html",
+        navigateFallback: `${publicPath}index.html`,
         // Ignores URLs starting from /__ (useful for Firebase):
         // https://github.com/facebookincubator/create-react-app/issues/2237#issuecomment-302693219
         navigateFallbackWhitelist: [/^(?!\/__).*/],
         // Don't precache sourcemaps (they're large) and build asset manifest:
         staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
     }), undefined),
+    /**
+     * This is necessary to emit hot updates (currently CSS only):
+     *
+     * @env development
+     */
+    ifDevelopment(new webpack.HotModuleReplacementPlugin(), undefined),
 ]);
 
 /**
@@ -141,6 +142,7 @@ const plugins: Plugin[] = removeEmpty([
 export default merge(common, {
     devtool: ifProduction("source-map", "cheap-module-source-map"), // TODO if prod should we even do this???
     entry,
+    name: "client",
     output,
     plugins,
     target: "web",
