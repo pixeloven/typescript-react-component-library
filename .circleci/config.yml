@@ -26,7 +26,17 @@ jobs:
         # fallback to using the latest cache if no exact match is found
         - v1-dependencies-
 
-    - run: yarn install
+    - run:
+        name: Update NPM
+        command: npm install -g npm
+
+    - run:
+        name: Update Yarn
+        command: npm install -g yarn
+
+    - run:
+        name: Install Dependencies
+        command: yarn install
 
     - save_cache:
         paths:
