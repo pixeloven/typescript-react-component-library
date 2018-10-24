@@ -1,11 +1,22 @@
+/**
+ * Bootstrap development env
+ */
+import "./boostrap/development";
+
 import cors from "cors";
 import express from "express";
 import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackHotServerMiddleware from "webpack-hot-server-middleware";
+import Env from "./app/configs/env";
 import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
+
+Env.load();
+
+// TODO refresh if css changes
+// TODO refresh if server code changes
 
 // https://github.com/gaearon/react-hot-loader
 // https://github.com/webpack-contrib/webpack-hot-middleware
@@ -37,4 +48,4 @@ app.use(webpackHotServerMiddleware(combinedCompiler));
  * Start express server on specific host and port
  * TODO in dev should migrate ports if already in use
  */
-app.listen(8080);
+app.listen(8083);

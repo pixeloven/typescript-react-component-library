@@ -12,8 +12,6 @@ import Env from "../env";
 import files from "../files";
 import common from "./common";
 
-Env.load(); // TODO should do in server.... once we get rid of scripts
-
 /**
  * Utility functions to help segment configuration based on environment
  */
@@ -42,7 +40,7 @@ const devtoolModuleFilenameTemplate = (info: DevtoolModuleFilenameTemplateInfo) 
  * Define entrypoint(s) for client
  */
 const entry = removeEmpty([
-    // ifDevelopment("webpack-hot-middleware/client?reload=true", undefined),
+    ifDevelopment("webpack-hot-middleware/client?reload=true", undefined),
     // ifDevelopment(require.resolve("react-dev-utils/webpackHotDevClient"), undefined), // TODO we lose the browser console errors if we use our own here -- rewrite
     Application.clientEntryPoint,
 ]);
@@ -132,7 +130,7 @@ const plugins: Plugin[] = removeEmpty([
         staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
     }), undefined),
     /**
-     * This is necessary to emit hot updates (currently CSS only):
+     * This is necessary to emit hot updates
      *
      * @env development
      */

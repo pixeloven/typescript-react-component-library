@@ -79,7 +79,7 @@ const staticFileRule: RuleSetRule = {
     loader: require.resolve("url-loader"),
     options: {
         limit: 10000,
-        name: "static/media/[name].[hash:8].[ext]", // TODO is this needed I don't think so
+        name: "static/media/[name].[hash:8].[ext]", // TODO is this setting needed I don't think so
     },
     test: /\.(bmp|png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
 };

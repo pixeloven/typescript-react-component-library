@@ -160,7 +160,7 @@
     "lint-scss": "stylelint src/**/*.scss --syntax scss",
     "lint-scss-fix": "stylelint src/**/*.scss --syntax scss --fix",
     "precommit": "lint-staged",
-    "start-server": "NODE_ENV=development nodemon --watch ./src --exec 'ts-node --files src/server/index.ts'",
+    "start-server": "NODE_ENV=development nodemon --watch ./src --exec 'ts-node --files scripts/serve.ts'",
     "start": "run-s start-ts",
     "start-ts": "ts-node --files scripts/start.ts",
     "start-story": "start-storybook -p 9001 -c .storybook",

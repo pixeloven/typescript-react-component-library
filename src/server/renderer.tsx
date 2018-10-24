@@ -28,4 +28,3 @@ export default (props: RendererProps) => (req: Request, res: Response): void => 
         res.status(404).send("O no we should be serving a 404!");
     }
 };
-// https://github.com/catamphetamine/universal-webpack/issues/11

@@ -6,8 +6,6 @@ import Env from "../env";
 import files from "../files";
 import common from "./common";
 
-Env.load(); // TODO should do in server.... once we get rid of scripts
-
 /**
  * Utility functions to help segment configuration based on environment
  */
