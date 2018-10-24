@@ -3,6 +3,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
 import {DevtoolModuleFilenameTemplateInfo, Output, Plugin} from "webpack";
+import webpack from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
 import ManifestPlugin from "webpack-manifest-plugin";
 import merge from "webpack-merge";
@@ -10,6 +11,8 @@ import Application from "../../Application";
 import Env from "../env";
 import files from "../files";
 import common from "./common";
+
+Env.load(); // TODO should do in server.... once we get rid of scripts
 
 /**
  * Utility functions to help segment configuration based on environment
@@ -20,7 +23,7 @@ const {ifProduction, ifDevelopment} = getIfUtils(Env.current);
  * Webpack uses `publicPath` to determine where the app is being served from.
  * It requires a trailing slash, or the file assets will get an incorrect path.
  */
-const publicPath = Env.config("PUBLIC_URL", "/");
+const publicPath = Env.config("PUBLIC_URL", "/public/");
 
 /**
  * Describe source pathing in dev tools
@@ -39,7 +42,7 @@ const devtoolModuleFilenameTemplate = (info: DevtoolModuleFilenameTemplateInfo) 
  * Define entrypoint(s) for client
  */
 const entry = removeEmpty([
-    ifDevelopment("webpack-hot-middleware/client?reload=true", undefined),
+    // ifDevelopment("webpack-hot-middleware/client?reload=true", undefined),
     // ifDevelopment(require.resolve("react-dev-utils/webpackHotDevClient"), undefined), // TODO we lose the browser console errors if we use our own here -- rewrite
     Application.clientEntryPoint,
 ]);
@@ -51,8 +54,8 @@ const output: Output = {
     chunkFilename: files.outputPattern.jsChunk, // TODO need to add support for hash pattern
     devtoolModuleFilenameTemplate, // TODO do we need this if we don't do sourcemaps in prod??
     filename: files.outputPattern.js,
-    path: ifProduction(`${Application.buildPath}/public/`, "/public/"),
-    publicPath: ifProduction(publicPath, "/"),
+    path: `${Application.buildPath}/public`,
+    publicPath,
 };
 
 /**
@@ -128,6 +131,12 @@ const plugins: Plugin[] = removeEmpty([
         // Don't precache sourcemaps (they're large) and build asset manifest:
         staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
     }), undefined),
+    /**
+     * This is necessary to emit hot updates (currently CSS only):
+     *
+     * @env development
+     */
+    ifDevelopment(new webpack.HotModuleReplacementPlugin(), undefined),
 ]);
 
 /**

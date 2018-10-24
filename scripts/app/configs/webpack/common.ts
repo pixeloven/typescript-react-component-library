@@ -166,12 +166,6 @@ const performance: Options.Performance = {
  */
 const plugins: Plugin[] = removeEmpty([
     /**
-     * This is necessary to emit hot updates (currently CSS only):
-     *
-     * @env development
-     */
-    ifDevelopment(new webpack.HotModuleReplacementPlugin(), undefined), // TODO client only???
-    /**
      * Watcher doesn"t work well if you mistype casing in a path so we use
      * a plugin that prints an error when you attempt to do this.
      * See https://github.com/facebookincubator/create-react-app/issues/240

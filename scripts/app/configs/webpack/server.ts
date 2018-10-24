@@ -6,6 +6,8 @@ import Env from "../env";
 import files from "../files";
 import common from "./common";
 
+Env.load(); // TODO should do in server.... once we get rid of scripts
+
 /**
  * Utility functions to help segment configuration based on environment
  */
@@ -15,7 +17,7 @@ const {ifProduction} = getIfUtils(Env.current);
  * Webpack uses `publicPath` to determine where the app is being served from.
  * It requires a trailing slash, or the file assets will get an incorrect path.
  */
-const publicPath = Env.config("PUBLIC_URL", "/");
+const publicPath = Env.config("PUBLIC_URL", "/public/");
 
 // TODO need config for development... right now it is rendering 100% on client... can also maybe get rid of index.html
 // TODO also need to get ENV into server and client
@@ -26,8 +28,9 @@ export default merge(common, {
     name: "server",
     output: {
         filename: files.outputPattern.jsServer,
-        path: ifProduction(Application.buildPath, "/"),
-        publicPath: ifProduction(publicPath, "/"), // TODO not sure about these for development
+        libraryTarget: "commonjs2",
+        path: Application.buildPath,
+        publicPath,
     },
     target: "node",
 });

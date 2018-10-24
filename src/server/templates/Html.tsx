@@ -2,9 +2,10 @@ import * as React from "react";
 
 interface Props {
     children: React.ReactNode;
+    css?: React.Component;
+    js?: React.Component;
 }
 
-// TODO inject in css and js file so we can use the hash
 const Html = (props: Props) => {
     return (
         <html lang="en">
@@ -14,7 +15,7 @@ const Html = (props: Props) => {
                 <meta name="theme-color" content="#000000" />
                 <link rel="manifest" href="/public/manifest.json" />
                 <link rel="shortcut icon" href="/public/favicon.ico" />
-                <link rel="stylesheet" type="text/css" href="/public/static/css/main.css" />
+                {props.css}
                 <title>React App</title>
             </head>
             <body>
@@ -22,7 +23,7 @@ const Html = (props: Props) => {
                 You need to enable JavaScript to run this app.
             </noscript>
             <div id="root">{props.children}</div>
-            <script type="text/javascript" src="/public/static/js/main.js" />
+            {props.js}
             </body>
         </html>
     );

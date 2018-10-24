@@ -248,6 +248,8 @@ With all of the items below we need to consider whether we want to maintain a si
     * eliminate the .html file and plugins
     * cleanup build scripts even more
     * Add CSS minification https://github.com/NMFR/optimize-css-assets-webpack-plugin
+* Implement chunking 
+    * https://github.com/faceyspacey/webpack-flush-chunks
 * Implement Router config 
     * https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
     * Or write our own
