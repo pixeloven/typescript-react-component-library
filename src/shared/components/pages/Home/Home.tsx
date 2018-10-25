@@ -1,7 +1,6 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import {Container, Grid, Header, Image, Segment} from "semantic-ui-react";
-
 import {Default} from "../../templates";
 
 class Home extends React.Component<RouteComponentProps> {
@@ -15,7 +14,7 @@ class Home extends React.Component<RouteComponentProps> {
                             <Segment inverted={true} vertical={true} textAlign="center">
                                 <Container>
                                     <Image className="app-logo" src={"/public/static/media/logo.svg"} />
-                                    <Header as="h1" inverted={true}>Welcome to TypeScript + React</Header>
+                                    <Header as="h1" inverted={true}>Welcome to TypeScript + React lame</Header>
                                     <p>Includes Semantic UI React, Redux and much more!</p>
                                 </Container>
                             </Segment>

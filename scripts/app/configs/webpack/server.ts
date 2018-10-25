@@ -26,6 +26,7 @@ export default merge(common, {
     name: "server",
     output: {
         filename: files.outputPattern.jsServer,
+        libraryTarget: "commonjs2",
         path: Application.buildPath,
         publicPath,
     },

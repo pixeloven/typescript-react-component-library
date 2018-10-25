@@ -14,7 +14,7 @@ const Html = (props: Props) => {
                 <meta name="theme-color" content="#000000" />
                 <link rel="manifest" href="/public/manifest.json" />
                 <link rel="shortcut icon" href="/public/favicon.ico" />
-                <link rel="stylesheet" type="text/css" href="/public/static/css/main.css" />
+                <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
                 <title>React App</title>
             </head>
             <body>
@@ -22,7 +22,7 @@ const Html = (props: Props) => {
                 You need to enable JavaScript to run this app.
             </noscript>
             <div id="root">{props.children}</div>
-            <script type="text/javascript" src="/public/static/js/main.js" />
+            <script type="text/javascript" src="/static/js/main.js" />
             </body>
         </html>
     );

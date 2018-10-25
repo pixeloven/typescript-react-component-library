@@ -22,7 +22,7 @@ const files: Files = {
     entryPoint: {
         client: "src/client/index.tsx",
         public: "public/index.html",
-        server: "src/server/index.ts",
+        server: "src/server/renderer.tsx",
     },
     lock: "yarn.lock",
     outputPattern: {

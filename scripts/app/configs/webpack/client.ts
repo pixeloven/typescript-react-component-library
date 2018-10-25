@@ -1,4 +1,3 @@
-import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
@@ -40,7 +39,7 @@ const devtoolModuleFilenameTemplate = (info: DevtoolModuleFilenameTemplateInfo) 
  * Define entrypoint(s) for client
  */
 const entry = removeEmpty([
-    ifDevelopment(require.resolve("react-dev-utils/webpackHotDevClient"), undefined),
+    ifDevelopment("webpack-hot-middleware/client?reload=true", undefined),
     Application.clientEntryPoint,
 ]);
 
@@ -48,8 +47,7 @@ const entry = removeEmpty([
  * @description Output instructions for client build
  */
 const output: Output = {
-    chunkFilename: files.outputPattern.jsChunk, // TODO need to add support for hash pattern
-    devtoolModuleFilenameTemplate, // TODO do we need this if we don't do sourcemaps in prod??
+    devtoolModuleFilenameTemplate,
     filename: files.outputPattern.js,
     path: `${Application.buildPath}/public/`,
     publicPath: ifProduction(publicPath, "/"),
@@ -60,33 +58,11 @@ const output: Output = {
  */
 const plugins: Plugin[] = removeEmpty([
     /**
-     * Generates an `index.html` file with the <script> injected.
-     *
-     * @env all // TODO not really need for prod unless we server html instead of a react template
-     */
-    new HtmlWebpackPlugin(removeEmpty({
-        inject: true,
-        minify: ifProduction({
-            collapseWhitespace: true,
-            keepClosingSlash: true,
-            minifyCSS: true,
-            minifyJS: true,
-            minifyURLs: true,
-            removeComments: true,
-            removeEmptyAttributes: true,
-            removeRedundantAttributes: true,
-            removeStyleLinkTypeAttributes: true,
-            useShortDoctype: true,
-        }),
-        template: Application.publicEntryPoint,
-    })),
-    /**
      * Extract css to file
      * @env production
      */
     // TODO how can we keep the hash but also still server it form the server side???
     ifProduction(new MiniCssExtractPlugin({
-        chunkFilename: files.outputPattern.css,
         filename: files.outputPattern.css,
     }), undefined),
     /**
