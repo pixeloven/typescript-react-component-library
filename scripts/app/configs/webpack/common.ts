@@ -1,6 +1,6 @@
 import autoprefixer from "autoprefixer";
 import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
-import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
+// import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
 import TimeFixPlugin from "time-fix-plugin";
@@ -97,7 +97,7 @@ const typeScriptRule: RuleSetRule = {
             loader: require.resolve("ts-loader"),
             options: {
                 configFile: Application.tsConfig,
-                transpileOnly: true,
+                // transpileOnly: true,
             },
         },
     ],
@@ -195,14 +195,14 @@ const plugins: Plugin[] = removeEmpty([
      * TODO might prevent showing errors in browser if async is off... but then again it breaks hmr
      * @env all
      */
-    ifProduction(new ForkTsCheckerWebpackPlugin({
-        tsconfig: Application.tsConfig,
-        tslint: Application.tsLint,
-    }), new ForkTsCheckerWebpackPlugin({
-        tsconfig: Application.tsConfig,
-        tslint: Application.tsLint,
-        watch: Application.srcPath,
-    })),
+    // ifProduction(new ForkTsCheckerWebpackPlugin({
+    //     tsconfig: Application.tsConfig,
+    //     tslint: Application.tsLint,
+    // }), new ForkTsCheckerWebpackPlugin({
+    //     tsconfig: Application.tsConfig,
+    //     tslint: Application.tsLint,
+    //     watch: Application.srcPath,
+    // })),
 ]);
 
 /**
