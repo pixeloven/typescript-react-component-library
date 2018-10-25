@@ -15,11 +15,11 @@ import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
 
 Env.load();
-const HOST = Env.config("HOST", "0.0.0.0");
+const HOST = Env.config("HOST", "localhost");
 const PORT = parseInt(Env.config("PORT", "8080"), 10);
 
 // TODO need to differnetiate between build public path and public URL which should just be "/"
-const publicPath = Env.config("PUBLIC_URL", "/public/");
+const publicPath = Env.config("PUBLIC_URL", "/");
 // TODO need to make it so that if server side change is made then hard refresh.
 // TODO why does it hang... perhaps we need to handle images better???
 

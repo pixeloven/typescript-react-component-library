@@ -14,7 +14,7 @@ class Home extends React.Component<RouteComponentProps> {
                             <Segment inverted={true} vertical={true} textAlign="center">
                                 <Container>
                                     <Image className="app-logo" src={"/static/media/logo.svg"} />
-                                    <Header as="h1" inverted={true}>Welcome to TypeScript + React lame</Header>
+                                    <Header as="h1" inverted={true}>Welcome to TypeScript + React</Header>
                                     <p>Includes Semantic UI React, Redux and much more!</p>
                                 </Container>
                             </Segment>

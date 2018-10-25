@@ -1,7 +1,7 @@
 import * as WebpackDevServer from "webpack-dev-server";
 import Env, {Environments} from "./env";
 
-const DEFAULT_HOST = Env.config("HOST", "0.0.0.0");
+const DEFAULT_HOST = Env.config("HOST", "localhost");
 const DEFAULT_PORT = parseInt(Env.config("PORT", "8080"), 10);
 const DEFAULT_PROTOCOL = Env.config("PROTOCOL", "https");
 

@@ -3,7 +3,7 @@ import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
-import WatchMissingNodeModulesPlugin from "react-dev-utils/WatchMissingNodeModulesPlugin";
+// import WatchMissingNodeModulesPlugin from "react-dev-utils/WatchMissingNodeModulesPlugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import webpack, {Configuration, Module, Node, Options, Plugin, Resolve, RuleSetRule} from "webpack";
@@ -52,21 +52,21 @@ const catchAllRule = {
 /**
  * Handle css/scss
  */
+// TODO do we need source maps here?
 const scssRule: RuleSetRule = {
     test: /\.(scss|sass|css)$/i,
     use: removeEmpty([
         ifProduction(MiniCssExtractPlugin.loader),
-        ifDevelopment({loader: "style-loader", options: {sourceMap: true}}),
-        {loader: "css-loader", options: {sourceMap: true}},
+        ifDevelopment({loader: "style-loader"}),
+        {loader: "css-loader"},
         {
             loader: "postcss-loader",
             options: {
                 ident: "postcss",
                 plugins: postCssPlugin,
-                sourceMap: true,
             },
         },
-        {loader: "sass-loader", options: {sourceMap: true}},
+        {loader: "sass-loader"},
     ]),
 };
 
@@ -174,15 +174,15 @@ const plugins: Plugin[] = removeEmpty([
      */
     ifDevelopment(new CaseSensitivePathsPlugin(), undefined),
 
-    /**
-     * If you require a missing module and then `npm install` it, you still have
-     * to restart the development server for Webpack to discover it. This plugin
-     * makes the discovery automatic so you don"t have to restart.
-     * See https://github.com/facebookincubator/create-react-app/issues/186
-     *
-     * @env development
-     */
-    ifDevelopment(new WatchMissingNodeModulesPlugin(Application.nodeModulesPath), undefined),
+    // /**
+    //  * If you require a missing module and then `npm install` it, you still have
+    //  * to restart the development server for Webpack to discover it. This plugin
+    //  * makes the discovery automatic so you don"t have to restart.
+    //  * See https://github.com/facebookincubator/create-react-app/issues/186
+    //  *
+    //  * @env development
+    //  */
+    // ifDevelopment(new WatchMissingNodeModulesPlugin(Application.nodeModulesPath), undefined),
     /**
      * Moment.js is an extremely popular library that bundles large locale files
      * by default due to how Webpack interprets its code. This is a practical

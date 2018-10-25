@@ -116,7 +116,7 @@ const plugins: Plugin[] = removeEmpty([
  * Client side configuration
  */
 export default merge(common, {
-    devtool: ifProduction("source-map", "cheap-module-source-map"), // TODO if prod should we even do this???
+    devtool: ifProduction("source-map", "eval-source-map"), // TODO if prod should we even do this???
     entry,
     name: "client",
     output,
