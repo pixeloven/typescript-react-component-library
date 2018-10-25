@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Switch} from "react-router-dom";
-import {SingleRoute} from "./components/atoms";
+import {SingleRoute} from "./components/elements";
 import {NoMatch} from "./components/pages";
 import routes from "./routes";
 
