@@ -21,28 +21,11 @@ export interface Package {
 class Application {
 
     /**
-     * Return Application name
-     * @returns {string}
-     */
-    public static get appName(): string {
-        return Application.package.name;
-    }
-
-    /**
      * Return build path
      * @returns {string}
      */
     public static get buildPath(): string {
         return Application.resolvePath(paths.build, false);
-    }
-
-    /**
-     * Return proxy settings
-     * @description This is specifically for our development server
-     * @returns {Proxy}
-     */
-    public static get proxySettings(): Proxy {
-        return Application.package.proxy;
     }
 
     /**
@@ -142,14 +125,6 @@ class Application {
      */
     public static get tsConfig(): string {
         return Application.resolvePath(files.tsConfig);
-    }
-
-    /**
-     * Return ts lint
-     * @returns {string}
-     */
-    public static get tsLint(): string {
-        return Application.resolvePath(files.tsLint);
     }
 
     /**

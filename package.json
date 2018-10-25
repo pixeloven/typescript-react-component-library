@@ -158,8 +158,7 @@
     "lint-scss-fix": "stylelint src/**/*.scss --syntax scss --fix",
     "precommit": "lint-staged",
     "start": "run-s start-ts",
-    "start-ts": "ts-node --files scripts/start.ts",
-    "start-ts-server": "ts-node --files scripts/serve.ts",
+    "start-ts": "ts-node --files scripts/serve.ts",
     "start-story": "start-storybook -p 9001 -c .storybook",
     "test": "jest --watch --env=jsdom",
     "test-coverage": "jest --coverage --env=jsdom"
@@ -203,9 +202,6 @@
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|ts|tsx)$"
     ],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web"
-    },
     "moduleFileExtensions": [
       "web.ts",
       "ts",

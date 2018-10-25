@@ -49,7 +49,7 @@ const entry = removeEmpty([
 const output: Output = {
     devtoolModuleFilenameTemplate,
     filename: files.outputPattern.js,
-    path: `${Application.buildPath}/public/`,
+    path: Application.resolvePath("build/public/", false), // TODO maybe be strict for prod build as this should be created before hand
     publicPath,
 };
 
