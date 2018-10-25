@@ -86,14 +86,37 @@ const staticFileRule: RuleSetRule = {
 
 /**
  * Define rule for transpiling TypeScript
- * @description Disable type checker - we will use it in ForkTsCheckerWebpackPlugin
+ * @description Uncomment transpileOnly to Disable type checker - will use it in ForkTsCheckerWebpackPlugin at the cost of overlay.
+ * Babel loader is present to support react-hot-loader.
+ *
+ * @todo Make configurable for CI and performance. Babel can also provide caching and polyfill
  */
 const typeScriptRule: RuleSetRule = {
     include: Application.srcPath,
     test: /\.(ts|tsx)$/,
     use: [
+        // {
+        //      // TODO should not do for server code... another reason to segment the configs back out
+        //      // https://iamturns.com/typescript-babel/
+        //      // TODO https://medium.com/@francesco.agnoletto/how-to-set-up-typescript-with-babel-and-webpack-6fba1b6e72d5
+        //     // TODO https://blog.wax-o.com/2018/05/webpack-loaders-babel-sourcemaps-react-hot-module-reload-typescript-modules-code-splitting-and-lazy-loading-full-tutorial-to-transpile-and-bundle-your-code/
+        //     loader: require.resolve("babel-loader"),
+        //     options: {
+        //         plugins: [
+        //             "react-hot-loader/babel",
+        //         ],
+        //     },
+        // },
         {
-            loader: require.resolve("ts-loader"),
+            loader: "babel-loader",
+            options: {
+                babelrc: false,
+                cacheDirectory: true,
+                plugins: ["react-hot-loader/babel"],
+            },
+        },
+        {
+            loader: "ts-loader",
             options: {
                 configFile: Application.tsConfig,
                 // transpileOnly: true,
@@ -172,7 +195,7 @@ const plugins: Plugin[] = removeEmpty([
      *
      * @env development
      */
-    ifDevelopment(new TimeFixPlugin(), undefined), // TODO might not me needed
+    ifDevelopment(new TimeFixPlugin(), undefined),
     /**
      * Watcher doesn"t work well if you mistype casing in a path so we use
      * a plugin that prints an error when you attempt to do this.

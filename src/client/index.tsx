@@ -4,7 +4,7 @@ import "raf/polyfill";
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-// import { hot } from "react-hot-loader";
+import { hot } from "react-hot-loader";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { Action, createStore } from "redux";
@@ -46,14 +46,14 @@ const AppWrapper = () => (
         </BrowserRouter>
     </Provider>
 );
-// const HotAppWrapper = hot(module)(AppWrapper);
+const HotAppWrapper = hot(module)(AppWrapper);
 
 /**
  * When using hot module replacement we need to use the render method
  * otherwise errors may occur in development.
  */
 const renderMethod = !!module.hot ? ReactDOM.render : ReactDOM.hydrate;
-renderMethod(<AppWrapper />, document.getElementById("root"));
+renderMethod(<HotAppWrapper />, document.getElementById("root"));
 
 /**
  * Register service workers
