@@ -39,7 +39,7 @@ const devtoolModuleFilenameTemplate = (info: DevtoolModuleFilenameTemplateInfo) 
  * Define entrypoint(s) for client
  */
 const entry = removeEmpty([
-    ifDevelopment("webpack-hot-middleware/client?reload=true", undefined),
+    ifDevelopment("webpack-hot-middleware/client?reload=true&overlay=true", undefined),
     Application.clientEntryPoint,
 ]);
 

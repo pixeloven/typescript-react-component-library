@@ -244,6 +244,7 @@ REACT_APP_BAR=$DOMAIN/bar
 
 ## Current Tasks
 With all of the items below we need to consider whether we want to maintain a single application or multiple applications. Now that we are doing PWA, SSR, etc it might make sense to maintian a single app and just break it into templates and pages.
+* Add read me about https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers
 * Create development entry point for server side code
     * eliminate the .html file and plugins
     * cleanup build scripts even more

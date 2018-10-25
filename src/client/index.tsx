@@ -4,7 +4,7 @@ import "raf/polyfill";
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { hot } from "react-hot-loader";
+// import { hot } from "react-hot-loader";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { Action, createStore } from "redux";
@@ -36,6 +36,9 @@ const store = createStore(
 /**
  * Wrap application with container, router and store
  */
+// TODO get reload working first
+// TODO "react-hot-loader/babel" needs to be added????
+    // https://github.com/gaearon/react-hot-loader/issues/525
 const AppWrapper = () => (
     <Provider store={store}>
         <BrowserRouter basename="/">
@@ -43,14 +46,14 @@ const AppWrapper = () => (
         </BrowserRouter>
     </Provider>
 );
-const HotAppWrapper = hot(module)(AppWrapper);
+// const HotAppWrapper = hot(module)(AppWrapper);
 
 /**
  * When using hot module replacement we need to use the render method
  * otherwise errors may occur in development.
  */
 const renderMethod = !!module.hot ? ReactDOM.render : ReactDOM.hydrate;
-renderMethod(<HotAppWrapper />, document.getElementById("root"));
+renderMethod(<AppWrapper />, document.getElementById("root"));
 
 /**
  * Register service workers

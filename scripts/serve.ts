@@ -4,7 +4,6 @@
 import "./boostrap/development";
 
 import chalk from "chalk";
-import cors from "cors";
 import express from "express";
 import path from "path";
 import openBrowser from "react-dev-utils/openBrowser";
@@ -29,6 +28,8 @@ const HOST = Env.config("HOST", "localhost");
 const PROTOCOL = Env.config("PROTOCOL", "http");
 const PORT = parseInt(Env.config("PORT", "8080"), 10);
 
+Env.define("UV_THREADPOOL_SIZE", "128");
+
 /**
  * We attempt to use the default port but if it is busy, we offer the user to
  * run on a different port. `choosePort()` Promise resolves to the next free port.
@@ -52,8 +53,6 @@ choosePort(HOST, PORT).then((port: number) => {
      * @type {Function}
      */
     const app = express();
-    app.use(cors());
-
     app.use(express.static(path.resolve(process.cwd(), "public"))); // TODO get this working and unify prod and dev to use PUBLIC_URL
 
     /**

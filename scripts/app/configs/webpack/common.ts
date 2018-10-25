@@ -3,6 +3,7 @@ import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
+import TimeFixPlugin from "time-fix-plugin";
 // import WatchMissingNodeModulesPlugin from "react-dev-utils/WatchMissingNodeModulesPlugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
@@ -166,6 +167,14 @@ const performance: Options.Performance = {
  */
 const plugins: Plugin[] = removeEmpty([
     /**
+     * Fixes a known issue with cross-platform differences in file watchers,
+     * so that webpack doesn't loose file changes when watched files change rapidly
+     * https://github.com/webpack/webpack-dev-middleware#known-issues
+     *
+     * @env development
+     */
+    ifDevelopment(new TimeFixPlugin(), undefined), // TODO might not me needed
+    /**
      * Watcher doesn"t work well if you mistype casing in a path so we use
      * a plugin that prints an error when you attempt to do this.
      * See https://github.com/facebookincubator/create-react-app/issues/240
@@ -173,16 +182,6 @@ const plugins: Plugin[] = removeEmpty([
      * @env development
      */
     ifDevelopment(new CaseSensitivePathsPlugin(), undefined),
-
-    // /**
-    //  * If you require a missing module and then `npm install` it, you still have
-    //  * to restart the development server for Webpack to discover it. This plugin
-    //  * makes the discovery automatic so you don"t have to restart.
-    //  * See https://github.com/facebookincubator/create-react-app/issues/186
-    //  *
-    //  * @env development
-    //  */
-    // ifDevelopment(new WatchMissingNodeModulesPlugin(Application.nodeModulesPath), undefined),
     /**
      * Moment.js is an extremely popular library that bundles large locale files
      * by default due to how Webpack interprets its code. This is a practical
@@ -193,15 +192,13 @@ const plugins: Plugin[] = removeEmpty([
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     /**
      * Perform type checking and linting in a separate process to speed up compilation
-     *
+     * TODO might prevent showing errors in browser if async is off... but then again it breaks hmr
      * @env all
      */
     ifProduction(new ForkTsCheckerWebpackPlugin({
-        async: false,
         tsconfig: Application.tsConfig,
         tslint: Application.tsLint,
     }), new ForkTsCheckerWebpackPlugin({
-        async: false,
         tsconfig: Application.tsConfig,
         tslint: Application.tsLint,
         watch: Application.srcPath,
