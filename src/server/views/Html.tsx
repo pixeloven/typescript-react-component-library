@@ -2,6 +2,7 @@ import * as React from "react";
 
 interface Props {
     children: React.ReactNode;
+    files: Express.Files | undefined;
 }
 
 // TODO inject in css and js file so we can use the hash

@@ -95,7 +95,6 @@ try {
         /**
          * Start express server on specific host and port
          */
-
         app.listen(PORT, DEFAULT_HOST, (error?: Error) => {
             if (error) {
                 handleError(error);

@@ -29,14 +29,6 @@ class Application {
     }
 
     /**
-     * Return public entry point
-     * @returns {string}
-     */
-    public static get publicEntryPoint(): string {
-        return Application.resolvePath(files.entryPoint.public);
-    }
-
-    /**
      * Return public path
      * @returns {string}
      */

@@ -1,16 +1,17 @@
-import cors from "cors";
 import express from "express";
 import expressWinston from "express-winston";
 import winston from "winston";
 import {config} from "./config";
-import {DefaultController} from "./controllers";
+import {health} from "./controllers";
+import {renderer} from "./middleware";
 
+// TODO use env for hosting
+// TODO need to create a function to generate the renderer with specific files.[css,js]
 /**
  * Create express application
  * @type {Function}
  */
 const app = express();
-app.use(cors());
 
 /**
  * Setup express logger
@@ -23,23 +24,19 @@ app.use(expressWinston.logger({
 }));
 
 /**
+ * Define middleware
+ */
+app.use(renderer);
+
+/**
  * Defines static build files
  */
 app.use(express.static("build/public"));
 
 /**
- * This defines a catch all route for serving all react pages
- * TODO can create an inheritable controller class
- * TODO should inject template into the controllers
- */
-const defaultController = new DefaultController();
-
-/**
  * Register endpoints
- * TODO need to handle 404s
  */
-app.get("/health", defaultController.health);
-app.get("*", defaultController.render);
+app.use(health);
 
 /**
  * Start express server on specific host and port

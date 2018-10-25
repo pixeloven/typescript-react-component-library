@@ -62,10 +62,9 @@ function setupBuildDirectory() {
 function copyPublicDirToBuild() {
     const buildPath = Application.buildPath;
     const publicPath = Application.publicPath;
-    const publicEntryPoint = Application.publicEntryPoint;
     fs.copySync(publicPath, `${buildPath}/public`, {
         dereference: true,
-        filter: file => file !== publicEntryPoint,
+        // filter: file => file !== publicEntryPoint, // TODO filter out stub main.css???
     });
 }
 
@@ -162,7 +161,6 @@ try {
     // TODO can remove once we use this in our webpack setup
     assert(Application.clientEntryPoint);
     assert(Application.serverEntryPoint);
-    assert(Application.publicEntryPoint);
 
     const buildPath = Application.buildPath;
     const publicPath = Application.servedPath;

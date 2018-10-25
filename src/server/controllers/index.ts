@@ -1,4 +1,4 @@
 /**
  * Register Controllers here
  */
-export { default as DefaultController } from "./DefaultController";
+export { default as health } from "./health";

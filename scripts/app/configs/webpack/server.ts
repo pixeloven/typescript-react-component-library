@@ -22,7 +22,7 @@ const publicPath = Env.config("PUBLIC_URL", "/");
 export default merge(common, {
     devtool: false, // TODO find a way to debug server
     entry: [
-        ifProduction("src/server/index.tsx", "src/server/renderer.tsx"),
+        ifProduction("src/server/index.ts", "src/server/webpack.ts"),
     ],
     externals: [webpackNodeExternals()],
     name: "server",
