@@ -1,10 +1,9 @@
 import autoprefixer from "autoprefixer";
 import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
-// import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
 import TimeFixPlugin from "time-fix-plugin";
-// import WatchMissingNodeModulesPlugin from "react-dev-utils/WatchMissingNodeModulesPlugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import webpack, {Configuration, Module, Node, Options, Plugin, Resolve, RuleSetRule} from "webpack";
@@ -192,7 +191,7 @@ const plugins: Plugin[] = removeEmpty([
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     /**
      * Perform type checking and linting in a separate process to speed up compilation
-     * TODO might prevent showing errors in browser if async is off... but then again it breaks hmr
+     * TODO might prevent showing errors in browser if async is off... but then again it breaks hmr overlay
      * @env all
      */
     // ifProduction(new ForkTsCheckerWebpackPlugin({
