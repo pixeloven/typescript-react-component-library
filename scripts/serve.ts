@@ -5,6 +5,7 @@ import "./boostrap/development";
 
 import cors from "cors";
 import express from "express";
+import path from "path";
 import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
@@ -17,8 +18,10 @@ Env.load();
 const HOST = Env.config("HOST", "0.0.0.0");
 const PORT = parseInt(Env.config("PORT", "8080"), 10);
 
-// TODO refresh if css changes
-// TODO refresh if server code changes
+// TODO need to differnetiate between build public path and public URL which should just be "/"
+const publicPath = Env.config("PUBLIC_URL", "/public/");
+// TODO need to make it so that if server side change is made then hard refresh.
+// TODO why does it hang... perhaps we need to handle images better???
 
 // https://github.com/gaearon/react-hot-loader
 // https://github.com/webpack-contrib/webpack-hot-middleware
@@ -35,18 +38,21 @@ const PORT = parseInt(Env.config("PORT", "8080"), 10);
 const app = express();
 app.use(cors());
 
+app.use(express.static(path.resolve(process.cwd(), "public"))); // TODO get this working and unify prod and dev to use PUBLIC_URL
+
 /**
  * Setup webpack hot module replacement for development
  */
 const combinedCompiler = webpack([webpackClientConfig, webpackServerConfig]);
 const clientCompiler = combinedCompiler.compilers.find(compiler => compiler.name === "client");
-app.use(webpackDevMiddleware(combinedCompiler));
+app.use(webpackDevMiddleware(combinedCompiler, {
+    publicPath,
+    serverSideRender: true,
+}));
 if (clientCompiler) {
     app.use(webpackHotMiddleware(clientCompiler));
 }
 app.use(webpackHotServerMiddleware(combinedCompiler));
-
-app.use("/public", express.static("/public")); // TODO get this working and unify prod and dev to use PUBLIC_URL
 
 /**
  * Start express server on specific host and port

@@ -15,7 +15,7 @@ const {ifProduction} = getIfUtils(Env.current);
  * Webpack uses `publicPath` to determine where the app is being served from.
  * It requires a trailing slash, or the file assets will get an incorrect path.
  */
-const publicPath = Env.config("PUBLIC_URL", "/public/");
+const publicPath = Env.config("PUBLIC_URL", "/");
 
 // TODO need config for development... right now it is rendering 100% on client... can also maybe get rid of index.html
 // TODO also need to get ENV into server and client

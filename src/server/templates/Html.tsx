@@ -5,6 +5,7 @@ interface Props {
 }
 
 // TODO inject in css and js file so we can use the hash
+// TODO should only show main.css if in prod... remove stub file
 const Html = (props: Props) => {
     return (
         <html lang="en">
@@ -12,8 +13,8 @@ const Html = (props: Props) => {
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                 <meta name="theme-color" content="#000000" />
-                <link rel="manifest" href="/public/manifest.json" />
-                <link rel="shortcut icon" href="/public/favicon.ico" />
+                <link rel="manifest" href="/manifest.json" />
+                <link rel="shortcut icon" href="/favicon.ico" />
                 <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
                 <title>React App</title>
             </head>

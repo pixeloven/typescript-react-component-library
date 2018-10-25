@@ -20,7 +20,7 @@ const {ifProduction, ifDevelopment} = getIfUtils(Env.current);
  * Webpack uses `publicPath` to determine where the app is being served from.
  * It requires a trailing slash, or the file assets will get an incorrect path.
  */
-const publicPath = Env.config("PUBLIC_URL", "/public/");
+const publicPath = Env.config("PUBLIC_URL", "/");
 
 /**
  * Describe source pathing in dev tools
@@ -50,7 +50,7 @@ const output: Output = {
     devtoolModuleFilenameTemplate,
     filename: files.outputPattern.js,
     path: `${Application.buildPath}/public/`,
-    publicPath: ifProduction(publicPath, "/"),
+    publicPath,
 };
 
 /**
