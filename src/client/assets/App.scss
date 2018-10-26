@@ -1,6 +1,7 @@
 $icons-font-path: "~semantic-ui-sass/icons";
 $flags-image-path: "~semantic-ui-sass/images";
-@import "~semantic-ui-sass/semantic-ui";
+
+@import "styles/semantic-import";
 
 body {
   margin: 0;
