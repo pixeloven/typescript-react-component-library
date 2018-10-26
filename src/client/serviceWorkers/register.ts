@@ -85,7 +85,7 @@ function checkValidServiceWorker(swUrl: string) {
  * Register service worker
  */
 export default function register() {
-    if (ENVIRONMENT === "production" && "serviceWorker" in navigator) {
+    if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
         // The URL constructor is available in all browsers that support SW.
         const publicUrl = new URL(
             window.location.href,
@@ -117,6 +117,8 @@ export default function register() {
                 registerValidSW(swUrl);
             }
         });
+    } else {
+        console.log("Service worker not registered. Development mode.");
     }
 }
 

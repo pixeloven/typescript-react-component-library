@@ -19,12 +19,6 @@ const rootReducer = (state: string = "asdf", action: Action) => {
     }
 };
 
-declare global {
-    interface Window {
-        __REDUX_DEVTOOLS_EXTENSION__: () => string;
-    }
-}
-
 /**
  * Setup store
  */

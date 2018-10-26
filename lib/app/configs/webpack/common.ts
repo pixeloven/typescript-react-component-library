@@ -208,8 +208,8 @@ const plugins: Plugin[] = removeEmpty([
      *
      * @env all
      */
-    new webpack.DefinePlugin({
-        ENVIRONMENT: ifProduction("production", "development"),
+    new webpack.EnvironmentPlugin({
+        NODE_ENV: ifProduction("production", "development"),
     }),
     /**
      * Moment.js is an extremely popular library that bundles large locale files
