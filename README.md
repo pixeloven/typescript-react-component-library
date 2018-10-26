@@ -83,8 +83,8 @@ yarn build
 ```
 The above will build our SCSS, TypeScript, and Storybook into our build directory.
 
-## Adding global constants
-> Note: This is discourage as it creates an interdependence between the build process and application
+## Adding Process Env Variables
+> Note: Adding process.env variables to the client is discouraged as it creates an interdependence between the build process and application
 
 TBD
 

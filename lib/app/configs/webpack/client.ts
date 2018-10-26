@@ -1,8 +1,10 @@
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import OptimizeCSSAssetsPlugin from "optimize-css-assets-webpack-plugin";
 import path from "path";
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
-import {DevtoolModuleFilenameTemplateInfo, Output, Plugin} from "webpack";
+import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import webpack from "webpack";
+import {DevtoolModuleFilenameTemplateInfo, Node, Options, Output, Plugin} from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
 import ManifestPlugin from "webpack-manifest-plugin";
 import merge from "webpack-merge";
@@ -43,6 +45,48 @@ const entry = removeEmpty([
 ]);
 
 /**
+ * @description Some libraries import Node modules but don"t use them in the browser.
+ * Tell Webpack to provide empty mocks for them so importing them works.
+ */
+const node: Node = {
+    child_process: "empty",
+    dgram: "empty",
+    fs: "empty",
+    net: "empty",
+    tls: "empty",
+};
+
+/**
+ * Define build optimization options
+ */
+const optimization: Options.Optimization = {
+    minimize: ifProduction(),
+    minimizer: ifProduction([
+        /**
+         * Minify the code JavaScript
+         *
+         * @env production
+         */
+        new UglifyJsPlugin({
+            cache: true,
+            parallel: true,
+            sourceMap: true, // TODO should we do this in prod??
+            uglifyOptions: {
+                compress: {
+                    comparisons: false,
+                    warnings: false,
+                },
+                output: {
+                    ascii_only: true,
+                    comments: false,
+                },
+            },
+        }),
+        new OptimizeCSSAssetsPlugin(),
+    ], []),
+};
+
+/**
  * @description Output instructions for client build
  */
 const output: Output = {
@@ -56,6 +100,14 @@ const output: Output = {
  * @description Plugins for client specific builds
  */
 const plugins: Plugin[] = removeEmpty([
+    /**
+     * Define environmental variables for application
+     *
+     * @env all
+     */
+    new webpack.EnvironmentPlugin({
+        NODE_ENV: ifProduction("production", "development"),
+    }),
     /**
      * Extract css to file
      * @env production
@@ -118,6 +170,8 @@ export default merge(common, {
     devtool: ifProduction("source-map", "eval-source-map"), // TODO if prod should we even do this???
     entry,
     name: "client",
+    node,
+    optimization,
     output,
     plugins,
     target: "web",

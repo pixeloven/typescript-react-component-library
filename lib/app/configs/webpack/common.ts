@@ -4,8 +4,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
 import TimeFixPlugin from "time-fix-plugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
-import UglifyJsPlugin from "uglifyjs-webpack-plugin";
-import webpack, {Configuration, Module, Node, Options, Plugin, Resolve, RuleSetRule} from "webpack";
+import webpack, {Configuration, Module, Options, Plugin, Resolve, RuleSetRule} from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
 import Env from "../../libraries/Env";
 import {resolvePath} from "../../macros";
@@ -89,23 +88,12 @@ const staticFileRule: RuleSetRule = {
  * Babel loader is present to support react-hot-loader.
  *
  * @todo Make configurable for CI and performance. Babel can also provide caching and polyfill
+ * @todo Babel probably doesn't need to be run for server config
  */
 const typeScriptRule: RuleSetRule = {
     include: resolvePath("src"),
     test: /\.(ts|tsx)$/,
     use: [
-        // {
-        //      // TODO should not do for server code... another reason to segment the configs back out
-        //      // https://iamturns.com/typescript-babel/
-        //      // TODO https://medium.com/@francesco.agnoletto/how-to-set-up-typescript-with-babel-and-webpack-6fba1b6e72d5
-        //     // TODO https://blog.wax-o.com/2018/05/webpack-loaders-babel-sourcemaps-react-hot-module-reload-typescript-modules-code-splitting-and-lazy-loading-full-tutorial-to-transpile-and-bundle-your-code/
-        //     loader: require.resolve("babel-loader"),
-        //     options: {
-        //         plugins: [
-        //             "react-hot-loader/babel",
-        //         ],
-        //     },
-        // },
         {
             loader: "babel-loader",
             options: {
@@ -135,48 +123,6 @@ const module: Module = {
 };
 
 /**
- * @description Some libraries import Node modules but don"t use them in the browser.
- * Tell Webpack to provide empty mocks for them so importing them works.
- */
-const node: Node = {
-    child_process: "empty",
-    dgram: "empty",
-    fs: "empty",
-    net: "empty",
-    tls: "empty",
-};
-
-/**
- * Define build optimization options
- */
-const optimization: Options.Optimization = {
-    minimize: ifProduction(),
-    minimizer: ifProduction([
-        /**
-         * Minify the code.
-         * Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-         *
-         * @env production
-         */
-        new UglifyJsPlugin({
-            cache: true,
-            parallel: true,
-            sourceMap: true, // TODO should we do this in prod??
-            uglifyOptions: {
-                compress: {
-                    comparisons: false,
-                    warnings: false,
-                },
-                output: {
-                    ascii_only: true,
-                    comments: false,
-                },
-            },
-        }),
-    ], []),
-};
-
-/**
  * Define build performance options
  */
 const performance: Options.Performance = {
@@ -203,14 +149,6 @@ const plugins: Plugin[] = removeEmpty([
      * @env development
      */
     ifDevelopment(new CaseSensitivePathsPlugin(), undefined),
-    /**
-     * Define environmental variables for application
-     *
-     * @env all
-     */
-    new webpack.EnvironmentPlugin({
-        NODE_ENV: ifProduction("production", "development"),
-    }),
     /**
      * Moment.js is an extremely popular library that bundles large locale files
      * by default due to how Webpack interprets its code. This is a practical
@@ -270,8 +208,6 @@ const config: Configuration = {
     bail: ifProduction(),
     mode: ifProduction("production", "development"),
     module,
-    node,
-    optimization,
     performance,
     plugins,
     resolve,
