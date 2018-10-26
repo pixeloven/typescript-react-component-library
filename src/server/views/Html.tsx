@@ -1,13 +1,41 @@
 import * as React from "react";
 
-interface Props {
+interface JavaScriptProps {
+    sources: string[] | undefined;
+}
+
+interface StyleSheetProps {
+    hrefs: string[] | undefined;
+}
+
+interface HtmlProps {
     children: React.ReactNode;
     files: Express.Files | undefined;
 }
 
-// TODO inject in css and js file so we can use the hash
-// TODO should only show main.css if in prod... remove stub file
-const Html = (props: Props) => {
+const JavaScript = (props: JavaScriptProps) => {
+    const files = props.sources
+        ? props.sources.map((src, index) => <script key={index} type="text/javascript" src={src} />)
+        : undefined;
+    return (
+        <React.Fragment>
+            {files}
+        </React.Fragment>
+    );
+};
+
+const StyleSheet = (props: StyleSheetProps) => {
+    const files = props.hrefs
+        ? props.hrefs.map((href, index) => <link key={index} rel="stylesheet" type="text/css" href={href} />)
+        : undefined;
+    return (
+        <React.Fragment>
+            {files}
+        </React.Fragment>
+    );
+};
+
+const Html = (props: HtmlProps) => {
     return (
         <html lang="en">
             <head>
@@ -16,7 +44,7 @@ const Html = (props: Props) => {
                 <meta name="theme-color" content="#000000" />
                 <link rel="manifest" href="/manifest.json" />
                 <link rel="shortcut icon" href="/favicon.ico" />
-                <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+                {props.files && <StyleSheet hrefs={props.files.css}/>}
                 <title>React App</title>
             </head>
             <body>
@@ -24,7 +52,7 @@ const Html = (props: Props) => {
                 You need to enable JavaScript to run this app.
             </noscript>
             <div id="root">{props.children}</div>
-            <script type="text/javascript" src="/static/js/main.js" />
+            {props.files && <JavaScript sources={props.files.js}/>}
             </body>
         </html>
     );

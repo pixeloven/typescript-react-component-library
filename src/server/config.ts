@@ -9,6 +9,7 @@ export interface Server {
 }
 
 export interface Config {
+    environment: Environment;
     server: Server;
 }
 
@@ -23,7 +24,8 @@ const server: Server = {
     port: parseInt(PORT, 10),
     protocol: PROTOCOL,
 };
-
+const ENVIRONMENT = process.env.NODE_ENV as Environment || "production" as Environment;
 export const config: Config = {
+    environment: ENVIRONMENT,
     server,
 };

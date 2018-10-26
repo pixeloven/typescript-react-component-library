@@ -1,5 +1,6 @@
-import express from "express";
+import express, {NextFunction, Request, Response} from "express";
 import expressWinston from "express-winston";
+import fs from "fs";
 import path from "path";
 import winston from "winston";
 import {config} from "./config";
@@ -28,8 +29,21 @@ const publicPath = path.resolve(__dirname, "public");
 app.use(express.static(publicPath));
 
 /**
- * Define middleware
+ * Define render middleware
  */
+const cssFiles = fs.readdirSync(`${publicPath}/static/css`)
+    .filter(fn => fn.endsWith(".css"))
+    .map(file => `/static/css/${file}`);
+const jsFiles = fs.readdirSync(`${publicPath}/static/js`)
+    .filter(fn => fn.endsWith(".js"))
+    .map(file => `/static/js/${file}`);
+app.use((req: Request, res: Response, next: NextFunction): void => {
+    req.files = {
+        css: cssFiles,
+        js: jsFiles,
+    };
+    next();
+});
 app.use(renderer);
 
 /**

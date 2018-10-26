@@ -91,7 +91,7 @@ const optimization: Options.Optimization = {
  */
 const output: Output = {
     devtoolModuleFilenameTemplate,
-    filename: "static/js/[name].js",
+    filename: "static/js/[name].[hash:8].js",
     path: resolvePath("build/public"),
     publicPath,
 };
@@ -112,9 +112,8 @@ const plugins: Plugin[] = removeEmpty([
      * Extract css to file
      * @env production
      */
-    // TODO minify for prod
     ifProduction(new MiniCssExtractPlugin({
-        filename: "static/css/[name].css",
+        filename: "static/css/[name].[hash:8].css",
     }), undefined),
     /**
      * Generate a manifest file which contains a mapping of all asset filenames
