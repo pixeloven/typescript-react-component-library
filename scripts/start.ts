@@ -17,7 +17,7 @@ import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackHotServerMiddleware from "webpack-hot-server-middleware";
 import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
-import Env from "./app/Env";
+import Env from "./app/libraries/Env";
 import {handleError, sleep} from "./app/macros";
 
 /**

@@ -7,7 +7,7 @@ import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import webpack, {Configuration, Module, Node, Options, Plugin, Resolve, RuleSetRule} from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
-import Env from "../../Env";
+import Env from "../../libraries/Env";
 import {resolvePath} from "../../macros";
 
 /**

@@ -1,7 +1,7 @@
 import {getIfUtils} from "webpack-config-utils";
 import merge from "webpack-merge";
 import webpackNodeExternals from "webpack-node-externals";
-import Env from "../../Env";
+import Env from "../../libraries/Env";
 import {resolvePath} from "../../macros";
 import common from "./common";
 

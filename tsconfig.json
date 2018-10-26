@@ -18,6 +18,11 @@
       "./scripts",
       "./src"
     ],
+    "paths": {
+      "@client/*": ["src/client/*"],
+      "@server/*": ["src/server/*"],
+      "@shared/*": ["src/shared/*"]
+    },
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,

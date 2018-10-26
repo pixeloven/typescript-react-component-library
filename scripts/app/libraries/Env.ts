@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import NodeProcessException from "./exceptions/NodeProcessException";
+import NodeProcessException from "../exceptions/NodeProcessException";
 
 export type Environment = "development" | "production" | "test";
 

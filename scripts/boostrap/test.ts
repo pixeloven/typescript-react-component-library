@@ -1,4 +1,4 @@
-import Env, {Environment} from "../app/Env";
+import Env, {Environment} from "../app/libraries/Env";
 
 /**
  * Makes the script crash on unhandled rejections instead of silently

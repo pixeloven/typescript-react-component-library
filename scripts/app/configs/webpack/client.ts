@@ -6,7 +6,7 @@ import webpack from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
 import ManifestPlugin from "webpack-manifest-plugin";
 import merge from "webpack-merge";
-import Env from "../../Env";
+import Env from "../../libraries/Env";
 import {resolvePath} from "../../macros";
 import common from "./common";
 

@@ -8,14 +8,13 @@ import "./boostrap/production";
  */
 import chalk from "chalk";
 import fs from "fs-extra";
-import path from "path";
 import Promise from "promise";
 import FileSizeReporter from "react-dev-utils/FileSizeReporter";
 import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
 import webpack, {Stats} from "webpack";
 import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
-import Env from "./app/Env";
+import Env from "./app/libraries/Env";
 import {handleError, resolvePath} from "./app/macros";
 
 /**
@@ -47,7 +46,7 @@ const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 /**
  * Setup build pathing
  */
-const PRIVATE_BUILD_PATH = path.resolve(process.cwd(), Env.config("BUILD_PATH", "build"));
+const PRIVATE_BUILD_PATH = resolvePath(Env.config("BUILD_PATH", "build"), false);
 const PUBLIC_BUILD_PATH = `${PRIVATE_BUILD_PATH}/public`;
 
 /**
