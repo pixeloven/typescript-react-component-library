@@ -11,6 +11,9 @@ export function handleError(error: Error) {
     if (error.message) {
         console.error(`${chalk.red(error.message)}\n`);
     }
+    if (error.stack) {
+        console.log(error.stack);
+    }
     process.exit(1);
 }
 

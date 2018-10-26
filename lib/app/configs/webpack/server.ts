@@ -32,7 +32,7 @@ export default merge(common, {
     output: {
         filename: "server.js",
         libraryTarget: "commonjs2",
-        path: resolvePath("build"),
+        path: resolvePath("build", false),
         publicPath,
     },
     target: "node",

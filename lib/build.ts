@@ -53,7 +53,7 @@ const PUBLIC_BUILD_PATH = `${PRIVATE_BUILD_PATH}/public`;
  * Setup Build Directory
  * @param fullPath
  */
-function setupBuildDirectory(fullPath: string) {
+function setupDirectory(fullPath: string) {
     if (!fs.existsSync(fullPath)) {
         fs.mkdirSync(fullPath);
     }
@@ -143,8 +143,9 @@ function build(config: object, previousFileSizes: OpaqueFileSizes) {
  * Build script
  */
 try {
-
-    setupBuildDirectory(PRIVATE_BUILD_PATH); // TODO be mindful of /docs.. this deletes them :( - Also make storybook configurable ON/OFF
+    // TODO be mindful of /docs.. this deletes them :( - Also make storybook configurable ON/OFF
+    setupDirectory(PRIVATE_BUILD_PATH);
+    setupDirectory(PUBLIC_BUILD_PATH);
     copyPublicDirectory(PUBLIC_BUILD_PATH);
 
     /**

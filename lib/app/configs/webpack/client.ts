@@ -92,7 +92,7 @@ const optimization: Options.Optimization = {
 const output: Output = {
     devtoolModuleFilenameTemplate,
     filename: "static/js/[name].[hash:8].js",
-    path: resolvePath("build/public"),
+    path: resolvePath("build/public", false),
     publicPath,
 };
 
