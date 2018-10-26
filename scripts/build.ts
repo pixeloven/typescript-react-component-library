@@ -13,10 +13,10 @@ import Promise from "promise";
 import FileSizeReporter from "react-dev-utils/FileSizeReporter";
 import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
 import webpack, {Stats} from "webpack";
-import Env from "./app/configs/env";
 import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
-import {handleError, resolvePath} from "./app/helpers";
+import Env from "./app/Env";
+import {handleError, resolvePath} from "./app/macros";
 
 /**
  * Build Information

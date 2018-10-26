@@ -6,9 +6,8 @@ import webpack from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
 import ManifestPlugin from "webpack-manifest-plugin";
 import merge from "webpack-merge";
-import Application from "../../Application";
-import Env from "../env";
-import files from "../files";
+import Env from "../../Env";
+import {resolvePath} from "../../macros";
 import common from "./common";
 
 /**
@@ -29,7 +28,7 @@ const publicPath = Env.config("PUBLIC_URL", "/");
 const devtoolModuleFilenameTemplate = (info: DevtoolModuleFilenameTemplateInfo) => {
     if (ifProduction()) {
         return path
-            .relative(Application.srcPath, info.absoluteResourcePath)
+            .relative(resolvePath("src"), info.absoluteResourcePath)
             .replace(/\\/g, "/");
     }
     return path.resolve(info.absoluteResourcePath).replace(/\\/g, "/");
@@ -40,7 +39,7 @@ const devtoolModuleFilenameTemplate = (info: DevtoolModuleFilenameTemplateInfo) 
  */
 const entry = removeEmpty([
     ifDevelopment("webpack-hot-middleware/client?reload=true", undefined),
-    Application.clientEntryPoint,
+    resolvePath("src/client/index.tsx"),
 ]);
 
 /**
@@ -48,8 +47,8 @@ const entry = removeEmpty([
  */
 const output: Output = {
     devtoolModuleFilenameTemplate,
-    filename: files.outputPattern.js,
-    path: Application.resolvePath("build/public/", false), // TODO maybe be strict for prod build as this should be created before hand
+    filename: "static/js/[name].js",
+    path: resolvePath("build/public"),
     publicPath,
 };
 
@@ -63,7 +62,7 @@ const plugins: Plugin[] = removeEmpty([
      */
     // TODO how can we keep the hash but also still server it form the server side???
     ifProduction(new MiniCssExtractPlugin({
-        filename: files.outputPattern.css,
+        filename: "static/css/[name].css",
     }), undefined),
     /**
      * Generate a manifest file which contains a mapping of all asset filenames

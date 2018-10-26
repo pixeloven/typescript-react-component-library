@@ -1,9 +1,8 @@
 import {getIfUtils} from "webpack-config-utils";
 import merge from "webpack-merge";
 import webpackNodeExternals from "webpack-node-externals";
-import Application from "../../Application";
-import Env from "../env";
-import files from "../files";
+import Env from "../../Env";
+import {resolvePath} from "../../macros";
 import common from "./common";
 
 /**
@@ -22,14 +21,14 @@ const publicPath = Env.config("PUBLIC_URL", "/");
 export default merge(common, {
     devtool: false, // TODO find a way to debug server
     entry: [
-        ifProduction("src/server/index.ts", "src/server/webpack.ts"),
+        ifProduction(resolvePath("src/server/index.ts"), resolvePath("src/server/webpack.ts")),
     ],
     externals: [webpackNodeExternals()],
     name: "server",
     output: {
-        filename: files.outputPattern.jsServer,
+        filename: "server.js",
         libraryTarget: "commonjs2",
-        path: Application.resolvePath("build/", false), // TODO maybe be strict for prod build as this should be created before hand
+        path: resolvePath("build"),
         publicPath,
     },
     target: "node",

@@ -1,6 +1,5 @@
 import autoprefixer from "autoprefixer";
 import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
-// import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin";
 import TimeFixPlugin from "time-fix-plugin";
@@ -8,8 +7,8 @@ import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import webpack, {Configuration, Module, Node, Options, Plugin, Resolve, RuleSetRule} from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
-import Application from "../../Application";
-import Env from "../env";
+import Env from "../../Env";
+import {resolvePath} from "../../macros";
 
 /**
  * Utility functions to help segment configuration based on environment
@@ -92,7 +91,7 @@ const staticFileRule: RuleSetRule = {
  * @todo Make configurable for CI and performance. Babel can also provide caching and polyfill
  */
 const typeScriptRule: RuleSetRule = {
-    include: Application.srcPath,
+    include: resolvePath("src"),
     test: /\.(ts|tsx)$/,
     use: [
         // {
@@ -118,7 +117,7 @@ const typeScriptRule: RuleSetRule = {
         {
             loader: "ts-loader",
             options: {
-                configFile: Application.tsConfig,
+                configFile: resolvePath("tsconfig.json"),
                 // transpileOnly: true,
             },
         },
@@ -217,13 +216,14 @@ const plugins: Plugin[] = removeEmpty([
      * TODO might prevent showing errors in browser if async is off... but then again it breaks hmr overlay
      * @env all
      */
+    // import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
     // ifProduction(new ForkTsCheckerWebpackPlugin({
-    //     tsconfig: Application.tsConfig,
-    //     tslint: Application.tsLint,
+    //     tsconfig: resolvePath("tsconfig.json"),
+    //     tslint: resolvePath("tslint.json"),
     // }), new ForkTsCheckerWebpackPlugin({
-    //     tsconfig: Application.tsConfig,
-    //     tslint: Application.tsLint,
-    //     watch: Application.srcPath,
+    //     tsconfig: resolvePath("tsconfig.json"),
+    //     tslint: resolvePath("tslint.json"),
+    //     watch: resolvePath("src"),
     // })),
 ]);
 
@@ -248,10 +248,10 @@ const resolve: Resolve = {
         ".web.jsx",
         ".jsx",
     ],
-    modules: ["node_modules", Application.nodeModulesPath],
+    modules: [resolvePath("src"), "node_modules"],
     plugins: [
-        new ModuleScopePlugin(Application.srcPath, [Application.packagePath]),
-        new TsconfigPathsPlugin({ configFile: Application.tsConfig }),
+        new ModuleScopePlugin(resolvePath("src"), [resolvePath("package.json")]),
+        new TsconfigPathsPlugin({ configFile: resolvePath("tsconfig.json") }),
     ],
 };
 
