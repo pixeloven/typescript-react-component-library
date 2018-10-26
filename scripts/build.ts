@@ -6,34 +6,19 @@ import "./boostrap/production";
 /**
  * Import dependencies
  */
-import assert from "assert";
 import chalk from "chalk";
 import fs from "fs-extra";
 import path from "path";
 import Promise from "promise";
 import FileSizeReporter from "react-dev-utils/FileSizeReporter";
 import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
-import printBuildError from "react-dev-utils/printBuildError";
 import printHostingInstructions from "react-dev-utils/printHostingInstructions";
 import webpack, {Stats} from "webpack";
 import Application from "./app/Application";
-import WebpackClientConfig from "./app/configs/webpack/client";
-import WebpackServerConfig from "./app/configs/webpack/server";
+import Env from "./app/configs/env";
+import webpackClientConfig from "./app/configs/webpack/client";
+import webpackServerConfig from "./app/configs/webpack/server";
 
-/**
- * Get FileSizeReporter functions
- */
-const {
-    measureFileSizesBeforeBuild,
-    printFileSizesAfterBuild,
-} = FileSizeReporter;
-
-/**
- * Setup constants for budle size
- * @description These sizes are pretty large. We"ll warn for bundles exceeding them.
- */
-const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
-const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 /**
  * Build Information
  */
@@ -46,25 +31,45 @@ interface BuildInformation {
 }
 
 /**
- * Setup Build Directory
+ * Get FileSizeReporter functions
  */
-function setupBuildDirectory() {
-    const buildPath = Application.buildPath;
-    if (!fs.existsSync(buildPath)) {
-        fs.mkdirSync(buildPath);
+const {
+    measureFileSizesBeforeBuild,
+    printFileSizesAfterBuild,
+} = FileSizeReporter;
+
+/**
+ * Setup constants for bundle size
+ * @description These sizes are pretty large. We"ll warn for bundles exceeding them.
+ */
+const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
+const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
+
+/**
+ * Setup build pathing
+ */
+const PRIVATE_BUILD_PATH = path.resolve(process.cwd(), Env.config("BUILD_PATH", "build"));
+const PUBLIC_BUILD_PATH = `${PRIVATE_BUILD_PATH}/public`;
+
+/**
+ * Setup Build Directory
+ * @param fullPath
+ */
+function setupBuildDirectory(fullPath: string) {
+    if (!fs.existsSync(fullPath)) {
+        fs.mkdirSync(fullPath);
     }
-    fs.emptyDirSync(buildPath);
+    fs.emptyDirSync(fullPath);
 }
 
 /**
  * Copy public folder to fresh build
+ * @param fullPath
  */
-function copyPublicDirToBuild() {
-    const buildPath = Application.buildPath;
-    const publicPath = Application.publicPath;
-    fs.copySync(publicPath, `${buildPath}/public`, {
+function copyPublicDirectory(fullPath: string) {
+    const publicDir = Application.resolvePath("public");
+    fs.copySync(publicDir, fullPath, {
         dereference: true,
-        // filter: file => file !== publicEntryPoint, // TODO filter out stub main.css???
     });
 }
 
@@ -108,7 +113,7 @@ function printBuildFileSizesAfterGzip(buildPath: string, stats: Stats, previousF
  */
 function printDeploymentInstructions(deploymentPath: string, buildRelativePath: string) {
     const appPackage = Application.package;
-    const publicUrl = Application.publicUrl; // TODO check this is being read in by .env
+    const publicUrl = Application.publicUrl;
     const usingYarn = Application.usingYarn;
     printHostingInstructions(
         appPackage,
@@ -117,6 +122,17 @@ function printDeploymentInstructions(deploymentPath: string, buildRelativePath: 
         buildRelativePath,
         usingYarn,
     );
+}
+
+/**
+ * Handle errors
+ * @param error
+ */
+function handleError(error: Error) {
+    if (error.message) {
+        console.error(`${chalk.red(error.message)}\n`);
+    }
+    process.exit(1);
 }
 
 /**
@@ -158,56 +174,39 @@ function build(config: object, previousFileSizes: OpaqueFileSizes) {
  * Build script
  */
 try {
-    // TODO can remove once we use this in our webpack setup
-    assert(Application.clientEntryPoint);
-    assert(Application.serverEntryPoint);
 
-    const buildPath = Application.buildPath;
-    const publicPath = Application.servedPath;
-    setupBuildDirectory();
+    setupBuildDirectory(PRIVATE_BUILD_PATH);
+    copyPublicDirectory(PUBLIC_BUILD_PATH);
 
     /**
      * Handle build for server side JavaScript
      * @description This lets us display how files changed
      */
-    measureFileSizesBeforeBuild(buildPath)
+    measureFileSizesBeforeBuild(PRIVATE_BUILD_PATH)
         .then((previousFileSizes: OpaqueFileSizes) => {
-            return build(WebpackServerConfig, previousFileSizes);
-        }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
+            return build(webpackServerConfig, previousFileSizes);
+        }).then(({previousFileSizes, stats, warnings}: BuildInformation) => {
             printBuildStatus(warnings);
-            printBuildFileSizesAfterGzip(buildPath, stats, previousFileSizes);
-            const buildRelativePath = path.relative(process.cwd(), buildPath);
-            printDeploymentInstructions(publicPath, buildRelativePath);
+            printBuildFileSizesAfterGzip(PRIVATE_BUILD_PATH, stats, previousFileSizes);
+            printDeploymentInstructions(PRIVATE_BUILD_PATH, PRIVATE_BUILD_PATH);
         },
-        (error: Error) => {
-            console.log(chalk.red("Failed to compile.\n"));
-            printBuildError(error);
-            process.exit(1);
-        },
+        handleError,
     );
+
     /**
      * Handle build for client side JavaScript
      * @description This lets us display how files changed
      */
-    const clientBuildPath = `${buildPath}/public`;
-    measureFileSizesBeforeBuild(clientBuildPath)
+    measureFileSizesBeforeBuild(PUBLIC_BUILD_PATH)
         .then((previousFileSizes: OpaqueFileSizes) => {
-            copyPublicDirToBuild();
-            return build(WebpackClientConfig, previousFileSizes);
-        }).then(({ previousFileSizes, stats, warnings }: BuildInformation) => {
+            return build(webpackClientConfig, previousFileSizes);
+        }).then(({previousFileSizes, stats, warnings}: BuildInformation) => {
             printBuildStatus(warnings);
-            printBuildFileSizesAfterGzip(clientBuildPath, stats, previousFileSizes);
-            const buildRelativePath = path.relative(process.cwd(), buildPath);
-            printDeploymentInstructions(publicPath, buildRelativePath);
+            printBuildFileSizesAfterGzip(PUBLIC_BUILD_PATH, stats, previousFileSizes);
+            printDeploymentInstructions(PUBLIC_BUILD_PATH, PUBLIC_BUILD_PATH);
         },
-        (error: Error) => {
-            console.log(chalk.red("Failed to compile.\n"));
-            printBuildError(error);
-            process.exit(1);
-        },
+        handleError,
     );
 } catch (error) {
-    console.log(chalk.red(error.message));
-    console.log();
-    process.exit(1);
+    handleError(error);
 }

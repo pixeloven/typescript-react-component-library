@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import url from "url";
 import {Environment} from "./configs/env";
 import files from "./configs/files";
 import paths from "./configs/paths";
@@ -21,22 +20,6 @@ export interface Package {
 class Application {
 
     /**
-     * Return build path
-     * @returns {string}
-     */
-    public static get buildPath(): string {
-        return Application.resolvePath(paths.build, false);
-    }
-
-    /**
-     * Return public path
-     * @returns {string}
-     */
-    public static get publicPath(): string {
-        return Application.resolvePath(paths.public);
-    }
-
-    /**
      * Return public url
      * @returns {string}
      */
@@ -50,25 +33,6 @@ class Application {
      */
     public static get clientEntryPoint(): string {
         return Application.resolvePath(files.entryPoint.client);
-    }
-
-    /**
-     * Return Application name
-     * @returns {string}
-     */
-    public static get serverEntryPoint(): string {
-        return Application.resolvePath(files.entryPoint.server);
-    }
-
-    /**
-     * Return served path
-     * @returns {string}
-     */
-    public static get servedPath(): string {
-        const pathName = url.parse(Application.publicUrl).pathname;
-        const servedUrl = pathName ? pathName : "/";
-        const hasSlash = servedUrl.endsWith("/");
-        return hasSlash ? servedUrl.substr(0, servedUrl.length - 1) : servedUrl;
     }
 
     /**

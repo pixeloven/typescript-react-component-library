@@ -3,6 +3,9 @@
  */
 import "./boostrap/development";
 
+/**
+ * Import dependencies
+ */
 import chalk from "chalk";
 import express from "express";
 import path from "path";

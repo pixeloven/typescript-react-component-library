@@ -15,7 +15,7 @@ export interface Environments {
  */
 export interface DefaultEnv extends NodeJS.ProcessEnv {
     BABEL_ENV: string;
-    GENERATE_SOURCE_MAP: string;
+    BUILD_PATH: string;
     HOST: string;
     PORT: string;
     PROTOCOL: string;
@@ -31,7 +31,7 @@ class Env {
      */
     public static defaultValues: DefaultEnv = {
         BABEL_ENV: "",
-        GENERATE_SOURCE_MAP: "",
+        BUILD_PATH: "",
         HOST: "",
         NODE_ENV: "",
         NODE_PATH: "",
