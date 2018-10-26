@@ -54,7 +54,7 @@ The structure of this application should be considered living. As new requiremen
 
 ### Source files
 Our source files require a bit more in depth discussion. Our source files are meant to be built in an isomorphic style. Isomorphic or Universal JavaScript is meant to reduce the amount of repeated code and context switching but often comes at the cost of complexity. We introduced a simple file structure to help us reduce thrashing when working in this context.
-* `src/browser` is the entry point for our build process for all client side code paths.
+* `src/client` is the entry point for our build process for all client side code paths.
 * `src/server` is the entry point for our build process for all server side code paths.
 * `src/shared` contains all source that is universal to the two code paths.
 
@@ -80,6 +80,11 @@ Finally if we would like to simply build the application we can run the followin
 yarn build
 ```
 The above will build our SCSS, TypeScript, and Storybook into our build directory.
+
+## Adding global constants
+> Note: This is discourage as it creates an interdependence between the build process and application
+
+
 
 ## Adding Custom Environment Variables
 

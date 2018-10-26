@@ -144,7 +144,7 @@
   },
   "scripts": {
     "build": "run-s build-ts build-story",
-    "build-ts": "ts-node --files scripts/build.ts",
+    "build-ts": "ts-node --files lib/build.ts",
     "build-story": "build-storybook -c .storybook -o build/public/docs",
     "clean": "rm -rf ./build",
     "deploy": "node build/server.js",
@@ -156,18 +156,18 @@
     "lint-scss-fix": "stylelint src/**/*.scss --syntax scss --fix",
     "precommit": "lint-staged",
     "start": "run-s start-ts",
-    "start-ts": "ts-node --files scripts/start.ts",
+    "start-ts": "ts-node --files lib/start.ts",
     "start-story": "start-storybook -p 9001 -c .storybook",
     "test": "jest --watch --env=jsdom",
     "test-coverage": "jest --coverage --env=jsdom"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "tslint --fix --project .",
+      "yarn lint-ts-fix",
       "git add"
     ],
     "*.scss": [
-      "stylelint src/**/*.scss --syntax scss --fix",
+      "yarn lint-scss-fix",
       "git add"
     ]
   },
@@ -185,7 +185,7 @@
       "src/**/*.{js,jsx,ts,tsx}"
     ],
     "setupFiles": [
-      "<rootDir>/scripts/boostrap/test.ts"
+      "<rootDir>/lib/boostrap/test.ts"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.(j|t)s?(x)",

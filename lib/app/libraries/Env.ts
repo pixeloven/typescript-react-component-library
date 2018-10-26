@@ -1,8 +1,6 @@
 import dotenv from "dotenv";
 import NodeProcessException from "../exceptions/NodeProcessException";
 
-export type Environment = "development" | "production" | "test";
-
 export interface Environments {
     development?: object;
     production?: object;

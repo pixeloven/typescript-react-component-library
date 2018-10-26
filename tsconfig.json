@@ -15,7 +15,7 @@
     "moduleResolution": "node",
     "rootDirs": [
       "./.storybook",
-      "./scripts",
+      "./lib",
       "./src"
     ],
     "paths": {
@@ -36,7 +36,7 @@
     "allowSyntheticDefaultImports": true
   },
   "typeRoots": [
-    "./definitions",
+    "./lib/definitions",
     "./node_modules/@types"
   ],
   "types": [

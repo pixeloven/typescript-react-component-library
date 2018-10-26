@@ -204,6 +204,14 @@ const plugins: Plugin[] = removeEmpty([
      */
     ifDevelopment(new CaseSensitivePathsPlugin(), undefined),
     /**
+     * Define environmental variables for application
+     *
+     * @env all
+     */
+    new webpack.DefinePlugin({
+        ENVIRONMENT: ifProduction("production", "development"),
+    }),
+    /**
      * Moment.js is an extremely popular library that bundles large locale files
      * by default due to how Webpack interprets its code. This is a practical
      * solution that requires the user to opt into importing specific locales.

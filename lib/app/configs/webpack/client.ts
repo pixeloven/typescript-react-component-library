@@ -60,7 +60,7 @@ const plugins: Plugin[] = removeEmpty([
      * Extract css to file
      * @env production
      */
-    // TODO how can we keep the hash but also still server it form the server side???
+    // TODO minify for prod
     ifProduction(new MiniCssExtractPlugin({
         filename: "static/css/[name].css",
     }), undefined),
@@ -96,7 +96,7 @@ const plugins: Plugin[] = removeEmpty([
         },
         minify: true,
         // For unknown URLs, fallback to the index page
-        navigateFallback: `${publicPath}index.html`,
+        navigateFallback: `${publicPath}index.html`, // TODO what should this be???
         // Ignores URLs starting from /__ (useful for Firebase):
         // https://github.com/facebookincubator/create-react-app/issues/2237#issuecomment-302693219
         navigateFallbackWhitelist: [/^(?!\/__).*/],

@@ -36,9 +36,6 @@ const store = createStore(
 /**
  * Wrap application with container, router and store
  */
-// TODO get reload working first
-// TODO "react-hot-loader/babel" needs to be added????
-    // https://github.com/gaearon/react-hot-loader/issues/525
 const AppWrapper = () => (
     <Provider store={store}>
         <BrowserRouter basename="/">

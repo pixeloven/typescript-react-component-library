@@ -28,4 +28,5 @@ export default (req: Request, res: Response, next: NextFunction): void => {
         res.status(404).send("O no we should be serving a 404!"); // TODO handle this in react and then pull back
     }
     // TODO what about next()???
+    next();
 };

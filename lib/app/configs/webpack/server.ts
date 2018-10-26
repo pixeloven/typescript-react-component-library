@@ -25,6 +25,10 @@ export default merge(common, {
     ],
     externals: [webpackNodeExternals()],
     name: "server",
+    node: {
+        __dirname: false,
+        __filename: false,
+    },
     output: {
         filename: "server.js",
         libraryTarget: "commonjs2",

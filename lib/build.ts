@@ -144,7 +144,7 @@ function build(config: object, previousFileSizes: OpaqueFileSizes) {
  */
 try {
 
-    setupBuildDirectory(PRIVATE_BUILD_PATH);
+    setupBuildDirectory(PRIVATE_BUILD_PATH); // TODO be mindful of /docs.. this deletes them :( - Also make storybook configurable ON/OFF
     copyPublicDirectory(PUBLIC_BUILD_PATH);
 
     /**

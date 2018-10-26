@@ -68,6 +68,8 @@ try {
         }
         app.use(webpackHotServerMiddleware(combinedCompiler));
 
+        // TODO register src here??
+
         /**
          * Start express server on specific host and port
          */
