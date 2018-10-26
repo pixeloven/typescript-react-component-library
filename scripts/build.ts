@@ -12,12 +12,11 @@ import path from "path";
 import Promise from "promise";
 import FileSizeReporter from "react-dev-utils/FileSizeReporter";
 import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
-import printHostingInstructions from "react-dev-utils/printHostingInstructions";
 import webpack, {Stats} from "webpack";
-import Application from "./app/Application";
 import Env from "./app/configs/env";
 import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
+import {handleError, resolvePath} from "./app/helpers";
 
 /**
  * Build Information
@@ -67,7 +66,7 @@ function setupBuildDirectory(fullPath: string) {
  * @param fullPath
  */
 function copyPublicDirectory(fullPath: string) {
-    const publicDir = Application.resolvePath("public");
+    const publicDir = resolvePath("public");
     fs.copySync(publicDir, fullPath, {
         dereference: true,
     });
@@ -104,35 +103,6 @@ function printBuildFileSizesAfterGzip(buildPath: string, stats: Stats, previousF
         WARN_AFTER_CHUNK_GZIP_SIZE,
     );
     console.log();
-}
-
-/**
- * Print instructions about deployment
- * @param deploymentPath
- * @param buildRelativePath
- */
-function printDeploymentInstructions(deploymentPath: string, buildRelativePath: string) {
-    const appPackage = Application.package;
-    const publicUrl = Application.publicUrl;
-    const usingYarn = Application.usingYarn;
-    printHostingInstructions(
-        appPackage,
-        publicUrl,
-        deploymentPath,
-        buildRelativePath,
-        usingYarn,
-    );
-}
-
-/**
- * Handle errors
- * @param error
- */
-function handleError(error: Error) {
-    if (error.message) {
-        console.error(`${chalk.red(error.message)}\n`);
-    }
-    process.exit(1);
 }
 
 /**
@@ -188,7 +158,6 @@ try {
         }).then(({previousFileSizes, stats, warnings}: BuildInformation) => {
             printBuildStatus(warnings);
             printBuildFileSizesAfterGzip(PRIVATE_BUILD_PATH, stats, previousFileSizes);
-            printDeploymentInstructions(PRIVATE_BUILD_PATH, PRIVATE_BUILD_PATH);
         },
         handleError,
     );
@@ -203,7 +172,6 @@ try {
         }).then(({previousFileSizes, stats, warnings}: BuildInformation) => {
             printBuildStatus(warnings);
             printBuildFileSizesAfterGzip(PUBLIC_BUILD_PATH, stats, previousFileSizes);
-            printDeploymentInstructions(PUBLIC_BUILD_PATH, PUBLIC_BUILD_PATH);
         },
         handleError,
     );

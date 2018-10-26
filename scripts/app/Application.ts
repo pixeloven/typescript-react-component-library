@@ -84,14 +84,6 @@ class Application {
     }
 
     /**
-     * Check if we are using yarn or another package manager.
-     * @return {boolean}
-     */
-    public static get usingYarn(): boolean {
-        return files.lock.includes("yarn");
-    }
-
-    /**
      * Return server configuration for specific environment
      * @param env
      */
