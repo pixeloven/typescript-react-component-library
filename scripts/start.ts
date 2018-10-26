@@ -15,10 +15,10 @@ import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
 import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackHotServerMiddleware from "webpack-hot-server-middleware";
-import Env from "./app/configs/env";
 import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
-import {handleError, sleep} from "./app/helpers";
+import Env from "./app/Env";
+import {handleError, sleep} from "./app/macros";
 
 /**
  * Get WebpackDevServerUtils functions
@@ -28,15 +28,11 @@ const {
     prepareUrls,
 } = WebpackDevServerUtils;
 
-// TODO should rename to PUBLIC_PATH - document as "/" or "/public" etc
-// TODO add DOMAIN to combine to form PUBLIC_URL??
 const PUBLIC_PATH = Env.config("PUBLIC_URL", "/");
 const DEFAULT_HOST = Env.config("HOST", "localhost");
 const DEFAULT_PROTOCOL = Env.config("PROTOCOL", "http");
 const DEFAULT_PORT = parseInt(Env.config("PORT", "8080"), 10);
 
-// TODO need to make it so that if server side change is made then hard refresh.
-// TODO missing fancy create-react-app error handling
 try {
     /**
      * We attempt to use the default port but if it is busy, we offer the user to

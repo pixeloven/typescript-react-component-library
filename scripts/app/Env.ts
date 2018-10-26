@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
-import NodeProcessException from "../exceptions/NodeProcessException";
+import NodeProcessException from "./exceptions/NodeProcessException";
 
-// TODO not really a config anymore... should be moved into a class lib or something
 export type Environment = "development" | "production" | "test";
 
 export interface Environments {
