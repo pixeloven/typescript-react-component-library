@@ -83,6 +83,9 @@ yarn build
 ```
 The above will build our SCSS, TypeScript, and Storybook into our build directory.
 
+## Service workers
+Google Analtycis 
+https://medium.com/@addyosmani/progressive-web-apps-with-react-js-part-3-offline-support-and-network-resilience-c84db889162c
 ## Adding Process Env Variables
 > Note: Adding process.env variables to the client is discouraged as it creates an interdependence between the build process and application
 

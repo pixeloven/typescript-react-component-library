@@ -2,6 +2,7 @@ import "core-js/es6/map";
 import "core-js/es6/set";
 import "raf/polyfill";
 
+import * as OfflinePluginRuntime from "offline-plugin/runtime";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { hot } from "react-hot-loader";
@@ -10,7 +11,6 @@ import { BrowserRouter } from "react-router-dom";
 import { Action, createStore } from "redux";
 import App from "../shared/App";
 import "./assets/App.scss";
-import {register} from "./serviceWorkers";
 
 const rootReducer = (state: string = "asdf", action: Action) => {
     switch (action.type) {
@@ -49,4 +49,5 @@ renderMethod(<HotAppWrapper />, document.getElementById("root"));
 /**
  * Register service workers
  */
-register();
+// register();
+OfflinePluginRuntime.install();

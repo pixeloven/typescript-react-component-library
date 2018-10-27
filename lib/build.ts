@@ -66,8 +66,10 @@ function setupDirectory(fullPath: string) {
  */
 function copyPublicDirectory(fullPath: string) {
     const publicDir = resolvePath("public");
+    const publicOffline = resolvePath("public/offline.html");
     fs.copySync(publicDir, fullPath, {
         dereference: true,
+        filter: file => file !== publicOffline,
     });
 }
 

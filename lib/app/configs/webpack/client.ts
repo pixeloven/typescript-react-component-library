@@ -1,7 +1,8 @@
+import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import OfflinePlugin from "offline-plugin";
 import OptimizeCSSAssetsPlugin from "optimize-css-assets-webpack-plugin";
 import path from "path";
-import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import webpack from "webpack";
 import {DevtoolModuleFilenameTemplateInfo, Node, Options, Output, Plugin} from "webpack";
@@ -12,6 +13,10 @@ import Env from "../../libraries/Env";
 import {resolvePath} from "../../macros";
 import common from "./common";
 
+// TODO need to run all copy files through webpack
+// TODO Upgrade webpack for production see here
+// TODO https://www.npmjs.com/package/tslint-loader
+// TODO check updated webpack https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.prod.js
 /**
  * Utility functions to help segment configuration based on environment
  */
@@ -126,33 +131,49 @@ const plugins: Plugin[] = removeEmpty([
         fileName: "asset-manifest.json",
     }), undefined),
     /**
+     * Generates html file for offline use
+     *
+     * @env production
+     */
+    ifProduction(new HtmlWebpackPlugin({
+        filename: resolvePath("build/public/offline.html", false),
+        inject: true,
+        minify: {
+            collapseWhitespace: true,
+            keepClosingSlash: true,
+            minifyCSS: true,
+            minifyJS: true,
+            minifyURLs: true,
+            removeComments: true,
+            removeEmptyAttributes: true,
+            removeRedundantAttributes: true,
+            removeStyleLinkTypeAttributes: true,
+            useShortDoctype: true,
+        },
+        template: resolvePath("public/offline.html"),
+    }), undefined),
+    /**
      * Generate a service worker script that will precache, and keep up to date,
      * the HTML & assets that are part of the Webpack build.
      *
      * @env production
      */
-    ifProduction(new SWPrecacheWebpackPlugin({
-        // By default, a cache-busting query parameter is appended to requests
-        // used to populate the caches, to ensure the responses are fresh.
-        // If a URL is already hashed by Webpack, then there is no concern
-        // about it being stale, and the cache-busting can be skipped.
-        dontCacheBustUrlsMatching: /\.\w{8}\./,
-        filename: "service-worker.js",
-        logger: (message: string): void => {
-            const totalPrecacheMsg = message.indexOf("Total precache size is") === 0;
-            const skippingStaticResourceMsg = message.indexOf("Skipping static resource") === 0;
-            if (!totalPrecacheMsg && !skippingStaticResourceMsg) {
-                console.log(message);
-            }
+    ifProduction(new OfflinePlugin({
+        ServiceWorker: {
+            events: true,
         },
-        minify: true,
-        // For unknown URLs, fallback to the index page
-        navigateFallback: `${publicPath}index.html`, // TODO what should this be???
-        // Ignores URLs starting from /__ (useful for Firebase):
-        // https://github.com/facebookincubator/create-react-app/issues/2237#issuecomment-302693219
-        navigateFallbackWhitelist: [/^(?!\/__).*/],
-        // Don't precache sourcemaps (they're large) and build asset manifest:
-        staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
+        appShell: "/offline.html",
+        caches: {
+            additional: [
+                "/offline.html",
+                ":externals:",
+            ],
+            main: [
+                ":rest:",
+            ],
+        },
+        responseStrategy: "network-first", // 'cache-first' // TODO any way to do this and detect offline?
+        safeToUseOptionalCaches: true,
     }), undefined),
     /**
      * This is necessary to emit hot updates (currently CSS only):

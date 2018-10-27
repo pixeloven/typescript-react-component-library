@@ -10,7 +10,7 @@
       ".circleci",
       ".storybook",
       "build",
-      "config",
+      "coverage",
       "node_modules",
       "public"
     ]
