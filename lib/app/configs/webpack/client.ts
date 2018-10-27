@@ -1,3 +1,4 @@
+import CopyWebpackPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import OfflinePlugin from "offline-plugin";
@@ -113,6 +114,14 @@ const plugins: Plugin[] = removeEmpty([
     new webpack.EnvironmentPlugin({
         NODE_ENV: ifProduction("production", "development"),
     }),
+    /**
+     * Copy files
+     * @env production
+     */
+    ifProduction(new CopyWebpackPlugin([{
+        from: resolvePath("public"),
+        ignore: ["*.html"],
+    }]), undefined),
     /**
      * Extract css to file
      * @env production

@@ -64,14 +64,14 @@ function setupDirectory(fullPath: string) {
  * Copy public folder to fresh build
  * @param fullPath
  */
-function copyPublicDirectory(fullPath: string) {
-    const publicDir = resolvePath("public");
-    const publicOffline = resolvePath("public/offline.html");
-    fs.copySync(publicDir, fullPath, {
-        dereference: true,
-        filter: file => file !== publicOffline,
-    });
-}
+// function copyPublicDirectory(fullPath: string) {
+//     const publicDir = resolvePath("public");
+//     const publicOffline = resolvePath("public/offline.html");
+//     fs.copySync(publicDir, fullPath, {
+//         dereference: true,
+//         filter: file => file !== publicOffline,
+//     });
+// }
 
 /**
  * Print msg on status of build
@@ -148,7 +148,7 @@ try {
     // TODO be mindful of /docs.. this deletes them :( - Also make storybook configurable ON/OFF
     setupDirectory(PRIVATE_BUILD_PATH);
     setupDirectory(PUBLIC_BUILD_PATH);
-    copyPublicDirectory(PUBLIC_BUILD_PATH);
+    // copyPublicDirectory(PUBLIC_BUILD_PATH);
 
     /**
      * Handle build for server side JavaScript
