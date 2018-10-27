@@ -75,7 +75,7 @@ const optimization: Options.Optimization = {
         new UglifyJsPlugin({
             cache: true,
             parallel: true,
-            sourceMap: true, // TODO should we do this in prod??
+            sourceMap: false,
             uglifyOptions: {
                 compress: {
                     comparisons: false,
@@ -187,7 +187,7 @@ const plugins: Plugin[] = removeEmpty([
  * Client side configuration
  */
 export default merge(common, {
-    devtool: ifProduction("source-map", "eval-source-map"), // TODO if prod should we even do this???
+    devtool: ifDevelopment("eval-source-map", false),
     entry,
     name: "client",
     node,
