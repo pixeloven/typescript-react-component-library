@@ -174,8 +174,10 @@ const plugins: Plugin[] = removeEmpty([
         appShell: "/offline.html",
         caches: {
             additional: [
-                "/offline.html",
                 ":externals:",
+            ],
+            externals: [
+                "/offline.html",
             ],
             main: [
                 ":rest:",
