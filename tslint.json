@@ -7,10 +7,9 @@
   ],
   "linterOptions": {
     "exclude": [
-      ".circleci",
-      ".storybook",
+      "./.circleci",
       "build",
-      "config",
+      "coverage",
       "node_modules",
       "public"
     ]

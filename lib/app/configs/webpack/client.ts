@@ -74,14 +74,13 @@ const catchAllRule = {
     loader: require.resolve("file-loader"),
     options: {
         name: "[name].[hash:8].[ext]",
-        outputPath: "static/media/", // TODO config
+        outputPath: "static/media/",
     },
 };
 
 /**
  * Handle css/scss
  */
-// TODO do we need source maps here?
 const scssRule: RuleSetRule = {
     test: /\.(scss|sass|css)$/i,
     use: removeEmpty([
@@ -107,7 +106,6 @@ const staticFileRule: RuleSetRule = {
     loader: require.resolve("url-loader"),
     options: {
         limit: 10000,
-        name: "static/media/[name].[hash:8].[ext]", // TODO is this needed I don't think so
     },
     test: /\.(bmp|png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
 };
@@ -178,7 +176,7 @@ const optimization: Options.Optimization = {
         new UglifyJsPlugin({
             cache: true,
             parallel: true,
-            sourceMap: true, // TODO should we do this in prod??
+            sourceMap: false,
             uglifyOptions: {
                 compress: {
                     comparisons: false,
