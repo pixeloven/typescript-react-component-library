@@ -24,9 +24,5 @@ declare module "react-dev-utils/ModuleScopePlugin";
 declare module "react-dev-utils/WatchMissingNodeModulesPlugin";
 declare module "react-dev-utils/WebpackDevServerUtils";
 declare module "storybook-readme";
+declare module "time-fix-plugin";
 declare module "tsconfig-paths-webpack-plugin";
-
-/**
- * Global types
- */
-type Optional<T> = T | undefined;

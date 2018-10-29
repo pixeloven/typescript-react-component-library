@@ -1,22 +1,20 @@
-import cors from "cors";
-import express from "express";
+import express, {NextFunction, Request, Response} from "express";
 import expressWinston from "express-winston";
+import fs from "fs";
+import path from "path";
 import winston from "winston";
 import {config} from "./config";
-import {DefaultController} from "./controllers";
+import {health} from "./controllers";
+import {renderer} from "./middleware";
 
-// TODO make it so you can build just the server and not client too
-// TODO should explore mvc frameworks for express
 /**
  * Create express application
  * @type {Function}
  */
 const app = express();
-app.use(cors());
 
 /**
  * Setup express logger
- * TODO {json: true,colorize: true} for config
  */
 app.use(expressWinston.logger({
     transports: [
@@ -26,28 +24,37 @@ app.use(expressWinston.logger({
 
 /**
  * Defines static build files
- * TODO read this from env
- * TODO ignore html file for build
  */
-app.use("/public", express.static("build/public"));
+const publicPath = path.resolve(__dirname, "public");
+app.use(express.static(publicPath));
 
 /**
- * This defines a catch all route for serving all react pages
- * TODO can create an inheritable controller class
- * TODO should inject template into the controllers
+ * Define render middleware
  */
-const defaultController = new DefaultController();
+const cssFiles = fs.readdirSync(`${publicPath}/static/css`)
+    .filter(fn => fn.endsWith(".css"))
+    .map(file => `/static/css/${file}`);
+const jsFiles = fs.readdirSync(`${publicPath}/static/js`)
+    .filter(fn => fn.endsWith(".js"))
+    .map(file => `/static/js/${file}`);
+app.use((req: Request, res: Response, next: NextFunction): void => {
+    req.files = {
+        css: cssFiles,
+        js: jsFiles,
+    };
+    next();
+});
+app.use(renderer);
 
 /**
  * Register endpoints
- * TODO need to handle 404s
  */
-app.get("/health", defaultController.health);
-app.get("*", defaultController.render);
+app.use(health);
 
 /**
  * Start express server on specific host and port
  */
-app.listen(config.CLIENT.PORT, config.CLIENT.HOST, () => {
-    console.log(`Running on http://${config.CLIENT.HOST}:${config.CLIENT.PORT}`);
+app.listen(config.server.port, config.server.host, () => {
+    console.log(`Running on ${config.server.protocol}://${config.server.host}:${config.server.port}`);
+    console.log(`Serving static files from: ${publicPath}`);
 });

@@ -1,31 +1,27 @@
-import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import OptimizeCSSAssetsPlugin from "optimize-css-assets-webpack-plugin";
 import path from "path";
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin";
-import {DevtoolModuleFilenameTemplateInfo, Output, Plugin} from "webpack";
+import UglifyJsPlugin from "uglifyjs-webpack-plugin";
+import webpack from "webpack";
+import {DevtoolModuleFilenameTemplateInfo, Node, Options, Output, Plugin} from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
 import ManifestPlugin from "webpack-manifest-plugin";
 import merge from "webpack-merge";
-import Application from "../../Application";
-import Env from "../env";
-import files from "../files";
+import Env from "../../libraries/Env";
+import {resolvePath} from "../../macros";
 import common from "./common";
 
 /**
  * Utility functions to help segment configuration based on environment
  */
 const {ifProduction, ifDevelopment} = getIfUtils(Env.current);
+
 /**
  * Webpack uses `publicPath` to determine where the app is being served from.
  * It requires a trailing slash, or the file assets will get an incorrect path.
  */
-const publicPath = Env.config("PUBLIC_URL", "/"); // TODO need to redo webpack adn then build scripts to use the proper env vrs
-/**
- * publicUrl is just like `publicPath`, but we will provide it to our app
- * as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript
- * Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
- */
-const publicUrl = publicPath.slice(0, -1);
+const publicPath = Env.config("PUBLIC_URL", "/");
 
 /**
  * Describe source pathing in dev tools
@@ -34,7 +30,7 @@ const publicUrl = publicPath.slice(0, -1);
 const devtoolModuleFilenameTemplate = (info: DevtoolModuleFilenameTemplateInfo) => {
     if (ifProduction()) {
         return path
-            .relative(Application.srcPath, info.absoluteResourcePath)
+            .relative(resolvePath("src"), info.absoluteResourcePath)
             .replace(/\\/g, "/");
     }
     return path.resolve(info.absoluteResourcePath).replace(/\\/g, "/");
@@ -44,20 +40,60 @@ const devtoolModuleFilenameTemplate = (info: DevtoolModuleFilenameTemplateInfo) 
  * Define entrypoint(s) for client
  */
 const entry = removeEmpty([
-    ifDevelopment(require.resolve("react-dev-utils/webpackHotDevClient"), undefined),
-    Application.clientEntryPoint,
+    ifDevelopment("webpack-hot-middleware/client?reload=true", undefined),
+    resolvePath("src/client/index.tsx"),
 ]);
+
+/**
+ * @description Some libraries import Node modules but don"t use them in the browser.
+ * Tell Webpack to provide empty mocks for them so importing them works.
+ */
+const node: Node = {
+    child_process: "empty",
+    dgram: "empty",
+    fs: "empty",
+    net: "empty",
+    tls: "empty",
+};
+
+/**
+ * Define build optimization options
+ */
+const optimization: Options.Optimization = {
+    minimize: ifProduction(),
+    minimizer: ifProduction([
+        /**
+         * Minify the code JavaScript
+         *
+         * @env production
+         */
+        new UglifyJsPlugin({
+            cache: true,
+            parallel: true,
+            sourceMap: true, // TODO should we do this in prod??
+            uglifyOptions: {
+                compress: {
+                    comparisons: false,
+                    warnings: false,
+                },
+                output: {
+                    ascii_only: true,
+                    comments: false,
+                },
+            },
+        }),
+        new OptimizeCSSAssetsPlugin(),
+    ], []),
+};
 
 /**
  * @description Output instructions for client build
  */
 const output: Output = {
-    chunkFilename: files.outputPattern.jsChunk, // TODO need to add support for hash pattern
-    devtoolModuleFilenameTemplate, // TODO do we need this if we don't do sourcemaps in prod??
-    filename: files.outputPattern.js,
-    path: ifProduction(`${Application.buildPath}/public/`, "/"),
-    pathinfo: ifDevelopment(),
-    publicPath: ifProduction(publicPath, "/"), // TODO ONE OF THESE IS BREAKING THE FONTS
+    devtoolModuleFilenameTemplate,
+    filename: "static/js/[name].[hash:8].js",
+    path: resolvePath("build/public", false),
+    publicPath,
 };
 
 /**
@@ -65,34 +101,19 @@ const output: Output = {
  */
 const plugins: Plugin[] = removeEmpty([
     /**
-     * Generates an `index.html` file with the <script> injected.
+     * Define environmental variables for application
      *
-     * @env all // TODO not really need for prod unless we server html instead of a react template
+     * @env all
      */
-    new HtmlWebpackPlugin(removeEmpty({
-        inject: true,
-        minify: ifProduction({
-            collapseWhitespace: true,
-            keepClosingSlash: true,
-            minifyCSS: true,
-            minifyJS: true,
-            minifyURLs: true,
-            removeComments: true,
-            removeEmptyAttributes: true,
-            removeRedundantAttributes: true,
-            removeStyleLinkTypeAttributes: true,
-            useShortDoctype: true,
-        }),
-        template: Application.publicEntryPoint,
-    })),
+    new webpack.EnvironmentPlugin({
+        NODE_ENV: ifProduction("production", "development"),
+    }),
     /**
      * Extract css to file
      * @env production
      */
-    // TODO how can we keep the hash but also still server it form the server side???
     ifProduction(new MiniCssExtractPlugin({
-        chunkFilename: files.outputPattern.css,
-        filename: files.outputPattern.css,
+        filename: "static/css/[name].[hash:8].css",
     }), undefined),
     /**
      * Generate a manifest file which contains a mapping of all asset filenames
@@ -126,21 +147,30 @@ const plugins: Plugin[] = removeEmpty([
         },
         minify: true,
         // For unknown URLs, fallback to the index page
-        navigateFallback: publicUrl + "/index.html",
+        navigateFallback: `${publicPath}index.html`, // TODO what should this be???
         // Ignores URLs starting from /__ (useful for Firebase):
         // https://github.com/facebookincubator/create-react-app/issues/2237#issuecomment-302693219
         navigateFallbackWhitelist: [/^(?!\/__).*/],
         // Don't precache sourcemaps (they're large) and build asset manifest:
         staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
     }), undefined),
+    /**
+     * This is necessary to emit hot updates (currently CSS only):
+     *
+     * @env development
+     */
+    ifDevelopment(new webpack.HotModuleReplacementPlugin(), undefined),
 ]);
 
 /**
  * Client side configuration
  */
 export default merge(common, {
-    devtool: ifProduction("source-map", "cheap-module-source-map"), // TODO if prod should we even do this???
+    devtool: ifProduction("source-map", "eval-source-map"), // TODO if prod should we even do this???
     entry,
+    name: "client",
+    node,
+    optimization,
     output,
     plugins,
     target: "web",

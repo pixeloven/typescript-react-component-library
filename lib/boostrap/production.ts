@@ -1,4 +1,4 @@
-import Env, {Environment} from "../app/configs/env";
+import Env from "../app/libraries/Env";
 
 /**
  * Makes the script crash on unhandled rejections instead of silently
@@ -17,6 +17,6 @@ Env.load();
 /**
  * Set test environment
  */
-const environment: Environment = "development";
+const environment: Environment = "production";
 Env.define("BABEL_ENV", environment);
 Env.define("NODE_ENV", environment);
