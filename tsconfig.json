@@ -37,7 +37,8 @@
   },
   "typeRoots": [
     "./lib/definitions",
-    "./node_modules/@types"
+    "./node_modules/@types",
+    "./node_modules/offline-plugin/runtime.d.ts"
   ],
   "types": [
     "jest"

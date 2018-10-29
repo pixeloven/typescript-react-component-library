@@ -50,7 +50,6 @@ const catchAllRule = {
 /**
  * Handle css/scss
  */
-// TODO do we need source maps here?
 const scssRule: RuleSetRule = {
     test: /\.(scss|sass|css)$/i,
     use: removeEmpty([
@@ -135,7 +134,7 @@ const performance: Options.Performance = {
 const plugins: Plugin[] = removeEmpty([
     /**
      * Fixes a known issue with cross-platform differences in file watchers,
-     * so that webpack doesn't loose file changes when watched files change rapidly
+     * so that webpack doesn't lose file changes when watched files change rapidly
      * https://github.com/webpack/webpack-dev-middleware#known-issues
      *
      * @env development

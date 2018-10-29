@@ -24,5 +24,6 @@ declare module "react-dev-utils/ModuleScopePlugin";
 declare module "react-dev-utils/WatchMissingNodeModulesPlugin";
 declare module "react-dev-utils/WebpackDevServerUtils";
 declare module "storybook-readme";
+declare module "offline-plugin";
 declare module "time-fix-plugin";
 declare module "tsconfig-paths-webpack-plugin";
