@@ -18,7 +18,6 @@
   "dependencies": {
     "classnames": "2.2.6",
     "core-js": "2.5.7",
-    "cors": "2.8.4",
     "deepmerge": "2.2.1",
     "express": "4.16.4",
     "express-winston": "3.0.1",
@@ -29,6 +28,7 @@
     "react": "16.5.2",
     "react-dev-utils": "6.0.5",
     "react-dom": "16.5.2",
+    "react-hot-loader": "^4.3.11",
     "react-redux": "5.0.7",
     "react-router-dom": "4.3.1",
     "react-router-redux": "4.0.8",
@@ -36,7 +36,7 @@
     "redux-form": "7.4.2",
     "redux-saga": "0.16.2",
     "reselect": "4.0.0",
-    "semantic-ui-react": "0.82.5",
+    "semantic-ui-react": "0.83.0",
     "semantic-ui-sass": "2.3.1",
     "whatwg-fetch": "3.0.0",
     "winston": "3.1.0"
@@ -53,19 +53,17 @@
     "@types/autoprefixer": "^9.1.0",
     "@types/case-sensitive-paths-webpack-plugin": "^2.1.2",
     "@types/core-js": "^2.5.0",
-    "@types/cors": "^2.8.4",
     "@types/dotenv": "^4.0.3",
     "@types/enzyme": "^3.1.0",
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/express": "^4.16.0",
     "@types/express-winston": "^3.0.0",
     "@types/fs-extra": "^5.0.4",
-    "@types/html-webpack-plugin": "^3.2.0",
     "@types/jest": "^23.3.2",
     "@types/lodash": "^4.14.115",
     "@types/mini-css-extract-plugin": "^0.2.0",
     "@types/node": "^8.10.0",
-    "@types/promise": "^7.1.30",
+    "@types/optimize-css-assets-webpack-plugin": "^1.3.3",
     "@types/react": "^16.4.14",
     "@types/react-dom": "^16.0.8",
     "@types/react-redux": "^6.0.9",
@@ -76,20 +74,22 @@
     "@types/storybook__addon-options": "^3.2.2",
     "@types/storybook__react": "^3.0.9",
     "@types/sw-precache-webpack-plugin": "^0.11.0",
-    "@types/tapable": "0.2.5",
+    "@types/tapable": "^1.0.4",
     "@types/uglifyjs-webpack-plugin": "^1.1.0",
     "@types/webpack": "^4.4.17",
     "@types/webpack-config-utils": "^2.3.0",
+    "@types/webpack-dev-middleware": "^2.0.2",
     "@types/webpack-dev-server": "^3.1.1",
+    "@types/webpack-hot-middleware": "^2.16.4",
     "@types/webpack-manifest-plugin": "^1.3.2",
     "@types/webpack-merge": "^4.1.3",
     "@types/webpack-node-externals": "^1.6.3",
     "autoprefixer": "9.1.5",
-    "babel-core": "^6.26.0",
-    "babel-jest": "^22.1.0",
-    "babel-loader": "^7.1.2",
+    "babel-core": "6.26.3",
+    "babel-jest": "23.6.0",
+    "babel-loader": "8.0.4",
     "babel-preset-react-app": "3.1.2",
-    "babel-runtime": "^6.26.0",
+    "babel-runtime": "6.26.0",
     "case-sensitive-paths-webpack-plugin": "2.1.2",
     "chalk": "2.4.1",
     "css-loader": "1.0.0",
@@ -97,9 +97,8 @@
     "enzyme": "3.7.0",
     "enzyme-adapter-react-16": "1.6.0",
     "file-loader": "2.0.0",
-    "fork-ts-checker-webpack-plugin": "0.4.10",
+    "fork-ts-checker-webpack-plugin": "0.4.12",
     "fs-extra": "7.0.0",
-    "html-webpack-plugin": "3.2.0",
     "husky": "1.1.2",
     "jest": "23.6.0",
     "lint-staged": "7.3.0",
@@ -107,6 +106,7 @@
     "moment": "2.22.2",
     "node-sass": "4.9.4",
     "npm-run-all": "4.1.3",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-loader": "3.0.0",
     "raf": "3.4.0",
@@ -117,8 +117,9 @@
     "style-loader": "0.23.1",
     "stylelint": "9.6.0",
     "stylelint-config-recommended-scss": "3.2.0",
-    "stylelint-scss": "3.3.1",
+    "stylelint-scss": "3.3.2",
     "sw-precache-webpack-plugin": "0.11.5",
+    "time-fix-plugin": "^2.0.4",
     "ts-jest": "23.10.4",
     "ts-loader": "5.2.2",
     "ts-node": "7.0.1",
@@ -130,11 +131,14 @@
     "typescript": "3.1.1",
     "uglifyjs-webpack-plugin": "2.0.1",
     "url-loader": "1.1.2",
-    "webpack": "4.22.0",
+    "webpack": "4.23.0",
     "webpack-config-utils": "2.3.1",
+    "webpack-dev-middleware": "3.4.0",
     "webpack-dev-server": "3.1.10",
+    "webpack-hot-middleware": "2.24.3",
+    "webpack-hot-server-middleware": "^0.5.0",
     "webpack-manifest-plugin": "2.0.4",
-    "webpack-merge": "^4.1.4",
+    "webpack-merge": "4.1.4",
     "webpack-node-externals": "1.7.2"
   },
   "devEngines": {
@@ -142,7 +146,7 @@
   },
   "scripts": {
     "build": "run-s build-ts build-story",
-    "build-ts": "ts-node --files scripts/build.ts",
+    "build-ts": "ts-node --files lib/build.ts",
     "build-story": "build-storybook -c .storybook -o build/public/docs",
     "clean": "rm -rf ./build",
     "deploy": "node build/server.js",
@@ -154,18 +158,18 @@
     "lint-scss-fix": "stylelint src/**/*.scss --syntax scss --fix",
     "precommit": "lint-staged",
     "start": "run-s start-ts",
-    "start-ts": "ts-node --files scripts/start.ts",
+    "start-ts": "ts-node --files lib/start.ts",
     "start-story": "start-storybook -p 9001 -c .storybook",
     "test": "jest --watch --env=jsdom",
     "test-coverage": "jest --coverage --env=jsdom"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "tslint --fix --project .",
+      "yarn lint-ts-fix",
       "git add"
     ],
     "*.scss": [
-      "stylelint src/**/*.scss --syntax scss --fix",
+      "yarn lint-scss-fix",
       "git add"
     ]
   },
@@ -183,7 +187,7 @@
       "src/**/*.{js,jsx,ts,tsx}"
     ],
     "setupFiles": [
-      "<rootDir>/scripts/boostrap/test.ts"
+      "<rootDir>/lib/boostrap/test.ts"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.(j|t)s?(x)",
@@ -198,9 +202,6 @@
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|ts|tsx)$"
     ],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web"
-    },
     "moduleFileExtensions": [
       "web.ts",
       "ts",

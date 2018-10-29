@@ -20,13 +20,14 @@ This package has the following requirements for development. Keep in mind that t
 
 ## Directory Structure
 ```
-typeScript-react-component-library
+root
+├── .circleci
 ├── .storybook
 ├── build
-├── config
+├── coverage
+├── lib
 ├── node_modules
 ├── public
-├── scripts
 ├── src
 │   ├── client
 │   │   ├── assets
@@ -34,7 +35,8 @@ typeScript-react-component-library
 │   │   ├── serviceWorkers
 │   ├── server
 │   │   ├── controllers
-│   │   └── templates
+│   │   ├── middleware
+│   │   └── views
 │   ├── shared
 │   │   ├── components
 │   │   │   ├── atoms
@@ -44,21 +46,22 @@ typeScript-react-component-library
 │   │   │   └── templates
 ```
 The structure of this application should be considered living. As new requirements are needed this structure should be able to adapt to change. With that said there was a fair attempt to plan for the future. Below is a quick break down of the above structure.
-* `.storybook` defines speciall configuration for storybook. If changes are to be made to the root `tsconfig.json` they should also be carefully considered here too.
+* `.circleci` configuration for CI build process.
+* `.storybook` defines special configuration for storybook. If changes are to be made to the root `tsconfig.json` they should also be carefully considered here too.
 * `build` this is a transient directory. It should not be relied on for adding any permanent files. All production files can be found here.
-* `config` contains webpack configuration along with supporting scripts. 
+* `coverage` this is a transient directory. It should not be relied on for adding any permanent files. All test coverage files can be found here.
+* `lib` contains webpack configuration along with supporting scripts.
 * `node_modules` I would hope this is understood ;) but this is also a transient directory used to store our applications dependencies.
 * `public` all static files that can be served to the public.
-* `scripts` contains scripts that are used in building, developing and testing our code.
 * `src` alright the fun part! Contains all the source files used to build our application.
 
 ### Source files
 Our source files require a bit more in depth discussion. Our source files are meant to be built in an isomorphic style. Isomorphic or Universal JavaScript is meant to reduce the amount of repeated code and context switching but often comes at the cost of complexity. We introduced a simple file structure to help us reduce thrashing when working in this context.
-* `src/browser` is the entry point for our build process for all client side code paths.
+* `src/client` is the entry point for our build process for all client side code paths.
 * `src/server` is the entry point for our build process for all server side code paths.
 * `src/shared` contains all source that is universal to the two code paths.
 
-Further down into our `shared` directory structure we have adopted Atomic Design philosiphies for creating react components. Please reference [react-atomic-design](https://github.com/danilowoz/react-atomic-design) for more details.
+Further down into our `shared` directory structure we have adopted Atomic Design philosophies for creating react components. Please reference [react-atomic-design](https://github.com/danilowoz/react-atomic-design) for more details.
 
 ## Getting Started
 
@@ -68,8 +71,7 @@ First we will need to import all dependencies.
 ```bash
 yarn install
 ```
-
-Now we can either enter into a development enviroment or build the application. To start let's start up the development enviroment.
+Now we can either enter into a development environment or build the application. To start let's start up the development enviroment.
 ```bash
 yarn start
 ```
@@ -80,6 +82,11 @@ Finally if we would like to simply build the application we can run the followin
 yarn build
 ```
 The above will build our SCSS, TypeScript, and Storybook into our build directory.
+
+## Adding Process Env Variables
+> Note: Adding process.env variables to the client is discouraged as it creates an interdependence between the build process and application
+
+TBD
 
 ## Adding Custom Environment Variables
 
@@ -244,6 +251,7 @@ REACT_APP_BAR=$DOMAIN/bar
 
 ## Current Tasks
 With all of the items below we need to consider whether we want to maintain a single application or multiple applications. Now that we are doing PWA, SSR, etc it might make sense to maintian a single app and just break it into templates and pages.
+* Add read me about https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers
 * Create development entry point for server side code
     * eliminate the .html file and plugins
     * cleanup build scripts even more
