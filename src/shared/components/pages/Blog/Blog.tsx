@@ -1,7 +1,8 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
-import {Grid, Header} from "semantic-ui-react";
-import {Default} from "../../templates";
+import { Grid, Header } from "semantic-ui-react";
+import { Icon } from "../../atoms/Icon";
+import { Default } from "../../templates";
 
 class Blog extends React.Component<RouteComponentProps> {
     public render(): React.ReactNode {
@@ -11,7 +12,14 @@ class Blog extends React.Component<RouteComponentProps> {
                 <Grid container={true} divided="vertically">
                     <Grid.Row>
                         <Grid.Column>
-                            <Header as="h2">Atomic Design</Header>
+                            <Header as="h2">
+                                <Icon
+                                    iconType="ui"
+                                    iconName="checkmark"
+                                    className="a-icon--before-text"
+                                />
+                                Atomic Design
+                            </Header>
                             <p>Popularly known within the design world, Atomic Design helps to build consistent, solid and reusable design systems. Plus, in the world of React, Vue and frameworks that stimulate the componentization, Atomic Design is used unconsciously; but when used in the right way, it becomes a powerful ally for developers.</p>
                             <p>The name Atomic Design comes from the idea of separating the components in atoms, molecules, organisms, templates and pages, like in the image above. But what are the responsibilities of each separated part?</p>
                         </Grid.Column>

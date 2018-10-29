@@ -2,6 +2,8 @@ import * as React from "react";
 import {Container, Menu} from "semantic-ui-react";
 import {MenuItem, MenuItemArray} from "../";
 
+import "./main-menu.scss";
+
 const menuStyle = {
     border: "none",
     boxShadow: "none",
