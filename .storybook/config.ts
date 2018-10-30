@@ -1,7 +1,7 @@
 import { withKnobs } from "@storybook/addon-knobs";
 import { setOptions } from "@storybook/addon-options";
 import { addDecorator, configure } from "@storybook/react";
-import "../src/shared/components/styles/core/index.scss";
+import "../src/shared/styles/core/core.scss";
 import "./index.scss";
 
 setOptions({
