@@ -2,7 +2,7 @@ import * as React from "react";
 import {Container, Menu} from "semantic-ui-react";
 import {MenuItem, MenuItemArray} from "../";
 
-import "./main-menu.scss";
+import "./MainMenu.scss";
 
 const menuStyle = {
     border: "none",

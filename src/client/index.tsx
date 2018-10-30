@@ -11,7 +11,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Action, createStore } from "redux";
 import App from "../shared/App";
 
-import "../shared/components/styles/core/index.scss";
+import "../shared/styles/core/core.scss";
 
 const rootReducer = (state: string = "asdf", action: Action) => {
     switch (action.type) {
