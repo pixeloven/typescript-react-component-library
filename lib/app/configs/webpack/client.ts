@@ -91,8 +91,12 @@ const scssRule: RuleSetRule = {
     test: /\.(scss|sass|css)$/i,
     use: removeEmpty([
         ifProduction(MiniCssExtractPlugin.loader),
-        ifDevelopment({loader: "style-loader"}),
-        {loader: "css-loader"},
+        ifDevelopment({
+            loader: "style-loader",
+        }),
+        {
+            loader: "css-loader",
+        },
         {
             loader: "postcss-loader",
             options: {
@@ -100,7 +104,9 @@ const scssRule: RuleSetRule = {
                 plugins: postCssPlugin,
             },
         },
-        {loader: "sass-loader"},
+        {
+            loader: "sass-loader",
+        },
     ]),
 };
 
