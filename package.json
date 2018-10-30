@@ -167,7 +167,11 @@
     "test-coverage": "jest --coverage --env=jsdom"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
+    "lib/**/*.{ts,tsx}": [
+      "yarn lint-ts-fix",
+      "git add"
+    ],
+    "src/**/*.{ts,tsx}": [
       "yarn lint-ts-fix",
       "git add"
     ],
@@ -205,6 +209,10 @@
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|ts|tsx)$"
     ],
+    "moduleNameMapper": {
+      ".+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/lib/mocks/fileMock.js",
+      ".+\\.(css|styl|less|sass|scss)$": "<rootDir>/lib/mocks/styleMock.ts"
+    },
     "moduleFileExtensions": [
       "web.ts",
       "ts",

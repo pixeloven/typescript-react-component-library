@@ -1,0 +1,15 @@
+@import '~semantic-ui-sass/scss/globals/variables';
+@import '~semantic-ui-sass/scss/globals/reset';
+@import '~semantic-ui-sass/scss/globals/site';
+
+@import '~semantic-ui-sass/scss/elements/container';
+@import '~semantic-ui-sass/scss/elements/header';
+@import '~semantic-ui-sass/scss/elements/segment';
+
+@import '~semantic-ui-sass/scss/collections/grid';
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}

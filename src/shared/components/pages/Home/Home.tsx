@@ -1,7 +1,8 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
-import {Container, Grid, Header, Image, Segment} from "semantic-ui-react";
-import {Default} from "../../templates";
+import { Container, Grid, Header, Segment } from "semantic-ui-react";
+import { Icon, Logo } from "../../atoms/";
+import { Default } from "../../templates";
 
 class Home extends React.Component<RouteComponentProps> {
     public render(): React.ReactNode {
@@ -13,7 +14,7 @@ class Home extends React.Component<RouteComponentProps> {
                         <Grid.Column>
                             <Segment inverted={true} vertical={true} textAlign="center">
                                 <Container>
-                                    <Image className="app-logo" src={"/static/media/logo.svg"} />
+                                    <Logo speed="10s" />
                                     <Header as="h1" inverted={true}>Welcome to TypeScript + React</Header>
                                     <p>Includes Semantic UI React, Redux and much more!</p>
                                 </Container>
@@ -24,7 +25,14 @@ class Home extends React.Component<RouteComponentProps> {
                 <Grid container={true} divided="vertically">
                     <Grid.Row>
                         <Grid.Column>
-                            <Header as="h2">Atomic Design</Header>
+                            <Header as="h2">
+                                <Icon
+                                    iconType="ui"
+                                    iconName="checkmark"
+                                    className="a-icon--before-text"
+                                />
+                                Atomic Design
+                            </Header>
                             <p>Popularly known within the design world, Atomic Design helps to build consistent, solid and reusable design systems. Plus, in the world of React, Vue and frameworks that stimulate the componentization, Atomic Design is used unconsciously; but when used in the right way, it becomes a powerful ally for developers.</p>
                             <p>The name Atomic Design comes from the idea of separating the components in atoms, molecules, organisms, templates and pages, like in the image above. But what are the responsibilities of each separated part?</p>
                         </Grid.Column>
