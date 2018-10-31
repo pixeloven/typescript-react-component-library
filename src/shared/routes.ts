@@ -30,13 +30,8 @@ const routes = [
             },
         ],
     }, {
-        component: Default,
-        routes: [
-            {
-                component: NoMatch,
-                statusCode: 404,
-            },
-        ],
+        component: NoMatch,
+        statusCode: 404,
     },
 ];
 
