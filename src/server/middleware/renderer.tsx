@@ -6,7 +6,7 @@ import {renderToString} from "react-dom/server";
 import {StaticContext, StaticRouter} from "react-router";
 
 /**
- * Example middleware
+ * Renderer middleware
  * @description Outputs a readable stream which means we could split up the render to faster first to byte
  * @param req
  * @param res
