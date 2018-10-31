@@ -1,19 +1,37 @@
-import {Blog, Home} from "./components/pages";
+import {Blog, Home, NoMatch} from "./components/pages";
+import {Default} from "./components/templates";
 
-// TODO create docker for server side
-// TODO create development entry point for server code
-// TODO https://medium.com/airbnb-engineering/server-rendering-code-splitting-and-lazy-loading-with-react-router-v4-bfe596a6af70
-
-// TODO PUBLIC_URL is not working
-// TODO App should be roote comp here (follow above)
+/**
+ * Defines routes for both client and server
+ * @description Nested routes allow for pages to share templates.
+ */
 const routes = [
     {
-        component: Home,
+        component: Default,
         exact: true,
         path: "/",
+        routes: [
+            {
+                component: Home,
+            },
+        ],
     }, {
-        component: Blog,
+        component: Default,
         path: "/blog",
+        routes: [
+            {
+                component: Blog,
+                exact: true,
+                path: "/blog",
+            },
+            {
+                component: Blog,
+                path: "/blog/:post",
+            },
+        ],
+    }, {
+        component: NoMatch,
+        statusCode: 404,
     },
 ];
 

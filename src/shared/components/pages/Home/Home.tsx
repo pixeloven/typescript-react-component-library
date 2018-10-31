@@ -2,13 +2,11 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { Container, Grid, Header, Segment } from "semantic-ui-react";
 import { Icon, Logo } from "../../atoms/";
-import { Default } from "../../templates";
 
 class Home extends React.Component<RouteComponentProps> {
     public render(): React.ReactNode {
-        const pageProps = this.props;
         return (
-            <Default {...pageProps}>
+            <Grid.Row>
                 <Grid>
                     <Grid.Row>
                         <Grid.Column>
@@ -62,7 +60,7 @@ class Home extends React.Component<RouteComponentProps> {
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-            </Default>
+            </Grid.Row>
         );
     }
 }

@@ -106,14 +106,12 @@ BUILD_PATH=build
 
 ## Current Tasks
 With all of the items below we need to consider whether we want to maintain a single application or multiple applications. Now that we are doing PWA, SSR, etc it might make sense to maintian a single app and just break it into templates and pages.
+* Create more aliases and eliminate numerous index.ts files
 * Add read me about https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers
 * Create development entry point for server side code
     * eliminate the .html file and plugins
     * cleanup build scripts even more
     * Add CSS minification https://github.com/NMFR/optimize-css-assets-webpack-plugin
-* Implement Router config 
-    * https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
-    * Or write our own
 * Add aliases for the atomic design stuff
     * https://stackoverflow.com/questions/43281741/how-to-use-paths-in-tsconfig-json
 * Define where `connect` and `reduxForm` will be defined. (Should be outside component)
