@@ -26,7 +26,7 @@ export default (options: RendererOptions) => {
         if (options.clientStats.hash) {
             const hash = options.clientStats.hash.substring(0, 8);
             req.files = {
-                js: [`static/js/main.${hash}.js`],
+                js: [`/static/js/main.${hash}.js`],
             };
         }
         renderer(req, res, next);

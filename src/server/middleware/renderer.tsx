@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import * as React from "react";
-import {renderToNodeStream} from "react-dom/server";
+import {renderToString} from "react-dom/server";
 import {StaticContext, StaticRouter} from "react-router";
 import App from "../../shared/App";
 import {Html} from "../views";
@@ -24,16 +24,24 @@ export default (req: Request, res: Response, next: NextFunction): void => {
     // Promise.all(promises).then(() => {
     //
     // }); // TODO catch as 500
-
-    const staticContext: StaticContext = {}; // TODO use to find 404s
-    const stream = renderToNodeStream(
+    const staticContext: StaticContext = {
+        statusCode: 200,
+    };
+    // const stream = renderToNodeStream(
+    //     <Html files={req.files}>
+    //         <StaticRouter location={req.url} context={staticContext}>
+    //             <App />
+    //         </StaticRouter>
+    //     </Html>,
+    // );
+    // stream.pipe(res);
+    const markup = renderToString(
         <Html files={req.files}>
             <StaticRouter location={req.url} context={staticContext}>
                 <App />
             </StaticRouter>
         </Html>,
     );
-    res.status(staticContext.statusCode || 200);
-    stream.pipe(res);
+    res.status(staticContext.statusCode || 200).send(markup);
     next();
 };

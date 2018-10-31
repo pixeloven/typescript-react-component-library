@@ -1,5 +1,6 @@
+import {Route, RouteComponentProps} from "@shared/components";
 import * as React from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
+import {Link, Switch} from "react-router-dom";
 import {Container, Icon, Responsive, Segment, Visibility} from "semantic-ui-react";
 import {MainMenu, MenuItem} from "../../molecules";
 
@@ -22,10 +23,11 @@ class Default extends React.PureComponent<RouteComponentProps, State> {
     }
 
     public render(): React.ReactNode {
-        const { children, match } = this.props;
+        const { routes, match } = this.props;
         const { fixedTopMenu } = this.state;
-
-        // TODO Make this configurable
+        const mappedSubRoutes = routes ? routes.map((route, index) => (
+            <Route key={index} {...route} />
+        )) : undefined;
         const items: MenuItem[] = [
             { name: "Home", path: "/", active: true },
             { name: "Blog", path: "/blog", active: false },
@@ -35,7 +37,6 @@ class Default extends React.PureComponent<RouteComponentProps, State> {
                 ? match.path === item.path
                 : match.path.startsWith(item.path);
         });
-
         return (
             <Responsive>
                 <Container fluid={true}>
@@ -52,7 +53,9 @@ class Default extends React.PureComponent<RouteComponentProps, State> {
                     </Visibility>
                 </Container>
                 <Container fluid={true}>
-                    {children}
+                    <Switch>
+                        {mappedSubRoutes}
+                    </Switch>
                 </Container>
                 <Container fluid={true}>
                     <Segment inverted={true} vertical={true} textAlign="center">

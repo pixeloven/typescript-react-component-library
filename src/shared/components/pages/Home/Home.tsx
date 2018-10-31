@@ -6,7 +6,7 @@ import { Icon, Logo } from "../../atoms/";
 class Home extends React.Component<RouteComponentProps> {
     public render(): React.ReactNode {
         return (
-            <Grid>
+            <Grid.Row>
                 <Grid>
                     <Grid.Row>
                         <Grid.Column>
@@ -60,7 +60,7 @@ class Home extends React.Component<RouteComponentProps> {
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-            </Grid>
+            </Grid.Row>
         );
     }
 }

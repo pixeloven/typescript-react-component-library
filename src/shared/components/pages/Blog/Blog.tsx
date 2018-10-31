@@ -6,7 +6,7 @@ import { Icon } from "../../atoms/Icon";
 class Blog extends React.Component<RouteComponentProps> {
     public render(): React.ReactNode {
         return (
-            <Grid>
+            <Grid.Row>
                 <Grid container={true} divided="vertically">
                     <Grid.Row>
                         <Grid.Column>
@@ -47,7 +47,7 @@ class Blog extends React.Component<RouteComponentProps> {
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-            </Grid>
+            </Grid.Row>
         );
     }
 }

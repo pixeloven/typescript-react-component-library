@@ -1,24 +1,43 @@
 import {Blog, Home, NoMatch} from "./components/pages";
 import {Default} from "./components/templates";
 
-// TODO https://medium.com/airbnb-engineering/server-rendering-code-splitting-and-lazy-loading-with-react-router-v4-bfe596a6af70
-const routes = [{
-    component: Default,
-    routes: [
-        {
-            component: Home,
-            exact: true,
-            path: "/",
-        },
-        {
-            component: Blog,
-            path: "/blog",
-        },
-        {
-            component: NoMatch,
-            statusCode: 404,
-        },
-    ],
-}];
+/**
+ * Defines routes for both client and server
+ * @description Nested routes allow for pages to share templates.
+ */
+const routes = [
+    {
+        component: Default,
+        exact: true,
+        path: "/",
+        routes: [
+            {
+                component: Home,
+            },
+        ],
+    }, {
+        component: Default,
+        path: "/blog",
+        routes: [
+            {
+                component: Blog,
+                exact: true,
+                path: "/blog",
+            },
+            {
+                component: Blog,
+                path: "/blog/:post",
+            },
+        ],
+    }, {
+        component: Default,
+        routes: [
+            {
+                component: NoMatch,
+                statusCode: 404,
+            },
+        ],
+    },
+];
 
 export default routes;

@@ -5,12 +5,13 @@ import {
     RouteProps as DefaultRouteProps,
 } from "react-router-dom";
 
-interface RouteComponentProps extends DefaultRouteComponentProps {
-    statusCode?: number;
+export interface RouteComponentProps extends DefaultRouteComponentProps {
+    routes?: RouteProps[];
 }
 
-interface RouteProps extends DefaultRouteProps {
+export interface RouteProps extends DefaultRouteProps {
     component: new (props: RouteComponentProps) => React.Component<RouteComponentProps>;
+    statusCode?: number;
 }
 
 /**
@@ -25,7 +26,7 @@ interface RouteProps extends DefaultRouteProps {
 const Route = ({ component: Component, exact, path, ...rest }: RouteProps) => {
     const render = (props: RouteComponentProps) => {
         if (props.staticContext) {
-            props.staticContext.statusCode = props.statusCode;
+            props.staticContext.statusCode = rest.statusCode || props.staticContext.statusCode || 200;
         }
         return (
             <Component {...props} {...rest} />

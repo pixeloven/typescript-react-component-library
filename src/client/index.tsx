@@ -49,5 +49,6 @@ renderMethod(<HotAppWrapper />, document.getElementById("root"));
 /**
  * Register service workers
  */
-// register();
-OfflinePluginRuntime.install();
+if (process.env.NODE_ENV === "production") {
+    OfflinePluginRuntime.install();
+}
