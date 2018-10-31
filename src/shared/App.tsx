@@ -1,4 +1,5 @@
 import * as React from "react";
+import {Helmet} from "react-helmet";
 import {Switch} from "react-router-dom";
 import {Route} from "./components/atoms";
 import routes from "./routes";
@@ -12,9 +13,14 @@ class App extends React.Component {
             <Route key={index} {...route} />
         ));
         return (
-            <Switch>
-                {mappedRoutes}
-            </Switch>
+            <React.Fragment>
+                <Helmet
+                    titleTemplate="%s | React App"
+                />
+                <Switch>
+                    {mappedRoutes}
+                </Switch>
+            </React.Fragment>
         );
     }
 }

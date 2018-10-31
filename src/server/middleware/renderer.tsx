@@ -3,6 +3,7 @@ import App from "@shared/App";
 import {NextFunction, Request, Response} from "express";
 import * as React from "react";
 import {renderToString} from "react-dom/server";
+import {Helmet} from "react-helmet";
 import {StaticContext, StaticRouter} from "react-router";
 
 /**
@@ -17,13 +18,14 @@ export default (req: Request, res: Response, next: NextFunction): void => {
     const staticContext: StaticContext = {
         statusCode: 200,
     };
+    const helmet = Helmet.renderStatic();
     const markup = renderToString(
-        <Html files={req.files}>
+        <Html files={req.files} helmet={helmet}>
             <StaticRouter location={req.url} context={staticContext}>
                 <App />
             </StaticRouter>
         </Html>,
     );
-    res.status(staticContext.statusCode || 200).send(markup);
+    res.status(staticContext.statusCode || 200).send(`<!DOCTYPE html>${markup}`);
     next();
 };
