@@ -3,15 +3,11 @@ import { Link, RouteComponentProps } from "react-router-dom";
 import {Container, Icon, Responsive, Segment, Visibility} from "semantic-ui-react";
 import {MainMenu, MenuItem} from "../../molecules";
 
-interface Props extends RouteComponentProps {
-    children: React.ReactNode;
-}
-
 interface State {
     fixedTopMenu: boolean;
 }
 
-class Default extends React.PureComponent<Props, State> {
+class Default extends React.PureComponent<RouteComponentProps, State> {
 
     public state: State = {
         fixedTopMenu: false,
