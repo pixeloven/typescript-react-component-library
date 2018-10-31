@@ -1,9 +1,9 @@
+import {Html} from "@server/views";
+import App from "@shared/App";
 import {NextFunction, Request, Response} from "express";
 import * as React from "react";
 import {renderToString} from "react-dom/server";
 import {StaticContext, StaticRouter} from "react-router";
-import App from "../../shared/App";
-import {Html} from "../views";
 
 /**
  * Example middleware
@@ -13,28 +13,10 @@ import {Html} from "../views";
  * @param next
  */
 export default (req: Request, res: Response, next: NextFunction): void => {
-    // TODO map to promises
-    // const matchedRoutes = routes.find((route: RouteProps) => !!matchPath(req.url, route));
-    //
-    // const promises = branch.map(() => {
-    //     // Load the data for that route. Include match information
-    //     // so route parameters can be passed through.
-    //     // return store.dispatch(route.loadData(match))
-    // });
-    // Promise.all(promises).then(() => {
-    //
-    // }); // TODO catch as 500
+    // TODO handle data fetching https://medium.freecodecamp.org/demystifying-reacts-server-side-render-de335d408fe4
     const staticContext: StaticContext = {
         statusCode: 200,
     };
-    // const stream = renderToNodeStream(
-    //     <Html files={req.files}>
-    //         <StaticRouter location={req.url} context={staticContext}>
-    //             <App />
-    //         </StaticRouter>
-    //     </Html>,
-    // );
-    // stream.pipe(res);
     const markup = renderToString(
         <Html files={req.files}>
             <StaticRouter location={req.url} context={staticContext}>

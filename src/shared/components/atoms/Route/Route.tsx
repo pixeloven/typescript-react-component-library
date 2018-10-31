@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+    match,
     Route as DefaultRoute,
     RouteComponentProps as DefaultRouteComponentProps,
     RouteProps as DefaultRouteProps,
@@ -11,6 +12,7 @@ export interface RouteComponentProps extends DefaultRouteComponentProps {
 
 export interface RouteProps extends DefaultRouteProps {
     component: new (props: RouteComponentProps) => React.Component<RouteComponentProps>;
+    loadData?: (match: match) => Promise<void>;
     statusCode?: number;
 }
 
