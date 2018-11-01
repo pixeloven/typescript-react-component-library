@@ -1,4 +1,5 @@
 import * as React from "react";
+import {HelmetData} from "react-helmet";
 
 interface JavaScriptProps {
     sources: string[] | undefined;
@@ -11,6 +12,7 @@ interface StyleSheetProps {
 interface HtmlProps {
     children: React.ReactNode;
     files: Express.Files | undefined;
+    helmet: HelmetData;
 }
 
 const JavaScript = (props: JavaScriptProps) => {
@@ -39,13 +41,12 @@ const Html = (props: HtmlProps) => {
     return (
         <html lang="en">
             <head>
-                <meta charSet="utf-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-                <meta name="theme-color" content="#000000" />
+                {props.helmet.title.toComponent()}
+                {props.helmet.meta.toComponent()}
+                {props.helmet.link.toComponent()}
                 <link rel="manifest" href="/manifest.json" />
                 <link rel="shortcut icon" href="/favicon.ico" />
                 {props.files && <StyleSheet hrefs={props.files.css}/>}
-                <title>React App</title>
             </head>
             <body>
             <noscript>
