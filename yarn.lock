@@ -837,7 +837,7 @@
     exenv "^1.2.2"
     prop-types "^15.6.2"
 
-"@storybook/addon-actions@^4.0.0-rc.1":
+"@storybook/addon-actions@4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-4.0.2.tgz#baab9ea37d94c3bba7a2a12e5dc57bcb505d8f42"
   integrity sha512-qaXo07CtmD5yqdx9lkcaw0bp/BC+o4icehqo88m7oSQrByW7//VyE8YmLq0+fd6sRFhLdDPspXvYhhSdPnoONw==
@@ -856,7 +856,7 @@
     react-inspector "^2.3.0"
     uuid "^3.3.2"
 
-"@storybook/addon-knobs@^4.0.0-rc.1":
+"@storybook/addon-knobs@4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@storybook/addon-knobs/-/addon-knobs-4.0.2.tgz#cc16e913dbb51d4b10c07e4dc2e01fd841e30fa4"
   integrity sha512-7qrfjz8CWDHDt9eHWK0pcduqyjpO0DWiELQ4yBdk5tXtuw0nQFfySX6o5mUdYNCDCFDGUbC6qd0evLvuH0b2aQ==
@@ -875,7 +875,7 @@
     react-lifecycles-compat "^3.0.4"
     util-deprecate "^1.0.2"
 
-"@storybook/addon-notes@^4.0.0-rc.1":
+"@storybook/addon-notes@4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@storybook/addon-notes/-/addon-notes-4.0.2.tgz#033894e6c163251a127629f9ed490b3d0de89e21"
   integrity sha512-Lq7z2ugly5rdl0Cg0JGcd1O3pK6/TrIfCS0TmtvtM6m0qa3IE3Q9liMsGP6HjLSR24hHBCxhoFc40Eh5uuw0/w==
@@ -885,7 +885,7 @@
     marked "^0.5.1"
     prop-types "^15.6.2"
 
-"@storybook/addon-options@^4.0.0-rc.1":
+"@storybook/addon-options@4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@storybook/addon-options/-/addon-options-4.0.2.tgz#76302ecbc8f8aec20026d90d850c591e5ac6bde2"
   integrity sha512-x7tiFhVPbU5ca5lpj+5PF+Tj2PsdBb0pMUi94z6wvvh+S4+7BxTgHIqtGpQfLbgpcXXQkL/kGpEC1JYoz5QdrA==
@@ -893,7 +893,7 @@
     "@storybook/addons" "4.0.2"
     util-deprecate "^1.0.2"
 
-"@storybook/addons@4.0.2", "@storybook/addons@^4.0.0-rc.1":
+"@storybook/addons@4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@storybook/addons/-/addons-4.0.2.tgz#95fa2384c122953359693849abd711a1611a9bcf"
   integrity sha512-DZFDoACd6gC3YDWbF65prhR8w8TcbHm/XVsN5mGMn0y1RxEN+1MWcxYmkT1nhnZqxc28TfgxBXwLO53pxTr+eQ==
@@ -943,7 +943,7 @@
   resolved "https://registry.yarnpkg.com/@storybook/core-events/-/core-events-4.0.2.tgz#0c1bf65cd06e09cffd6f2e12b227290da7ffc9b8"
   integrity sha512-3gK0nJXv4Y57HZqSlTq8vb3wMMzaShx/zCAaZMvoUo+reTB60x56nawjzAQ+hk2pEDbhvVLZL4I0xNeYazoZRw==
 
-"@storybook/core@4.0.2", "@storybook/core@^4.0.0-rc.1":
+"@storybook/core@4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@storybook/core/-/core-4.0.2.tgz#78948b4a0b8a7e7c100280f76e6df22157d52e1c"
   integrity sha512-qsKPi7KAmyL9bUH1tUsi1AkDYzQBaPCouP93Dgv7yYvDm405Dntl672A/AVVvCwaaCCriiPGX+Fbxk7HEqhRZA==
@@ -1061,7 +1061,7 @@
   dependencies:
     babel-runtime "^6.5.0"
 
-"@storybook/react@^4.0.0-rc.1":
+"@storybook/react@4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@storybook/react/-/react-4.0.2.tgz#fa24bcbdbc4ee9eda35d5f4804684a7cf4e34595"
   integrity sha512-S8Qiebj0xRblAOGsclVCTeakkRkIhDr40bmJGsMrIkbZe83taC1mSzZk17mG4uvrc7LXZA1dH97PIitM04W03g==
@@ -8950,7 +8950,7 @@ optimist@^0.6.1:
     minimist "~0.0.1"
     wordwrap "~0.0.2"
 
-optimize-css-assets-webpack-plugin@^5.0.1:
+optimize-css-assets-webpack-plugin@5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/optimize-css-assets-webpack-plugin/-/optimize-css-assets-webpack-plugin-5.0.1.tgz#9eb500711d35165b45e7fd60ba2df40cb3eb9159"
   integrity sha512-Rqm6sSjWtx9FchdP0uzTQDc7GXDKnwVEGoSxjezPkzMewx7gEWE9IMUYKmigTRC4U3RaNSwYVnUDLuIdtTpm0A==
@@ -12067,7 +12067,7 @@ thunky@^1.0.2:
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-1.0.3.tgz#f5df732453407b09191dae73e2a8cc73f381a826"
   integrity sha512-YwT8pjmNcAXBZqrubu22P4FYsh2D4dxRmnWBOL8Jk8bUcRUtc5326kx32tuTmFDAZtLOGEVNl8POAR8j896Iow==
 
-time-fix-plugin@^2.0.4:
+time-fix-plugin@2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/time-fix-plugin/-/time-fix-plugin-2.0.5.tgz#41c76e734217cc91a08ea525fdde56de119fb683"
   integrity sha512-veHRiEsQ50KSrfdhkZiFvZIjRoyfyfxpgskD+P7uVQAcNe6rIMLZ8vhjFRE2XrPqQdy+4CF+jXsWAlgVy9Bfcg==
@@ -12854,7 +12854,7 @@ webpack-dev-server@3.1.10:
     webpack-log "^2.0.0"
     yargs "12.0.2"
 
-webpack-flush-chunks@^2.0.3:
+webpack-flush-chunks@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/webpack-flush-chunks/-/webpack-flush-chunks-2.0.3.tgz#77a4f18d101f889ec33456a0c64a8c0f8b4600db"
   integrity sha512-CXGOyXG5YjjxyI+Qyt3VlI//JX92UmGRNP65zN3o9CIntEzfzc1J30YTKRRvF1JsE/iEzbnp5u99yCkL9obotQ==
@@ -12869,7 +12869,7 @@ webpack-hot-middleware@2.24.3, webpack-hot-middleware@^2.24.3:
     querystring "^0.2.0"
     strip-ansi "^3.0.0"
 
-webpack-hot-server-middleware@^0.5.0:
+webpack-hot-server-middleware@0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/webpack-hot-server-middleware/-/webpack-hot-server-middleware-0.5.0.tgz#c3a3137e2af2c926485d1c8126c2aad81d35b78c"
   integrity sha512-ykNFgeYQkIYDjwUrzJjqc8W6w9lj8DheKPyBRdemXuDJZCMTfeztixm3eMDx59C7LMNWvHEfsSq2LsKEK5vWBA==
