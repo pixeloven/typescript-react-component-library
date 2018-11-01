@@ -64,7 +64,7 @@ try {
             serverSideRender: true,
         }));
         if (clientCompiler) {
-            app.use(webpackHotMiddleware(clientCompiler));
+            app.use(webpackHotMiddleware(clientCompiler)); // TODO https://github.com/Tjatse/ansi-html/blob/99ec49e431c70af6275b3c4e00c7be34be51753c/README.md#set-colors
         }
         app.use(webpackHotServerMiddleware(combinedCompiler));
 
