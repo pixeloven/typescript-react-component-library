@@ -6,8 +6,8 @@ import OfflinePlugin from "offline-plugin";
 import OptimizeCSSAssetsPlugin from "optimize-css-assets-webpack-plugin";
 import path from "path";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
-import {DevtoolModuleFilenameTemplateInfo, Node, Options, Output, Plugin} from "webpack";
 import webpack, {Module, RuleSetRule} from "webpack";
+import {DevtoolModuleFilenameTemplateInfo, Node, Options, Output, Plugin} from "webpack";
 import {getIfUtils, removeEmpty} from "webpack-config-utils";
 import ManifestPlugin from "webpack-manifest-plugin";
 import merge from "webpack-merge";
@@ -90,10 +90,10 @@ const catchAllRule = {
 const scssRule: RuleSetRule = {
     test: /\.(scss|sass|css)$/i,
     use: removeEmpty([
-        ifProduction(MiniCssExtractPlugin.loader),
         ifDevelopment({
-            loader: "style-loader",
+            loader: "css-hot-loader",
         }),
+        MiniCssExtractPlugin.loader,
         {
             loader: "css-loader",
         },
@@ -240,9 +240,9 @@ const plugins: Plugin[] = removeEmpty([
      * Extract css to file
      * @env production
      */
-    ifProduction(new MiniCssExtractPlugin({
+    new MiniCssExtractPlugin({
         filename: "static/css/[name].[hash:8].css",
-    }), undefined),
+    }),
     /**
      * Generate a manifest file which contains a mapping of all asset filenames
      * to their corresponding output file so that tools can pick it up without
@@ -312,7 +312,7 @@ const plugins: Plugin[] = removeEmpty([
  * Client side configuration
  */
 export default merge(common, {
-    devtool: ifProduction("source-map", "eval-source-map"), // TODO remove in prod
+    devtool: ifDevelopment("eval-source-map", false),
     entry,
     module,
     name: "client",

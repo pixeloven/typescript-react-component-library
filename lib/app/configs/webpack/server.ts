@@ -9,7 +9,7 @@ import common from "./common";
 /**
  * Utility functions to help segment configuration based on environment
  */
-const {ifProduction} = getIfUtils(Env.current);
+const {ifProduction, ifDevelopment} = getIfUtils(Env.current);
 
 /**
  * Webpack uses `publicPath` to determine where the app is being served from.
@@ -123,7 +123,7 @@ const output: Output = {
  * Server side configuration
  */
 export default merge(common, {
-    devtool: ifProduction("source-map", "eval-source-map"), // TODO remove in prod
+    devtool: ifDevelopment("eval-source-map", false),
     entry,
     externals: [webpackNodeExternals()],
     module,
