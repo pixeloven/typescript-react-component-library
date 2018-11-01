@@ -217,6 +217,7 @@ const optimization: Options.Optimization = {
  * @description Output instructions for client build
  */
 const output: Output = {
+    chunkFilename: ifProduction("static/js/[name].[contenthash].js", "static/js/[name].[hash].js"),
     devtoolModuleFilenameTemplate,
     filename: ifProduction("static/js/[name].[contenthash].js", "static/js/[name].[hash].js"),
     path: resolvePath("build/public", false),
@@ -248,6 +249,7 @@ const plugins: Plugin[] = removeEmpty([
      * @env production
      */
     new MiniCssExtractPlugin({
+        chunkFilename: ifProduction("static/css/[name].[contenthash].css", "static/css/[name].[hash].css"),
         filename: ifProduction("static/css/[name].[contenthash].css", "static/css/[name].[hash].css"),
     }),
     /**
