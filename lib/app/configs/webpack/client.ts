@@ -15,10 +15,13 @@ import Env from "../../libraries/Env";
 import {resolvePath} from "../../macros";
 import common from "./common";
 
-// TODO need to run all copy files through webpack
-// TODO Upgrade webpack for production see here
-// TODO https://www.npmjs.com/package/tslint-loader
-// TODO check updated webpack https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.prod.js
+// TODO optimize builds
+    // see if we can use TS Fork (at least for prod build)
+    // see how we can use babels cache
+    // setup vendor chunking
+// TODO Fix polyfills (remove CORE-JS from loading in client)
+// TODO implement tslint-loader if we can do ts fork in development
+
 /**
  * Utility functions to help segment configuration based on environment
  */
@@ -46,10 +49,12 @@ const devtoolModuleFilenameTemplate = (info: DevtoolModuleFilenameTemplateInfo) 
 /**
  * Define entrypoint(s) for client
  */
-const entry = removeEmpty([
-    ifDevelopment("webpack-hot-middleware/client?reload=true", undefined),
-    resolvePath("src/client/index.tsx"),
-]);
+const entry = {
+    main: removeEmpty([
+        ifDevelopment("webpack-hot-middleware/client?reload=true", undefined),
+        resolvePath("src/client/index.tsx"),
+    ]),
+};
 
 /**
  * Post CSS fixes
@@ -79,7 +84,7 @@ const catchAllRule = {
     exclude: [/\.(js|jsx|mjs)$/, /\.(ts|tsx)$/, /\.html$/, /\.json$/],
     loader: require.resolve("file-loader"),
     options: {
-        name: "[name].[hash:8].[ext]",
+        name: ifProduction("[name].[contenthash].[ext]", "[name].[hash].[ext]"),
         outputPath: "static/media/", // TODO config
     },
 };
@@ -119,7 +124,6 @@ const staticFileRule: RuleSetRule = {
     loader: require.resolve("url-loader"),
     options: {
         limit: 10000,
-        name: "static/media/[name].[hash:8].[ext]", // TODO is this needed I don't think so
     },
     test: /\.(bmp|png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
 };
@@ -204,6 +208,9 @@ const optimization: Options.Optimization = {
         }),
         new OptimizeCSSAssetsPlugin(),
     ], []),
+    splitChunks: {
+        chunks: "all",
+    },
 };
 
 /**
@@ -211,7 +218,7 @@ const optimization: Options.Optimization = {
  */
 const output: Output = {
     devtoolModuleFilenameTemplate,
-    filename: "static/js/[name].[hash:8].js",
+    filename: ifProduction("static/js/[name].[contenthash].js", "static/js/[name].[hash].js"),
     path: resolvePath("build/public", false),
     publicPath,
 };
@@ -241,7 +248,7 @@ const plugins: Plugin[] = removeEmpty([
      * @env production
      */
     new MiniCssExtractPlugin({
-        filename: "static/css/[name].[hash:8].css",
+        filename: ifProduction("static/css/[name].[contenthash].css", "static/css/[name].[hash].css"),
     }),
     /**
      * Generate a manifest file which contains a mapping of all asset filenames
