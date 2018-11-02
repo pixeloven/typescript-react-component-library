@@ -8,6 +8,7 @@ import "./boostrap/development";
  */
 import chalk from "chalk";
 import express from "express";
+import FriendlyErrorsWebpackPlugin from "friendly-errors-webpack-plugin";
 import path from "path";
 import openBrowser from "react-dev-utils/openBrowser";
 import WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
@@ -60,13 +61,21 @@ try {
         const combinedCompiler = webpack([webpackClientConfig, webpackServerConfig]);
         const clientCompiler = combinedCompiler.compilers.find(compiler => compiler.name === "client");
         app.use(webpackDevMiddleware(combinedCompiler, {
+            logLevel: "silent",
             publicPath: PUBLIC_PATH,
             serverSideRender: true,
         }));
         if (clientCompiler) {
-            app.use(webpackHotMiddleware(clientCompiler)); // TODO https://github.com/Tjatse/ansi-html/blob/99ec49e431c70af6275b3c4e00c7be34be51753c/README.md#set-colors
+            app.use(webpackHotMiddleware(clientCompiler, {
+                log: false,
+            }));
         }
         app.use(webpackHotServerMiddleware(combinedCompiler));
+
+        /**
+         * Clean up console errors
+         */
+        combinedCompiler.apply(new FriendlyErrorsWebpackPlugin());
 
         /**
          * Start express server on specific host and port
