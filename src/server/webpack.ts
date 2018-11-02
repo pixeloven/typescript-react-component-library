@@ -1,5 +1,7 @@
 import {NextFunction, Request, Response} from "express";
+import { flushChunkNames } from "react-universal-component/server";
 import {Stats} from "webpack";
+import flushChunks from "webpack-flush-chunks";
 import {renderer} from "./middleware";
 
 interface RendererOptions {
@@ -7,29 +9,26 @@ interface RendererOptions {
     serverStats: Stats;
 }
 
+// TODO refresh automatically when server/css change https://github.com/glenjamin/ultimate-hot-reloading-example/blob/master/server.js
 /**
  * Webpack Dev server
  * @param options
  */
 export default (options: RendererOptions) => {
+    // TODO might still be able to register static server here and routes -- unify dev and prod
+    const { scripts, stylesheets } = flushChunks(options.clientStats, {
+        chunkNames: flushChunkNames(),
+    });
 
-    // TODO might still be able to register static server here and routes
     /**
      * Register client settings
      * @description Currently CSS is not emitted and is therefore inline. This means we don't yet need to reference it here.
-     *
-     * @todo hanle more than one CSS or JS file
-     * @todo Support code splitting
-     * @todo Support vendor JS splitting
      */
     return (req: Request, res: Response, next: NextFunction): void => {
-        if (options.clientStats.hash) {
-            const hash = options.clientStats.hash.substring(0, 8);
-            req.files = {
-                css: [`/static/css/main.${hash}.css`],
-                js: [`/static/js/main.${hash}.js`],
-            };
-        }
+        req.files = {
+            css: stylesheets,
+            js: scripts,
+        };
         renderer(req, res, next);
     };
 };
