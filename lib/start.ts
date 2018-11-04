@@ -34,6 +34,9 @@ const DEFAULT_HOST = Env.config("HOST", "localhost");
 const DEFAULT_PROTOCOL = Env.config("PROTOCOL", "http");
 const DEFAULT_PORT = parseInt(Env.config("PORT", "8080"), 10);
 
+/**
+ * @todo for some reason we get a bunch of uncaught exceptions in the browser after re-compile
+ */
 try {
     /**
      * We attempt to use the default port but if it is busy, we offer the user to

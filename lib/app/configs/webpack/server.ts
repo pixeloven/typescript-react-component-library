@@ -75,11 +75,6 @@ const typeScriptRule: RuleSetRule = {
     use: [
         {
             loader: "babel-loader",
-            options: {
-                babelrc: false,
-                cacheDirectory: true,
-                plugins: ["react-hot-loader/babel"],
-            },
         },
         {
             loader: "ts-loader",

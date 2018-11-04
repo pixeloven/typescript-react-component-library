@@ -50,9 +50,6 @@ const store = createStore(
     reduxDevToolExtension(),
 );
 
-/**
- * Wrap application with container, router and store
- */
 const AppWrapper = () => (
     <Provider store={store}>
         <BrowserRouter basename="/">
