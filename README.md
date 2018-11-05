@@ -82,7 +82,7 @@ First we will need to import all dependencies.
 ```bash
 yarn install
 ```
-Now we can either enter into a development environment or build the application. To start let's start up the development enviroment.
+Now we can either enter into a development environment or build the application. To start let's start up the development environment.
 ```bash
 yarn start
 ```
