@@ -38,7 +38,7 @@ class Env {
     };
 
     /**
-     * Get current enviroment
+     * Get current environment
      */
     public static get current(): Environment {
         return Env.config("NODE_ENV", "production") as Environment;
@@ -73,21 +73,21 @@ class Env {
     }
 
     /**
-     * Load from file for specific enviroment
+     * Load from file for specific environment
      * @description Check env and setup defualt keys
      */
-    public static load(enviroment?: Environment): void {
+    public static load(environment?: Environment): void {
         if (!process) {
             throw new NodeProcessException("Node process is undefined.");
         }
         if (!process.env) {
-            throw new NodeProcessException("Node enviromental variables are undefined.");
+            throw new NodeProcessException("Node environmental variables are undefined.");
         }
         dotenv.config();
-        if (enviroment) {
+        if (environment) {
             process.env = Object.assign(Env.defaultValues, process.env, {
-                BABEL_ENV: enviroment,
-                NODE_ENV: enviroment,
+                BABEL_ENV: environment,
+                NODE_ENV: environment,
             });
         } else {
             process.env = Object.assign(Env.defaultValues, process.env);

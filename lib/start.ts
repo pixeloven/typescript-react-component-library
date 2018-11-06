@@ -8,6 +8,7 @@ import "./boostrap/development";
  */
 import chalk from "chalk";
 import express from "express";
+import FriendlyErrorsWebpackPlugin from "friendly-errors-webpack-plugin";
 import path from "path";
 import openBrowser from "react-dev-utils/openBrowser";
 import WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
@@ -33,6 +34,9 @@ const DEFAULT_HOST = Env.config("HOST", "localhost");
 const DEFAULT_PROTOCOL = Env.config("PROTOCOL", "http");
 const DEFAULT_PORT = parseInt(Env.config("PORT", "8080"), 10);
 
+/**
+ * @todo for some reason we get a bunch of uncaught exceptions in the browser after re-compile
+ */
 try {
     /**
      * We attempt to use the default port but if it is busy, we offer the user to
@@ -60,13 +64,21 @@ try {
         const combinedCompiler = webpack([webpackClientConfig, webpackServerConfig]);
         const clientCompiler = combinedCompiler.compilers.find(compiler => compiler.name === "client");
         app.use(webpackDevMiddleware(combinedCompiler, {
+            logLevel: "silent",
             publicPath: PUBLIC_PATH,
             serverSideRender: true,
         }));
         if (clientCompiler) {
-            app.use(webpackHotMiddleware(clientCompiler)); // TODO https://github.com/Tjatse/ansi-html/blob/99ec49e431c70af6275b3c4e00c7be34be51753c/README.md#set-colors
+            app.use(webpackHotMiddleware(clientCompiler, {
+                log: false,
+            }));
         }
         app.use(webpackHotServerMiddleware(combinedCompiler));
+
+        /**
+         * Clean up console errors
+         */
+        combinedCompiler.apply(new FriendlyErrorsWebpackPlugin());
 
         /**
          * Start express server on specific host and port

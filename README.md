@@ -82,7 +82,7 @@ First we will need to import all dependencies.
 ```bash
 yarn install
 ```
-Now we can either enter into a development environment or build the application. To start let's start up the development enviroment.
+Now we can either enter into a development environment or build the application. To start let's start up the development environment.
 ```bash
 yarn start
 ```
@@ -106,6 +106,7 @@ BUILD_PATH=build
 
 ## Current Tasks
 With all of the items below we need to consider whether we want to maintain a single application or multiple applications. Now that we are doing PWA, SSR, etc it might make sense to maintian a single app and just break it into templates and pages.
+* Setup error boundries https://reactjs.org/docs/error-boundaries.html
 * Create more aliases and eliminate numerous index.ts files
 * Add read me about https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers
 * Create development entry point for server side code

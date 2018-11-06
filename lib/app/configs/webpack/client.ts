@@ -18,8 +18,6 @@ import common from "./common";
 // TODO optimize builds
     // see if we can use TS Fork (at least for prod build)
     // see how we can use babels cache
-    // setup vendor chunking
-// TODO Fix polyfills (remove CORE-JS from loading in client)
 // TODO implement tslint-loader if we can do ts fork in development
 
 /**
@@ -142,11 +140,6 @@ const typeScriptRule: RuleSetRule = {
     use: [
         {
             loader: "babel-loader",
-            options: {
-                babelrc: false,
-                cacheDirectory: true,
-                plugins: ["react-hot-loader/babel"],
-            },
         },
         {
             loader: "ts-loader",
