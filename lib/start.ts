@@ -17,7 +17,7 @@ import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackHotServerMiddleware from "webpack-hot-server-middleware";
 import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
-import {env, logger} from "./app/libraries";
+import {env, logger, WebpackStatsHandler} from "./app/libraries";
 import {handleError, sleep} from "./app/macros";
 
 /**
@@ -74,32 +74,27 @@ try {
             logLevel: "silent",
             publicPath: PUBLIC_PATH,
             reporter: (middlewareOptions, reporterOptions) => {
-                if (reporterOptions.state) {
-                    let message = "Compiled successfully.";
-                    if (reporterOptions.stats) {
+                if (reporterOptions.state && reporterOptions.stats) {
+                    const handler = new WebpackStatsHandler(reporterOptions.stats);
+                    const stats = handler.format();
+                    if (stats) {
                         if (reporterOptions.stats.hasErrors()) {
-                            message = "Failed to compile.";
+                            logger.error(stats.errors);
+                            logger.error("Failed to compile.");
                         } else if (reporterOptions.stats.hasWarnings()) {
-                            message = "Compiled with warnings.";
+                            logger.warn(stats.warnings);
+                            logger.warn("Compiled with warnings.");
+                        } else {
+                            logger.info("Compiled successfully.");
                         }
-                        const displayStats = (middlewareOptions.stats !== false);
-                        if (displayStats) {
-                            if (reporterOptions.stats.hasErrors()) {
-                                logger.error(reporterOptions.stats.toString(middlewareOptions.stats));
-                            } else if (reporterOptions.stats.hasWarnings()) {
-                                logger.warn(reporterOptions.stats.toString(middlewareOptions.stats));
-                            } else {
-                                logger.info(reporterOptions.stats.toString(middlewareOptions.stats));
-                            }
-                        }
-                        logger.info(message);
+                    } else {
+                        logger.error("Unexpected Error: Failed to retrieve webpack stats.");
                     }
                 } else {
                     logger.info("Compiling...");
                 }
             },
             serverSideRender: true,
-            stats: "minimal",
         });
         app.use(webpackDevMiddlewareInstance);
 
@@ -121,6 +116,7 @@ try {
         app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
             res.status(500).send(`<h1>Unexpected Error</h1><p>See console for more details.</p>`);
         });
+
         /**
          * Start express server on specific host and port
          */

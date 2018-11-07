@@ -10,11 +10,10 @@ import chalk from "chalk";
 import fs from "fs-extra";
 import Promise from "promise";
 import FileSizeReporter from "react-dev-utils/FileSizeReporter";
-import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
 import webpack, {Stats} from "webpack";
 import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
-import {env, logger} from "./app/libraries";
+import {env, logger, WebpackStatsHandler} from "./app/libraries";
 import {handleError, resolvePath} from "./app/macros";
 
 /**
@@ -93,7 +92,7 @@ function printBuildFileSizesAfterGzip(buildPath: string, stats: Stats, previousF
 }
 
 /**
- * Create the production build and print the deployment instructions.
+ * Create the production build
  * @param config
  * @param previousFileSizes
  */
@@ -105,13 +104,9 @@ function build(config: object, previousFileSizes: OpaqueFileSizes) {
             if (err) {
                 return reject(err);
             }
-            const messages = formatWebpackMessages(stats.toJson("verbose"));
+            const handler = new WebpackStatsHandler(stats);
+            const messages = handler.format();
             if (messages.errors.length) {
-                // Only keep the first error. Others are often indicative
-                // of the same problem, but confuse the reader with noise.
-                if (messages.errors.length > 1) {
-                    messages.errors.length = 1;
-                }
                 return reject(new Error(messages.errors.join("\n\n")));
             }
             if (process.env.CI && process.env.CI.toLowerCase() !== "false" && messages.warnings.length) {
