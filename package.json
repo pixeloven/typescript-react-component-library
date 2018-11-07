@@ -157,7 +157,7 @@
     "node": "8.x || 9.x || 10.x"
   },
   "scripts": {
-    "build": "run-p -l build-app build-story",
+    "build": "run-p build-app build-story",
     "build-app": "ts-node --files lib/build.ts",
     "build-story": "build-storybook -c .storybook -o build/public/docs",
     "clean": "rm -rf ./build",

@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import NodeProcessException from "../exceptions/NodeProcessException";
+import {NodeProcessException} from "../exceptions";
 
 export interface Environments {
     development?: object;
@@ -21,7 +21,7 @@ export interface DefaultEnv extends NodeJS.ProcessEnv {
     NODE_PATH: string;
 }
 
-class Env {
+export class Env {
 
     /**
      * Default values for env

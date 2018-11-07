@@ -17,8 +17,7 @@ import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackHotServerMiddleware from "webpack-hot-server-middleware";
 import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
-import Env from "./app/libraries/Env";
-import Logger from "./app/libraries/Logger";
+import {env, logger} from "./app/libraries";
 import {handleError, sleep} from "./app/macros";
 
 /**
@@ -29,10 +28,10 @@ const {
     prepareUrls,
 } = WebpackDevServerUtils;
 
-const PUBLIC_PATH = Env.config("PUBLIC_URL", "/");
-const DEFAULT_HOST = Env.config("HOST", "localhost");
-const DEFAULT_PROTOCOL = Env.config("PROTOCOL", "http");
-const DEFAULT_PORT = parseInt(Env.config("PORT", "8080"), 10);
+const PUBLIC_PATH = env.config("PUBLIC_URL", "/");
+const DEFAULT_HOST = env.config("HOST", "localhost");
+const DEFAULT_PROTOCOL = env.config("PROTOCOL", "http");
+const DEFAULT_PORT = parseInt(env.config("PORT", "8080"), 10);
 
 /**
  * @todo for some reason we get a bunch of uncaught exceptions in the browser after re-compile
@@ -49,8 +48,8 @@ try {
          * Notify user of host binding
          */
         const urls = prepareUrls(DEFAULT_PROTOCOL, DEFAULT_HOST, PORT);
-        Logger.info(`Attempting to bind to HOST: ${chalk.cyan(urls.localUrlForBrowser)}`);
-        Logger.info(`If successful the application will launch automatically.`);
+        logger.info(`Attempting to bind to HOST: ${chalk.cyan(urls.localUrlForBrowser)}`);
+        logger.info(`If successful the application will launch automatically.`);
         sleep(3000);
 
         /**
@@ -86,17 +85,17 @@ try {
                         const displayStats = (middlewareOptions.stats !== false);
                         if (displayStats) {
                             if (reporterOptions.stats.hasErrors()) {
-                                Logger.error(reporterOptions.stats.toString(middlewareOptions.stats));
+                                logger.error(reporterOptions.stats.toString(middlewareOptions.stats));
                             } else if (reporterOptions.stats.hasWarnings()) {
-                                Logger.warn(reporterOptions.stats.toString(middlewareOptions.stats));
+                                logger.warn(reporterOptions.stats.toString(middlewareOptions.stats));
                             } else {
-                                Logger.info(reporterOptions.stats.toString(middlewareOptions.stats));
+                                logger.info(reporterOptions.stats.toString(middlewareOptions.stats));
                             }
                         }
-                        Logger.info(message);
+                        logger.info(message);
                     }
                 } else {
-                    Logger.info("Compiling...");
+                    logger.info("Compiling...");
                 }
             },
             serverSideRender: true,
@@ -110,7 +109,7 @@ try {
         const clientCompiler = combinedCompiler.compilers.find(compiler => compiler.name === "client");
         if (clientCompiler) {
             app.use(webpackHotMiddleware(clientCompiler, {
-                log: Logger.info,
+                log: logger.info,
             }));
         }
         app.use(webpackHotServerMiddleware(combinedCompiler));
@@ -129,7 +128,7 @@ try {
             if (error) {
                 handleError(error);
             }
-            Logger.info("Starting development server...");
+            logger.info("Starting development server...");
             openBrowser(urls.localUrlForBrowser);
         });
     }).catch((error: Error) => {

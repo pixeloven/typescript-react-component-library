@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import FileNotFoundException from "./exceptions/FileNotFoundException";
-import Logger from "./libraries/Logger";
+import {FileNotFoundException} from "./exceptions";
+import {logger} from "./libraries";
 
 /**
  * Handle errors
@@ -9,10 +9,10 @@ import Logger from "./libraries/Logger";
  */
 export function handleError(error: Error) {
     if (error.message) {
-        Logger.error(error.message);
+        logger.error(error.message);
     }
     if (error.stack) {
-        Logger.error(error.stack);
+        logger.error(error.stack);
     }
     process.exit(1);
 }
