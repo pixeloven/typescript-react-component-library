@@ -67,7 +67,8 @@ try {
 
         /**
          * Setup webpack dev middleware
-         * @todo can use the reporter to better handle errors in console
+         * @todo can use the reporter to better handle errors in console (FORMATTING)
+         * @todo Should replace the log so we can inject it into reporter
          */
         const webpackDevMiddlewareInstance = webpackDevMiddleware(combinedCompiler, {
             index: false,
@@ -99,6 +100,7 @@ try {
                 }
             },
             serverSideRender: true,
+            stats: "minimal",
         });
         app.use(webpackDevMiddlewareInstance);
 
