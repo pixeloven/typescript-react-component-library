@@ -1,7 +1,7 @@
-import chalk from "chalk";
 import fs from "fs";
 import path from "path";
 import FileNotFoundException from "./exceptions/FileNotFoundException";
+import Logger from "./libraries/Logger";
 
 /**
  * Handle errors
@@ -9,10 +9,10 @@ import FileNotFoundException from "./exceptions/FileNotFoundException";
  */
 export function handleError(error: Error) {
     if (error.message) {
-        console.error(`${chalk.red(error.message)}\n`);
+        Logger.error(error.message);
     }
     if (error.stack) {
-        console.log(error.stack);
+        Logger.error(error.stack);
     }
     process.exit(1);
 }

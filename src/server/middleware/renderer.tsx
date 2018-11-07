@@ -18,14 +18,17 @@ export default (req: Request, res: Response, next: NextFunction): void => {
     const staticContext: StaticContext = {
         statusCode: 200,
     };
-    const helmet = Helmet.renderStatic();
-    const markup = renderToString(
-        <Html files={req.files} helmet={helmet}>
-            <StaticRouter location={req.url} context={staticContext}>
-                <App />
-            </StaticRouter>
-        </Html>,
-    );
-    res.status(staticContext.statusCode || 200).send(`<!DOCTYPE html>${markup}`);
-    next();
+    try {
+        const helmet = Helmet.renderStatic();
+        const markup = renderToString(
+            <Html files={req.files} helmet={helmet}>
+                <StaticRouter location={req.url} context={staticContext}>
+                    <App />
+                </StaticRouter>
+            </Html>,
+        );
+        res.status(staticContext.statusCode || 200).send(`<!DOCTYPE html>${markup}`);
+    } catch (error) {
+        next(error);
+    }
 };
