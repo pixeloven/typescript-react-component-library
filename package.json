@@ -172,7 +172,7 @@
     "precommit": "lint-staged",
     "start": "run-p start-ts start-story",
     "start-ts": "ts-node --files lib/start.ts",
-    "start-story": "start-storybook --quiet -p 9001 -c .storybook",
+    "start-story": "start-storybook -s ./public -p 9001 -c .storybook",
     "test": "jest --watch --env=jsdom",
     "test-coverage": "jest --coverage --env=jsdom"
   },
