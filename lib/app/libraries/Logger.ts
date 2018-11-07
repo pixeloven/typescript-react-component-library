@@ -2,7 +2,6 @@ import log from "webpack-log";
 const logger = log({ name: "core" });
 
 type Level = "info" | "warn" | "error";
-type Message = string | string[];
 
 /**
  * Logs a message as a specific
