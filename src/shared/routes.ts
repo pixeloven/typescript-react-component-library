@@ -1,4 +1,5 @@
 import {Blog, Home, NoMatch} from "./components/pages";
+import {SagasConnect} from "./components/pages/Sagas";
 import {Default} from "./components/templates";
 
 /**
@@ -27,6 +28,16 @@ const routes = [
             {
                 component: Blog,
                 path: "/blog/:post",
+            },
+        ],
+    }, {
+        component: Default,
+        path: "/sagas",
+        routes: [
+            {
+                component: SagasConnect,
+                exact: true,
+                path: "/sagas",
             },
         ],
     }, {
