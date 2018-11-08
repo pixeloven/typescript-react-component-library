@@ -11,11 +11,11 @@ storiesOf("Components/Atoms/Button", module)
     .add("Default", () => {
         const className = text("className", "");
         const href = text("href", "");
+        const tabIndex = number("tabIndex", 0);
         const isDisabled = boolean("isDisabled", false);
         const isFullWidth = boolean("isFullWidth", false);
         const isHollow = boolean("isHollow", false);
         const isUnstyled = boolean("isUnstyled", false);
-        const tabIndex = number("tabIndex", 0);
         return (
             <Button
                 className={className}
