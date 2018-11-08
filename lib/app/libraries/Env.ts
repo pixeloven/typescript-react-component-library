@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import NodeProcessException from "../exceptions/NodeProcessException";
+import {NodeProcessException} from "../exceptions";
 
 export interface Environments {
     development?: object;
@@ -21,10 +21,10 @@ export interface DefaultEnv extends NodeJS.ProcessEnv {
     NODE_PATH: string;
 }
 
-class Env {
+export class Env {
 
     /**
-     * Defualt values for env
+     * Default values for env
      */
     public static defaultValues: DefaultEnv = {
         BABEL_ENV: "",
@@ -74,7 +74,7 @@ class Env {
 
     /**
      * Load from file for specific environment
-     * @description Check env and setup defualt keys
+     * @description Check env and setup default keys
      */
     public static load(environment?: Environment): void {
         if (!process) {

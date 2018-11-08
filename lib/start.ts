@@ -7,8 +7,7 @@ import "./boostrap/development";
  * Import dependencies
  */
 import chalk from "chalk";
-import express from "express";
-import FriendlyErrorsWebpackPlugin from "friendly-errors-webpack-plugin";
+import express, {NextFunction, Request, Response} from "express";
 import path from "path";
 import openBrowser from "react-dev-utils/openBrowser";
 import WebpackDevServerUtils from "react-dev-utils/WebpackDevServerUtils";
@@ -18,7 +17,7 @@ import webpackHotMiddleware from "webpack-hot-middleware";
 import webpackHotServerMiddleware from "webpack-hot-server-middleware";
 import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
-import Env from "./app/libraries/Env";
+import {env, logger, WebpackStatsHandler} from "./app/libraries";
 import {handleError, sleep} from "./app/macros";
 
 /**
@@ -29,13 +28,14 @@ const {
     prepareUrls,
 } = WebpackDevServerUtils;
 
-const PUBLIC_PATH = Env.config("PUBLIC_URL", "/");
-const DEFAULT_HOST = Env.config("HOST", "localhost");
-const DEFAULT_PROTOCOL = Env.config("PROTOCOL", "http");
-const DEFAULT_PORT = parseInt(Env.config("PORT", "8080"), 10);
+const PUBLIC_PATH = env.config("PUBLIC_URL", "/");
+const DEFAULT_HOST = env.config("HOST", "localhost");
+const DEFAULT_PROTOCOL = env.config("PROTOCOL", "http");
+const DEFAULT_PORT = parseInt(env.config("PORT", "8080"), 10);
 
 /**
  * @todo for some reason we get a bunch of uncaught exceptions in the browser after re-compile
+ * @todo add error handling middleware to catch errors
  */
 try {
     /**
@@ -48,7 +48,8 @@ try {
          * Notify user of host binding
          */
         const urls = prepareUrls(DEFAULT_PROTOCOL, DEFAULT_HOST, PORT);
-        console.info(chalk.green(`Attempting to bind to HOST: ${chalk.white(urls.localUrlForBrowser)}`));
+        logger.info(`Attempting to bind to HOST: ${chalk.cyan(urls.localUrlForBrowser)}`);
+        logger.info(`If successful the application will launch automatically.`);
         sleep(3000);
 
         /**
@@ -62,23 +63,59 @@ try {
          * Setup webpack hot module replacement for development
          */
         const combinedCompiler = webpack([webpackClientConfig, webpackServerConfig]);
-        const clientCompiler = combinedCompiler.compilers.find(compiler => compiler.name === "client");
-        app.use(webpackDevMiddleware(combinedCompiler, {
+
+        /**
+         * Setup webpack dev middleware
+         * @todo can use the reporter to better handle errors in console (FORMATTING)
+         * @todo Should replace the log so we can inject it into reporter
+         */
+        const webpackDevMiddlewareInstance = webpackDevMiddleware(combinedCompiler, {
+            index: false,
             logLevel: "silent",
             publicPath: PUBLIC_PATH,
+            reporter: (middlewareOptions, reporterOptions) => {
+                if (reporterOptions.state && reporterOptions.stats) {
+                    const handler = new WebpackStatsHandler(reporterOptions.stats);
+                    const stats = handler.format();
+                    if (stats) {
+                        if (reporterOptions.stats.hasErrors()) {
+                            logger.error(stats.errors);
+                            logger.error("Failed to compile.");
+                        } else if (reporterOptions.stats.hasWarnings()) {
+                            logger.warn(stats.warnings);
+                            logger.warn("Compiled with warnings.");
+                        } else {
+                            logger.info("Compiled successfully.");
+                        }
+                    } else {
+                        logger.error("Unexpected Error: Failed to retrieve webpack stats.");
+                    }
+                } else {
+                    logger.info("Compiling...");
+                }
+            },
             serverSideRender: true,
-        }));
+        });
+        app.use(webpackDevMiddlewareInstance);
+
+        /**
+         * Setup hot middleware for client & server
+         */
+        const clientCompiler = combinedCompiler.compilers.find(compiler => compiler.name === "client");
         if (clientCompiler) {
             app.use(webpackHotMiddleware(clientCompiler, {
-                log: false,
+                log: logger.info,
             }));
         }
         app.use(webpackHotServerMiddleware(combinedCompiler));
 
         /**
-         * Clean up console errors
+         * Create error handler for server errors
+         * @todo Should render a basic page with the same stack style as the dev-middleware
          */
-        combinedCompiler.apply(new FriendlyErrorsWebpackPlugin());
+        app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+            res.status(500).send(`<h1>Unexpected Error</h1><p>See console for more details.</p>`);
+        });
 
         /**
          * Start express server on specific host and port
@@ -87,7 +124,7 @@ try {
             if (error) {
                 handleError(error);
             }
-            console.info(chalk.green("Starting development server...\n"));
+            logger.info("Starting development server...");
             openBrowser(urls.localUrlForBrowser);
         });
     }).catch((error: Error) => {
