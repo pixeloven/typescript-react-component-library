@@ -1,5 +1,4 @@
-import HttpClient from "@shared/utils/HttpClient";
-import { AxiosResponse } from "axios";
+import { HttpClient, Response } from "@shared/utils/HttpClient";
 import * as React from "react";
 
 interface State {
@@ -7,11 +6,13 @@ interface State {
     long: string;
 }
 
-class ApiTest extends React.Component<{}, State> {
+class ApiExample extends React.Component<{}, State> {
+
     public getData() {
-        HttpClient.get("http://api.open-notify.org/iss-now.json")
-        .then((response: AxiosResponse) => {
-            console.log(response.data);
+        const url = "http://api.open-notify.org/iss-now.json";
+
+        HttpClient.get(url)
+        .then((response: Response) => {
             this.setState({
                 lat: response.data.iss_position.latitude,
                 long: response.data.iss_position.longitude,
@@ -37,4 +38,4 @@ class ApiTest extends React.Component<{}, State> {
     }
 }
 
-export default ApiTest;
+export default ApiExample;

@@ -1,21 +1,30 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosPromise, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost/",
 });
 
+/**
+ * Additions to AxiosRequestConfig
+ */
 interface RequestConfig extends AxiosRequestConfig {
     urlReplacements?: object;
 }
 
+/**
+ * Make HTTP GET request using axios
+ */
 function get(url: string, config?: RequestConfig) {
     const fullUrl = applyUrlReplacements(url, config ? config.urlReplacements : undefined);
-    return axios.get(fullUrl, config);
+    return axiosInstance.get(fullUrl, config);
 }
 
+/**
+ * Make HTTP POST request using axios
+ */
 function post(url: string, data: object, config: RequestConfig) {
     const fullUrl = applyUrlReplacements(url, config.urlReplacements);
-    return axios.post(fullUrl, data, config);
+    return axiosInstance.post(fullUrl, data, config);
 }
 
 /**
@@ -35,4 +44,9 @@ const HttpClient = {
     post,
 };
 
-export default HttpClient;
+export {
+    HttpClient,
+    RequestConfig,
+    AxiosPromise as Promise,
+    AxiosResponse as Response,
+};
