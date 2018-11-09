@@ -17,6 +17,15 @@
   },
   "rules": {
     "arrow-parens": false,
+    "indent": [
+      true, 
+      "spaces", 
+      4
+    ],
+    "block-spacing": [
+      true,
+      "always"
+    ],
     "interface-name" : false,
     "max-line-length": false,
     "no-console": false,

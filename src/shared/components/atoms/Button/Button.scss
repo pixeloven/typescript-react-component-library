@@ -13,8 +13,8 @@
     padding: $global-spacing-half $global-spacing;
 
     &:hover {
-        background-color: $color-secondary;
-        color: $white;
+        background-color: $color-dark-primary;
+        color: $color-white;
     }
 }
 
@@ -24,7 +24,7 @@
     color: $color-primary;
 
     &:hover {
-        border-color: $color-secondary;
+        border-color: $color-dark-primary;
     }
 }
 
@@ -47,8 +47,8 @@
 }
 
 .a-button--disabled {
-    background-color: gray !important;
-    border-color: gray !important;
-    color: white !important;
+    background-color: $color-gray !important;
+    border-color: $color-gray !important;
+    color: $color-white !important;
     cursor: not-allowed !important;
 }

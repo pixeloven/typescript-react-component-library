@@ -10,11 +10,10 @@ import chalk from "chalk";
 import fs from "fs-extra";
 import Promise from "promise";
 import FileSizeReporter from "react-dev-utils/FileSizeReporter";
-import formatWebpackMessages from "react-dev-utils/formatWebpackMessages";
 import webpack, {Stats} from "webpack";
 import webpackClientConfig from "./app/configs/webpack/client";
 import webpackServerConfig from "./app/configs/webpack/server";
-import Env from "./app/libraries/Env";
+import {env, logger, WebpackStatsHandler} from "./app/libraries";
 import {handleError, resolvePath} from "./app/macros";
 
 /**
@@ -46,7 +45,7 @@ const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 /**
  * Setup build pathing
  */
-const PRIVATE_BUILD_PATH = resolvePath(Env.config("BUILD_PATH", "build"), false);
+const PRIVATE_BUILD_PATH = resolvePath(env.config("BUILD_PATH", "build"), false);
 const PUBLIC_BUILD_PATH = `${PRIVATE_BUILD_PATH}/public`;
 
 /**
@@ -66,12 +65,11 @@ function setupDirectory(fullPath: string) {
  */
 function printBuildStatus(warnings: string[]) {
     if (warnings.length) {
-        console.log(chalk.yellow("Compiled with warnings.\n"));
-        console.log(warnings.join("\n\n"));
-        console.log("\nSearch for the " + chalk.underline(chalk.yellow("keywords")) + " to learn more about each warning.");
-        console.log("To ignore, add " + chalk.cyan("// eslint-disable-next-line") + " to the line before.\n");
+        logger.warn("Compiled with warnings.");
+        logger.warn(warnings.join("\n\n")); // TODO print array??? can webpacl-log handle this natively???
+        logger.warn("Search for the " + chalk.underline(chalk.yellow("keywords")) + " to learn more about each warning.");
     } else {
-        console.log(chalk.green("Compiled successfully.\n"));
+        logger.info("Compiled successfully.");
     }
 }
 
@@ -82,7 +80,7 @@ function printBuildStatus(warnings: string[]) {
  * @param previousFileSizes
  */
 function printBuildFileSizesAfterGzip(buildPath: string, stats: Stats, previousFileSizes: OpaqueFileSizes) {
-    console.log("File sizes after gzip:\n");
+    logger.info("File sizes after gzip:\n");
     printFileSizesAfterBuild(
         stats,
         previousFileSizes,
@@ -94,29 +92,26 @@ function printBuildFileSizesAfterGzip(buildPath: string, stats: Stats, previousF
 }
 
 /**
- * Create the production build and print the deployment instructions.
+ * Create the production build
  * @param config
  * @param previousFileSizes
  */
 function build(config: object, previousFileSizes: OpaqueFileSizes) {
-    console.log("Creating an optimized production build...");
+    logger.info("Creating an optimized production build...");
     const compiler = webpack(config);
     return new Promise((resolve, reject) => {
         compiler.run((err: Error, stats: Stats) => {
             if (err) {
                 return reject(err);
             }
-            const messages = formatWebpackMessages(stats.toJson("verbose"));
+            const handler = new WebpackStatsHandler(stats);
+            const messages = handler.format();
             if (messages.errors.length) {
-                // Only keep the first error. Others are often indicative
-                // of the same problem, but confuse the reader with noise.
-                if (messages.errors.length > 1) {
-                    messages.errors.length = 1;
-                }
                 return reject(new Error(messages.errors.join("\n\n")));
             }
             if (process.env.CI && process.env.CI.toLowerCase() !== "false" && messages.warnings.length) {
-                console.log(chalk.yellow("\nTreating warnings as errors because process.env.CI = true.\n" + "Most CI servers set it automatically.\n"));
+                logger.info("Treating warnings as errors because process.env.CI = true.");
+                logger.info("Most CI servers set it automatically.");
                 return reject(new Error(messages.warnings.join("\n\n")));
             }
             return resolve({
