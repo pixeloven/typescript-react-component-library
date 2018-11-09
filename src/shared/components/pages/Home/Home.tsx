@@ -2,7 +2,7 @@ import * as React from "react";
 import {Helmet} from "react-helmet";
 import { RouteComponentProps } from "react-router-dom";
 import { Container, Grid, Header, Segment } from "semantic-ui-react";
-import { Icon, Logo } from "../../atoms/";
+import { ApiExample, Icon, Logo } from "../../atoms/";
 
 class Home extends React.Component<RouteComponentProps> {
     public render(): React.ReactNode {
@@ -63,6 +63,14 @@ class Home extends React.Component<RouteComponentProps> {
                             </Grid.Column>
                             <Grid.Column>
                                 <p>Organisms are the combination of molecules that work together or even with atoms that compose more elaborate interfaces. At this level, the components begin to have the final shape, but they are still ensured to be independent, portable and reusable enough to be reusable in any content.</p>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row columns={2}>
+                            <Grid.Column>
+                                <Header as="h3">API Example</Header>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <ApiExample/>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
