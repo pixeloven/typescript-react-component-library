@@ -27,3 +27,4 @@ declare module "storybook-readme";
 declare module "offline-plugin";
 declare module "time-fix-plugin";
 declare module "tsconfig-paths-webpack-plugin";
+declare module "webpack-log";

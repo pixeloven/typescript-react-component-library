@@ -18,7 +18,7 @@ export default (baseConfig: Configuration, env: object, defaultConfig: Configura
         test: /\.(ts|tsx)$/,
     };
     const newScssRule: RuleSetRule = {
-        loaders: ["style-loader", "css-loader", "sass-loader"],
+        loaders: ["style-loader", "css-loader", "sass-loader"], // TODO update to be the same as app
         test: /\.(scss|sass|css)$/i,
     };
     const newModule: Module = {

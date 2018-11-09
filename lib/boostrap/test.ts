@@ -1,4 +1,4 @@
-import Env from "../app/libraries/Env";
+import {env} from "../app/libraries";
 
 /**
  * Makes the script crash on unhandled rejections instead of silently
@@ -12,11 +12,11 @@ process.on("unhandledRejection", err => {
 /**
  * Initialize env vars
  */
-Env.load();
+env.load();
 
 /**
  * Set test environment
  */
 const environment: Environment = "test";
-Env.define("BABEL_ENV", environment);
-Env.define("NODE_ENV", environment);
+env.define("BABEL_ENV", environment);
+env.define("NODE_ENV", environment);
