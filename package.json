@@ -169,9 +169,9 @@
     "lint-scss": "stylelint src/**/*.scss --syntax scss",
     "lint-scss-fix": "stylelint src/**/*.scss --syntax scss --fix",
     "precommit": "lint-staged",
-    "start": "run-s start-app",
-    "start-app": "ts-node --files lib/start.ts",
-    "start-story": "start-storybook --quiet -p 9001 -c .storybook",
+    "start": "run-p start-ts start-story",
+    "start-ts": "ts-node --files lib/start.ts",
+    "start-story": "start-storybook --quiet -s ./public -p 9001 -c .storybook",
     "test": "jest --watch --env=jsdom",
     "test-coverage": "jest --coverage --env=jsdom"
   },
