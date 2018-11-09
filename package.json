@@ -16,6 +16,7 @@
     "typescript"
   ],
   "dependencies": {
+    "axios": "^0.18.0",
     "classnames": "2.2.6",
     "deepmerge": "2.2.1",
     "express": "4.16.4",
