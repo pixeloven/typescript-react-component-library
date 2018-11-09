@@ -9,9 +9,9 @@ import Avatar from "./Avatar";
 storiesOf("Components/Atoms/Avatar", module)
     .addDecorator(withReadme(Readme))
     .add("Avatar with an image", () => {
+        const className = text("className", "");
         const avatarName = text("avatarName", "User Name");
         const avatarURL = text("avatarURL", "http://i.pravatar.cc");
-        const className = text("className", "");
 
         return (
             <Avatar

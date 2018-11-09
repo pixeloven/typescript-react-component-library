@@ -9,14 +9,14 @@ import Icon from "./Icon";
 storiesOf("Components/Atoms/Icon", module)
     .addDecorator(withReadme(Readme))
     .add("Default", () => {
+        const fontSize = text("container font-size", "");
+        const fontColor = text("container color", "");
         const className = text("className", "");
         const iconType = text("iconType", "ui");
         const iconName = text("iconName", "search");
         const isAfterText = boolean("isAfterText", false);
         const isBeforeText = boolean("isBeforeText", false);
         const isLarge = boolean("isLarge", false);
-        const fontSize = text("container font-size", "");
-        const fontColor = text("container color", "");
         return (
             <div style={{ fontSize, color: fontColor }}>
                 {`${isAfterText ? "Leading text" : ""}`}

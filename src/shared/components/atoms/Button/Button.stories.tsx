@@ -8,14 +8,14 @@ import Button from "./Button";
 
 storiesOf("Components/Atoms/Button", module)
     .addDecorator(withReadme(Readme))
-    .add("default Button", () => {
+    .add("Default", () => {
         const className = text("className", "");
         const href = text("href", "");
-        const isDisabled = boolean("isDisabled", false, "isDisabled");
-        const isFullWidth = boolean("isFullWidth", false, "isFullWidth");
-        const isHollow = boolean("isHollow", false, "isHollow");
-        const isUnstyled = boolean("isUnstyled", false, "isUnstyled");
         const tabIndex = number("tabIndex", 0);
+        const isDisabled = boolean("isDisabled", false);
+        const isFullWidth = boolean("isFullWidth", false);
+        const isHollow = boolean("isHollow", false);
+        const isUnstyled = boolean("isUnstyled", false);
         return (
             <Button
                 className={className}
