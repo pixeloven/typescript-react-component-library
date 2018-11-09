@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "@types/classnames": "2.2.6",
+    "axios": "^0.18.0",
     "deepmerge": "2.2.1",
     "express": "4.16.4",
     "express-winston": "3.0.1",
