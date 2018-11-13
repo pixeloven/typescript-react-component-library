@@ -15,7 +15,6 @@ interface Props {
 }
 
 export default class Button extends Component<Props> {
-
     public render() {
         const {
             children,

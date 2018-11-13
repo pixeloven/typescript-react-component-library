@@ -1,8 +1,8 @@
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
 import { flushChunkNames } from "react-universal-component/server";
-import {Stats} from "webpack";
+import { Stats } from "webpack";
 import flushChunks from "webpack-flush-chunks";
-import {renderer} from "./middleware";
+import { renderer } from "./middleware";
 
 interface RendererOptions {
     clientStats: Stats;

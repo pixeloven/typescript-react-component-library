@@ -1,10 +1,5 @@
 {
   "defaultSeverity": "error",
-  "extends": [
-    "tslint:recommended",
-    "tslint-react",
-    "tslint-eslint-rules"
-  ],
   "linterOptions": {
     "exclude": [
       ".circleci",
@@ -15,19 +10,15 @@
       "public"
     ]
   },
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-standard",
+    "tslint-config-prettier",
+    "tslint-eslint-rules"
+  ],
   "rules": {
     "arrow-parens": false,
-    "indent": [
-      true, 
-      "spaces", 
-      4
-    ],
-    "block-spacing": [
-      true,
-      "always"
-    ],
     "interface-name" : false,
-    "max-line-length": false,
     "no-console": false,
     "no-any": true,
     "no-null-keyword": true

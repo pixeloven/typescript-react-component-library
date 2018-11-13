@@ -15,7 +15,11 @@ setOptions({
 addDecorator(withKnobs);
 
 // Stories loader
-const req = require.context("../src/shared/components", true, /.stories.[jt]sx?$/);
+const req = require.context(
+    "../src/shared/components",
+    true,
+    /.stories.[jt]sx?$/,
+);
 function loadStories() {
     req.keys().forEach(req);
 }

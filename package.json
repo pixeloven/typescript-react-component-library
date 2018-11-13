@@ -2,7 +2,7 @@
   "name": "typescript-react-component-library",
   "version": "0.1.0",
   "description": "TypeScript React component library and demo application",
-  "author": "Brian Gebel <me@pixeloven.com>",
+  "author": "Brian Gebel <brian@pixeloven.com>",
   "license": "MIT",
   "homepage": "https://github.com/pixeloven/typescript-react-component-library",
   "repository": {
@@ -16,8 +16,7 @@
     "typescript"
   ],
   "dependencies": {
-    "@types/classnames": "2.2.6",
-    "axios": "^0.18.0",
+    "axios": "0.18.0",
     "deepmerge": "2.2.1",
     "express": "4.16.4",
     "express-winston": "3.0.1",
@@ -48,6 +47,9 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "@pixeloven/cli": "0.5.0",
+    "@pixeloven/core": "0.5.0",
+    "@pixeloven/tasks": "0.5.0",
     "@storybook/addon-actions": "4.0.2",
     "@storybook/addon-knobs": "4.0.2",
     "@storybook/addon-notes": "4.0.2",
@@ -57,6 +59,7 @@
     "@storybook/react": "4.0.2",
     "@types/autoprefixer": "^9.1.0",
     "@types/case-sensitive-paths-webpack-plugin": "^2.1.2",
+    "@types/classnames": "2.2.6",
     "@types/copy-webpack-plugin": "^4.4.2",
     "@types/core-js": "^2.5.0",
     "@types/dotenv": "^4.0.3",
@@ -66,7 +69,6 @@
     "@types/express-winston": "^3.0.0",
     "@types/fs-extra": "^5.0.4",
     "@types/html-webpack-plugin": "^3.2.0",
-    "@types/jest": "^23.3.2",
     "@types/lodash": "^4.14.115",
     "@types/mini-css-extract-plugin": "^0.2.0",
     "@types/node": "^8.10.0",
@@ -95,7 +97,6 @@
     "@types/webpack-node-externals": "^1.6.3",
     "autoprefixer": "9.1.5",
     "babel-core": "6.26.3",
-    "babel-jest": "23.6.0",
     "babel-loader": "8.0.4",
     "babel-preset-react-app": "3.1.2",
     "babel-runtime": "6.26.0",
@@ -112,7 +113,6 @@
     "fs-extra": "7.0.0",
     "html-webpack-plugin": "^3.2.0",
     "husky": "1.1.2",
-    "jest": "23.6.0",
     "lint-staged": "7.3.0",
     "mini-css-extract-plugin": "0.4.4",
     "moment": "2.22.2",
@@ -125,13 +125,11 @@
     "raf": "3.4.0",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
-    "source-map-loader": "0.2.4",
     "storybook-readme": "4.0.2",
     "stylelint": "9.6.0",
     "stylelint-config-recommended-scss": "3.2.0",
     "stylelint-scss": "3.3.2",
     "time-fix-plugin": "2.0.5",
-    "ts-jest": "23.10.4",
     "ts-loader": "5.2.2",
     "ts-node": "7.0.1",
     "tsconfig-paths-webpack-plugin": "3.2.0",
@@ -158,86 +156,35 @@
     "node": "8.x || 9.x || 10.x"
   },
   "scripts": {
-    "build": "run-p build-app build-story",
-    "build-app": "ts-node --files lib/build.ts",
-    "build-story": "build-storybook -c .storybook -o build/public/docs",
-    "clean": "rm -rf ./build",
+    "build": "run-p build:app build:story",
+    "build:app": "pixeloven-tasks build",
+    "build:story": "build-storybook -c .storybook -o build/public/docs",
     "deploy": "node build/server.js",
-    "lint": "run-p -l lint-app lint-scss",
-    "lint-fix": "run-p -l lint-app-fix lint-scss-fix",
-    "lint-app": "tslint --project .",
-    "lint-app-fix": "tslint --fix --project .",
-    "lint-scss": "stylelint src/**/*.scss --syntax scss",
-    "lint-scss-fix": "stylelint src/**/*.scss --syntax scss --fix",
+    "lint": "pixeloven-cli lint:ts && pixeloven-cli lint:scss",
+    "lint:ts": "pixeloven-cli lint:ts",
+    "lint:scss": "pixeloven-cli lint:scss",
+    "prebuild": "rm -rf ./build",
     "precommit": "lint-staged",
-    "start": "run-p start-ts start-story",
-    "start-ts": "ts-node --files lib/start.ts",
-    "start-story": "start-storybook --quiet -s ./public -p 9001 -c .storybook",
-    "test": "jest --watch --env=jsdom",
-    "test-coverage": "jest --coverage --env=jsdom"
+    "pretest": "pixeloven-cli test:clean",
+    "pretty": "pixeloven-cli pretty",
+    "pretty:ts": "pixeloven-cli pretty:ts",
+    "pretty:scss": "pixeloven-cli pretty:scss",
+    "start": "run-p start:app start:story",
+    "start:app": "pixeloven-tasks serve",
+    "start:story": "start-storybook --quiet -s ./public -p 9001 -c .storybook",
+    "test": "pixeloven-cli test",
+    "test:watch": "pixeloven-cli test:watch"
   },
   "lint-staged": {
-    "lib/**/*.{ts,tsx}": [
-      "yarn lint-app-fix",
-      "git add"
-    ],
-    "src/**/*.{ts,tsx}": [
-      "yarn lint-app-fix",
-      "git add"
-    ],
-    "*.scss": [
-      "yarn lint-scss-fix",
+    "src/**/*.{scss,ts,tsx}": [
+      "yarn pretty",
+      "yarn pretty:ts",
+      "yarn pretty:scss",
+      "yarn lint",
       "git add"
     ]
   },
   "stylelint": {
-    "extends": "stylelint-config-recommended-scss",
-    "ignoreFiles": [
-      "./src/client/assets/semantic.scss",
-      "./src/client/assets/semantic.css",
-      "./src/client/assets/themes/**"
-    ]
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
-    ],
-    "setupFiles": [
-      "<rootDir>/lib/boostrap/test.ts"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.(j|t)s?(x)",
-      "<rootDir>/src/**/?(*.)(spec|test).(j|t)s?(x)"
-    ],
-    "testEnvironment": "node",
-    "testURL": "http://localhost",
-    "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest",
-      "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|ts|tsx)$"
-    ],
-    "moduleNameMapper": {
-      "@client/(.*)$": "<rootDir>/src/client/$1",
-      "@server/(.*)$": "<rootDir>/src/server/$1",
-      "@shared/(.*)$": "<rootDir>/src/shared/$1",
-      ".+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/lib/mocks/fileMock.js",
-      ".+\\.(css|styl|less|sass|scss)$": "<rootDir>/lib/mocks/styleMock.ts"
-    },
-    "moduleFileExtensions": [
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "web.js",
-      "js",
-      "web.jsx",
-      "jsx",
-      "json",
-      "node",
-      "mjs"
-    ]
+    "extends": "stylelint-config-recommended-scss"
   }
 }

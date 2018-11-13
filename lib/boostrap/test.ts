@@ -1,4 +1,4 @@
-import {env} from "../app/libraries";
+import { env, Environment } from "@pixeloven/core";
 
 /**
  * Makes the script crash on unhandled rejections instead of silently

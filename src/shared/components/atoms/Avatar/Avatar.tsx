@@ -13,12 +13,7 @@ interface Props {
 
 class Avatar extends React.Component<Props> {
     public render() {
-        const {
-            avatarURL,
-            avatarInitials,
-            avatarName,
-            className,
-        } = this.props;
+        const { avatarURL, avatarInitials, avatarName, className } = this.props;
         const avatarClasses = classNames(className, {
             "a-avatar": true,
             "a-avatar--anonymous": !avatarURL && !avatarInitials,
@@ -33,7 +28,7 @@ class Avatar extends React.Component<Props> {
         `;
 
         if (avatarURL) {
-            return(
+            return (
                 <img
                     alt={`${avatarName ? avatarName : ""}`}
                     className={avatarClasses}
@@ -42,16 +37,12 @@ class Avatar extends React.Component<Props> {
                 />
             );
         } else if (avatarInitials) {
-            return(
-                <div className={avatarClasses}>
-                    {avatarInitials}
-                </div>
-            );
+            return <div className={avatarClasses}>{avatarInitials}</div>;
         }
 
         // Always default to an anonymous user if the above conditions failed
         // TODO: Update iconName when correct icon becomes available
-        return(
+        return (
             <div className={avatarClasses}>
                 <Icon iconType="value-prop" iconName="add-people" />
             </div>

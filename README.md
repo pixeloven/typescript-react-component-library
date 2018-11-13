@@ -135,6 +135,9 @@ With all of the items below we need to consider whether we want to maintain a si
     * Use reselect to prevent immutableJS for breaking into components
 * Look into MVCish frameworks for the client server
 * Does it still make sense to use `yarn`? `npm`? Or another alternative?
+* Get prettier adn stylelint working together https://www.npmjs.com/package/prettier-stylelint
+* Also add stylelint to cli tool
+
 
 Handling state
 * Boilerplating: https://redux.js.org/recipes/reducingboilerplate

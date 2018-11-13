@@ -1,6 +1,6 @@
 import deepmerge from "deepmerge";
 import path from "path";
-import {Configuration, Module, RuleSetRule} from "webpack";
+import { Configuration, Module, RuleSetRule } from "webpack";
 
 /**
  * Extend webpack config for storybook
@@ -8,7 +8,11 @@ import {Configuration, Module, RuleSetRule} from "webpack";
  * @param env
  * @param defaultConfig
  */
-export default (baseConfig: Configuration, env: object, defaultConfig: Configuration) => {
+export default (
+    baseConfig: Configuration,
+    env: object,
+    defaultConfig: Configuration,
+) => {
     const newTsRule: RuleSetRule = {
         include: path.resolve(__dirname, "../src/shared/components"),
         loader: require.resolve("ts-loader"),

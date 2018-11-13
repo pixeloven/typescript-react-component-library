@@ -1,5 +1,5 @@
-import {Blog, Home, NoMatch} from "./components/pages";
-import {Default} from "./components/templates";
+import { Blog, Home, NoMatch } from "./components/pages";
+import { Default } from "./components/templates";
 
 /**
  * Defines routes for both client and server
@@ -15,7 +15,8 @@ const routes = [
                 component: Home,
             },
         ],
-    }, {
+    },
+    {
         component: Default,
         path: "/blog",
         routes: [
@@ -29,7 +30,8 @@ const routes = [
                 path: "/blog/:post",
             },
         ],
-    }, {
+    },
+    {
         component: NoMatch,
         statusCode: 404,
     },

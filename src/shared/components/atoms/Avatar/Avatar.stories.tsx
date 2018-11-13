@@ -25,17 +25,10 @@ storiesOf("Components/Atoms/Avatar", module)
         const avatarInitials = text("avatarInitials", "UN");
         const className = text("className", "");
 
-        return (
-            <Avatar
-                avatarInitials={avatarInitials}
-                className={className}
-            />
-        );
+        return <Avatar avatarInitials={avatarInitials} className={className} />;
     })
     .add("anonymous user Avatar", () => {
         const className = text("className", "");
 
-        return (
-            <Avatar className={className} />
-        );
+        return <Avatar className={className} />;
     });

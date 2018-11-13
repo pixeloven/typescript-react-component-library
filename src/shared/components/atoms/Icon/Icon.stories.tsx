@@ -24,9 +24,9 @@ storiesOf("Components/Atoms/Icon", module)
                     iconType={iconType}
                     iconName={iconName}
                     className={className}
-                    {...(isAfterText ? {isAfterText} : {})}
-                    {...(isBeforeText ? {isBeforeText} : {})}
-                    {...(isLarge ? {isLarge} : {})}
+                    {...(isAfterText ? { isAfterText } : {})}
+                    {...(isBeforeText ? { isBeforeText } : {})}
+                    {...(isLarge ? { isLarge } : {})}
                 />
                 {`${isBeforeText ? "Trailing text" : ""}`}
             </div>
