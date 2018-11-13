@@ -1,48 +1,18 @@
 import "raf/polyfill";
 
 import App from "@shared/App";
-import rootReducer from "@shared/store/rootReducer";
-import rootSaga from "@shared/store/rootSaga";
+import store from "@shared/store";
 import * as OfflinePluginRuntime from "offline-plugin/runtime";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { applyMiddleware, compose, createStore } from "redux";
-import createSagaMiddleware from "redux-saga";
 import "../shared/styles/core/core.scss";
 
 /**
  * Define root mounting point
  */
 const root = document.getElementById("root");
-
-/**
- * Setup redux dev tool
- */
-const reduxDevToolExtension = () => {
-    return ((w: Window) => {
-        if (w && w.devToolsExtension) {
-            return w.devToolsExtension();
-        }
-        return () => undefined;
-    })(window || {});
-};
-
-/**
- * Setup store
- *
- * @todo Move this to a new location
- */
-const sagaMiddleware = createSagaMiddleware();
-const store = createStore(
-    rootReducer,
-    compose(
-        applyMiddleware(sagaMiddleware),
-        reduxDevToolExtension(),
-    ),
-);
-sagaMiddleware.run(rootSaga);
 
 /**
  * Wrap application with container, router and store
