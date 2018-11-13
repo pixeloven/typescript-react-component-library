@@ -36,6 +36,7 @@ class Default extends React.PureComponent<RouteComponentProps, State> {
         const items: MenuItem[] = [
             { name: "Home", path: "/", active: true },
             { name: "Blog", path: "/blog", active: false },
+            { name: "Sagas", path: "/sagas", active: false },
         ];
         items.forEach((item, index) => {
             items[index].active = match.isExact

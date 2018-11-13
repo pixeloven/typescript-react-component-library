@@ -1,12 +1,12 @@
 import "raf/polyfill";
 
 import App from "@shared/App";
+import store from "@shared/store";
 import * as OfflinePluginRuntime from "offline-plugin/runtime";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { Action, createStore } from "redux";
 import "../shared/styles/core/core.scss";
 
 /**
@@ -15,38 +15,8 @@ import "../shared/styles/core/core.scss";
 const root = document.getElementById("root");
 
 /**
- * Create root reducer
- * @param state
- * @param action
- *
- * @todo Move this to a new location
+ * Wrap application with container, router and store
  */
-const rootReducer = (state: string = "asdf", action: Action) => {
-    switch (action.type) {
-        default:
-            return state;
-    }
-};
-
-/**
- * Setup redux dev tool
- */
-const reduxDevToolExtension = () => {
-    return ((w: Window) => {
-        if (w && w.__REDUX_DEVTOOLS_EXTENSION__) {
-            return w.__REDUX_DEVTOOLS_EXTENSION__();
-        }
-        return undefined;
-    })(window || {});
-};
-
-/**
- * Setup store
- *
- * @todo Move this to a new location
- */
-const store = createStore(rootReducer, reduxDevToolExtension());
-
 const AppWrapper = () => (
     <Provider store={store}>
         <BrowserRouter basename="/">

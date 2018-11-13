@@ -1,5 +1,6 @@
-import { Blog, Home, NoMatch } from "./components/pages";
-import { Default } from "./components/templates";
+import {Blog, Home, NoMatch} from "./components/pages";
+import {SagasConnect} from "./components/pages/Sagas";
+import {Default} from "./components/templates";
 
 /**
  * Defines routes for both client and server
@@ -30,8 +31,17 @@ const routes = [
                 path: "/blog/:post",
             },
         ],
-    },
-    {
+    }, {
+        component: Default,
+        path: "/sagas",
+        routes: [
+            {
+                component: SagasConnect,
+                exact: true,
+                path: "/sagas",
+            },
+        ],
+    }, {
         component: NoMatch,
         statusCode: 404,
     },
