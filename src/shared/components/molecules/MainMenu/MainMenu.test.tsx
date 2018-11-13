@@ -2,7 +2,7 @@ import { configure, shallow } from "enzyme";
 import ReactSixteenAdapter from "enzyme-adapter-react-16";
 import "jest";
 import * as React from "react";
-import {MainMenu, MenuItem} from "../";
+import { MainMenu, MenuItem } from "../";
 
 configure({
     adapter: new ReactSixteenAdapter(),
@@ -18,11 +18,7 @@ describe("Components", () => {
     describe("Organisms", () => {
         describe("MainMenu", () => {
             it("should render <MenuItemArray>", () => {
-                const wrapper = shallow(
-                    <MainMenu
-                        items={items}
-                    />,
-                );
+                const wrapper = shallow(<MainMenu items={items} />);
                 expect(wrapper.find("MenuItemArray")).toHaveLength(1);
             });
             it("should have 'a' in defaultProps", () => {
@@ -30,10 +26,7 @@ describe("Components", () => {
             });
             it("should be fixed to top", () => {
                 const wrapper = shallow(
-                    <MainMenu
-                        items={items}
-                        fixed={true}
-                    />,
+                    <MainMenu items={items} fixed={true} />,
                 );
                 expect(wrapper.find({ fixed: "top" }).length).toBe(1);
             });

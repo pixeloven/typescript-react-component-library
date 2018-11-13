@@ -1,4 +1,4 @@
-import {Request, Response, Router} from "express";
+import { Request, Response, Router } from "express";
 
 /**
  * Create router
@@ -10,8 +10,11 @@ const router = Router();
  * @param req
  * @param res
  */
-router.get("/health", (req: Request, res: Response): void => {
-    res.status(200).send("OK");
-});
+router.get(
+    "/health",
+    (req: Request, res: Response): void => {
+        res.status(200).send("OK");
+    },
+);
 
 export default router;

@@ -29,14 +29,16 @@ class Icon extends React.Component<Props> {
             "a-icon--large": isLarge,
         });
 
-        return(
+        return (
             <svg
                 height="1.1875em"
                 width="1.1875em"
                 viewBox="0 0 19 19"
                 className={iconClasses}
             >
-                <use href={`/static/media/${ iconType }-icons.svg#${ iconType }-${ iconName }`}/>
+                <use
+                    href={`/static/media/${iconType}-icons.svg#${iconType}-${iconName}`}
+                />
             </svg>
         );
     }

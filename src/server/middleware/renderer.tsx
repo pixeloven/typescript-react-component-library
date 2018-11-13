@@ -1,4 +1,4 @@
-import {Html} from "@server/views";
+import { Html } from "@server/views";
 import App from "@shared/App";
 import store from "@shared/store";
 import {NextFunction, Request, Response} from "express";
@@ -32,7 +32,9 @@ export default (req: Request, res: Response, next: NextFunction): void => {
                 </Provider>
             </Html>,
         );
-        res.status(staticContext.statusCode || 200).send(`<!DOCTYPE html>${markup}`);
+        res.status(staticContext.statusCode || 200).send(
+            `<!DOCTYPE html>${markup}`,
+        );
     } catch (error) {
         next(error);
     }

@@ -1,33 +1,38 @@
-import {Route, RouteComponentProps} from "@shared/components";
+import { Route, RouteComponentProps } from "@shared/components";
 import * as React from "react";
-import {Link, Switch} from "react-router-dom";
-import {Container, Icon, Responsive, Segment, Visibility} from "semantic-ui-react";
-import {MainMenu, MenuItem} from "../../molecules";
+import { Link, Switch } from "react-router-dom";
+import {
+    Container,
+    Icon,
+    Responsive,
+    Segment,
+    Visibility,
+} from "semantic-ui-react";
+import { MainMenu, MenuItem } from "../../molecules";
 
 interface State {
     fixedTopMenu: boolean;
 }
 
 class Default extends React.PureComponent<RouteComponentProps, State> {
-
     public state: State = {
         fixedTopMenu: false,
     };
 
     public stickMainMenu = (): void => {
         this.setState({ fixedTopMenu: true });
-    }
+    };
 
     public unStickMainMenu = (): void => {
         this.setState({ fixedTopMenu: false });
-    }
+    };
 
     public render(): React.ReactNode {
         const { routes, match } = this.props;
         const { fixedTopMenu } = this.state;
-        const mappedSubRoutes = routes ? routes.map((route, index) => (
-            <Route key={index} {...route} />
-        )) : undefined;
+        const mappedSubRoutes = routes
+            ? routes.map((route, index) => <Route key={index} {...route} />)
+            : undefined;
         const items: MenuItem[] = [
             { name: "Home", path: "/", active: true },
             { name: "Blog", path: "/blog", active: false },
@@ -54,13 +59,13 @@ class Default extends React.PureComponent<RouteComponentProps, State> {
                     </Visibility>
                 </Container>
                 <Container fluid={true}>
-                    <Switch>
-                        {mappedSubRoutes}
-                    </Switch>
+                    <Switch>{mappedSubRoutes}</Switch>
                 </Container>
                 <Container fluid={true}>
                     <Segment inverted={true} vertical={true} textAlign="center">
-                        <p>Powered with <Icon name="heart" /> by PixelOven</p>
+                        <p>
+                            Powered with <Icon name="heart" /> by PixelOven
+                        </p>
                     </Segment>
                 </Container>
             </Responsive>

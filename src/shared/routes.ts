@@ -16,7 +16,8 @@ const routes = [
                 component: Home,
             },
         ],
-    }, {
+    },
+    {
         component: Default,
         path: "/blog",
         routes: [

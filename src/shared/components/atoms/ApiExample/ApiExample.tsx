@@ -7,17 +7,19 @@ interface State {
 }
 
 class ApiExample extends React.Component<{}, State> {
-
     public getData() {
         const url = "http://api.open-notify.org/iss-now.json";
 
         HttpClient.get(url)
-        .then((response: Response) => {
-            this.setState({
-                lat: response.data.iss_position.latitude,
-                long: response.data.iss_position.longitude,
+            .then((response: Response) => {
+                this.setState({
+                    lat: response.data.iss_position.latitude,
+                    long: response.data.iss_position.longitude,
+                });
+            })
+            .catch((error: Error) => {
+                console.log(error.message);
             });
-        });
     }
 
     public componentDidMount() {

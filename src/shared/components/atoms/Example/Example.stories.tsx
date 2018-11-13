@@ -8,7 +8,5 @@ import Example from "./Example";
 storiesOf("Components/Atoms/Example", module)
     .addDecorator(withReadme(Readme))
     .add("default", () => {
-        return (
-            <Example example={"example"} />
-        );
+        return <Example example={"example"} />;
     });

@@ -15,7 +15,6 @@
     "moduleResolution": "node",
     "rootDirs": [
       "./.storybook",
-      "./lib",
       "./src"
     ],
     "paths": {
@@ -38,9 +37,10 @@
   "typeRoots": [
     "./lib/definitions",
     "./node_modules/@types",
-    "./node_modules/offline-plugin/runtime.d.ts"
   ],
-  "types": [
-    "jest"
+  "exclude": [
+    "**/*.stories.ts",
+    "**/*.test.ts",
+    "node_modules"
   ]
 }

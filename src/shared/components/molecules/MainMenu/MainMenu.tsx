@@ -1,6 +1,6 @@
 import * as React from "react";
-import {Container, Menu} from "semantic-ui-react";
-import {MenuItem, MenuItemArray} from "../";
+import { Container, Menu } from "semantic-ui-react";
+import { MenuItem, MenuItemArray } from "../";
 
 import "./MainMenu.scss";
 
@@ -27,17 +27,14 @@ interface Props {
 }
 
 class MainMenu extends React.Component<Props> {
-
     public static defaultProps: DefaultProps = {
         as: "a",
     };
 
     public render(): React.ReactNode {
-        const {as, fixed, items} = this.props;
-        const menuStyles = fixed
-            ? fixedMenuStyle
-            : menuStyle;
-        return(
+        const { as, fixed, items } = this.props;
+        const menuStyles = fixed ? fixedMenuStyle : menuStyle;
+        return (
             <Menu
                 borderless={true}
                 style={menuStyles}

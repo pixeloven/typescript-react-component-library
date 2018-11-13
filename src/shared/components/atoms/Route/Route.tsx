@@ -11,7 +11,9 @@ export interface RouteComponentProps extends DefaultRouteComponentProps {
 }
 
 export interface RouteProps extends DefaultRouteProps {
-    component: new (props: RouteComponentProps) => React.Component<RouteComponentProps>;
+    component: new (props: RouteComponentProps) => React.Component<
+        RouteComponentProps
+    >;
     loadData?: (match: match) => Promise<void>;
     statusCode?: number;
 }
@@ -28,19 +30,12 @@ export interface RouteProps extends DefaultRouteProps {
 const Route = ({ component: Component, exact, path, ...rest }: RouteProps) => {
     const render = (props: RouteComponentProps) => {
         if (props.staticContext) {
-            props.staticContext.statusCode = rest.statusCode || props.staticContext.statusCode || 200;
+            props.staticContext.statusCode =
+                rest.statusCode || props.staticContext.statusCode || 200;
         }
-        return (
-            <Component {...props} {...rest} />
-        );
+        return <Component {...props} {...rest} />;
     };
-    return (
-        <DefaultRoute
-            exact={exact}
-            path={path}
-            render={render}
-        />
-    );
+    return <DefaultRoute exact={exact} path={path} render={render} />;
 };
 
 export default Route;

@@ -19,12 +19,12 @@ storiesOf("Components/Atoms/Button", module)
         return (
             <Button
                 className={className}
-                {...(href ? {href} : {})}
-                {...(isDisabled ? {isDisabled} : {})}
-                {...(isFullWidth ? {isFullWidth} : {})}
-                {...(isHollow ? {isHollow} : {})}
-                {...(isUnstyled ? {isUnstyled} : {})}
-                {...(tabIndex ? {tabIndex} : {})}
+                {...(href ? { href } : {})}
+                {...(isDisabled ? { isDisabled } : {})}
+                {...(isFullWidth ? { isFullWidth } : {})}
+                {...(isHollow ? { isHollow } : {})}
+                {...(isUnstyled ? { isUnstyled } : {})}
+                {...(tabIndex ? { tabIndex } : {})}
             >
                 View this thing
             </Button>

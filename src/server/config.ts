@@ -1,6 +1,14 @@
-import dotenv from "dotenv";
+import { env, Environment } from "@pixeloven/core";
 
-dotenv.config();
+env.load();
+
+/**
+ * General configuration for server
+ */
+const HOST = env.config("HOST", "localhost");
+const PORT = env.config("PORT", "8080");
+const PROTOCOL = env.config("PROTOCOL", "https");
+const ENVIRONMENT = env.config("NODE_ENV", "production") as Environment;
 
 export interface Server {
     host: string;
@@ -13,18 +21,15 @@ export interface Config {
     server: Server;
 }
 
-/**
- * General configuration for server
- */
-const HOST = process.env.HOST || "localhost";
-const PORT = process.env.PORT || "8080";
-const PROTOCOL = process.env.PROTOCOL || "https";
 const server: Server = {
     host: HOST,
     port: parseInt(PORT, 10),
     protocol: PROTOCOL,
 };
-const ENVIRONMENT = process.env.NODE_ENV as Environment || "production" as Environment;
+
+/**
+ * Define general config
+ */
 export const config: Config = {
     environment: ENVIRONMENT,
     server,

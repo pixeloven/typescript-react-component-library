@@ -10,11 +10,11 @@ configure({
 
 describe("Atom Icon Component", () => {
     it("should render an `svg` elem with an `href` attr", () => {
-        const wrapper = shallow(
-            <Icon iconType="test" iconName="icon" />,
-        );
+        const wrapper = shallow(<Icon iconType="test" iconName="icon" />);
         expect(wrapper.type()).toBe("svg");
-        expect(wrapper.find("use").props().href).toBe("/static/media/test-icons.svg#test-icon");
+        expect(wrapper.find("use").props().href).toBe(
+            "/static/media/test-icons.svg#test-icon",
+        );
     });
 
     it("should extend passed classes", () => {

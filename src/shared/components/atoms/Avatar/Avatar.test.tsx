@@ -16,9 +16,7 @@ describe("Atom Avatar Component", () => {
             http://test.url/114 3x,
             http://test.url/152 4x
         `;
-        const wrapper = shallow(
-            <Avatar avatarURL="http://test.url" />,
-        );
+        const wrapper = shallow(<Avatar avatarURL="http://test.url" />);
         expect(wrapper.type()).toBe("img");
         expect(wrapper.props().src).toBe("http://test.url/38");
         expect(wrapper.props().srcSet).toBe(expectedSrcSet);
@@ -33,18 +31,14 @@ describe("Atom Avatar Component", () => {
     });
 
     it("should render a div elem and include the `--initials` modifier if passed the `avatarInitials` but not the `avatarURL` prop", () => {
-        const wrapper = shallow(
-            <Avatar avatarInitials="TU" />,
-        );
+        const wrapper = shallow(<Avatar avatarInitials="TU" />);
         expect(wrapper.type()).toBe("div");
         expect(wrapper.hasClass("a-avatar--initials")).toBe(true);
         expect(wrapper.text()).toBe("TU");
     });
 
     it("should render a `div` elem with the `--anonymous` modifier if `avatarURL` and `avatarInitials` props are not passed", () => {
-        const wrapper = shallow(
-            <Avatar />,
-        );
+        const wrapper = shallow(<Avatar />);
         expect(wrapper.type()).toBe("div");
         expect(wrapper.hasClass("a-avatar--anonymous")).toBe(true);
     });

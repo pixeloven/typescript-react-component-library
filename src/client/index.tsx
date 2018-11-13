@@ -29,7 +29,7 @@ const AppWrapper = () => (
  * When using hot module replacement we need to use the render method
  * otherwise errors may occur in development.
  */
-const renderMethod = !!module.hot ? ReactDOM.render : ReactDOM.hydrate;
+const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
 renderMethod(<AppWrapper />, root);
 
 /**
