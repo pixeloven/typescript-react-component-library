@@ -160,7 +160,6 @@
     "build:app": "pixeloven-tasks build",
     "build:story": "build-storybook -c .storybook -o build/public/docs",
     "deploy": "node build/server.js",
-    "lint": "pixeloven-cli lint:ts && pixeloven-cli lint:scss",
     "lint:ts": "pixeloven-cli lint:ts",
     "lint:scss": "pixeloven-cli lint:scss",
     "prebuild": "rm -rf ./build",
@@ -178,13 +177,17 @@
   "lint-staged": {
     "src/**/*.{scss,ts,tsx}": [
       "yarn pretty",
-      "yarn pretty:ts",
+      "git add"
+    ],
+    "src/**/*.{scss}": [
       "yarn pretty:scss",
-      "yarn lint",
+      "yarn lint:scss",
+      "git add"
+    ],
+    "src/**/*.{ts,tsx}": [
+      "yarn pretty:ts",
+      "yarn lint:ts",
       "git add"
     ]
-  },
-  "stylelint": {
-    "extends": "stylelint-config-recommended-scss"
   }
 }
