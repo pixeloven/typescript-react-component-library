@@ -1,15 +1,12 @@
 import {Html} from "@server/views";
 import App from "@shared/App";
-import rootReducer from "@shared/store/rootReducer";
-import rootSaga from "@shared/store/rootSaga";
+import store from "@shared/store";
 import {NextFunction, Request, Response} from "express";
 import * as React from "react";
 import {renderToString} from "react-dom/server";
 import {Helmet} from "react-helmet";
 import { Provider } from "react-redux";
 import {StaticContext, StaticRouter} from "react-router";
-import { applyMiddleware, createStore } from "redux";
-import createSagaMiddleware from "redux-saga";
 
 /**
  * Renderer middleware
@@ -20,16 +17,6 @@ import createSagaMiddleware from "redux-saga";
  */
 export default (req: Request, res: Response, next: NextFunction): void => {
     // TODO handle data fetching https://medium.freecodecamp.org/demystifying-reacts-server-side-render-de335d408fe4
-
-    /**
-     * Setup store and saga middleware
-     */
-    const sagaMiddleware = createSagaMiddleware();
-    const store = createStore(
-        rootReducer,
-        applyMiddleware(sagaMiddleware),
-    );
-    sagaMiddleware.run(rootSaga);
 
     const staticContext: StaticContext = {
         statusCode: 200,
