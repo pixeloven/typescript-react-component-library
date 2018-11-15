@@ -1,11 +1,9 @@
-import {StoreInterface} from "@shared/store/rootReducer";
+import { StoreInterface } from "@shared/store/rootReducer";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import Sagas, {SagasProps} from "./Sagas";
+import Sagas, { SagasProps } from "./Sagas";
 
-const mapStateToProps = (state: StoreInterface, ownProps: SagasProps) => ({
-
-});
+const mapStateToProps = (state: StoreInterface, ownProps: SagasProps) => ({});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     incrementAsync: () => {
@@ -13,4 +11,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sagas);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Sagas);

@@ -1,11 +1,13 @@
 import * as React from "react";
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 import { RouteComponentProps } from "react-router-dom";
 import { Container, Grid, Header, Segment } from "semantic-ui-react";
 import { Logo } from "../../atoms/";
 
 export interface SagasProps extends RouteComponentProps {
-    incrementAsync: ((event: React.MouseEvent<HTMLButtonElement>) => void) | undefined;
+    incrementAsync:
+        | ((event: React.MouseEvent<HTMLButtonElement>) => void)
+        | undefined;
 }
 
 export default class Sagas extends React.Component<SagasProps> {
@@ -20,12 +22,20 @@ export default class Sagas extends React.Component<SagasProps> {
                     <Grid>
                         <Grid.Row>
                             <Grid.Column>
-                                <Segment inverted={true} vertical={true} textAlign="center">
+                                <Segment
+                                    inverted={true}
+                                    vertical={true}
+                                    textAlign="center"
+                                >
                                     <Container>
                                         <Logo speed="10s" />
-                                        <Header as="h1" inverted={true}>Saga test page</Header>
+                                        <Header as="h1" inverted={true}>
+                                            Saga test page
+                                        </Header>
                                         <p>ooooOOOooOOO sagas</p>
-                                        <button onClick={this.props.incrementAsync}>
+                                        <button
+                                            onClick={this.props.incrementAsync}
+                                        >
                                             Increment after 1 second
                                         </button>
                                     </Container>

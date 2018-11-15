@@ -104,6 +104,17 @@ PUBLIC_URL=/
 BUILD_PATH=build
 ``` 
 
+## Features
+
+ - Zero-setup. After running `npm install` things will setup for you :wink:
+ - **[RollupJS](https://rollupjs.org/)** for multiple optimized bundles following the [standard convention](http://2ality.com/2017/04/setting-up-multi-platform-packages.html) and [Tree-shaking](https://alexjoverm.github.io/2017/03/06/Tree-shaking-with-Webpack-2-TypeScript-and-Babel/)
+ - Tests, coverage and interactive watch mode using **[Jest](http://facebook.github.io/jest/)**
+ - **[Prettier](https://github.com/prettier/prettier)** and **[TSLint](https://palantir.github.io/tslint/)** for code formatting and consistency
+ - **Docs automatic generation and deployment** to `gh-pages`, using **[TypeDoc](http://typedoc.org/)**
+ - Automatic types `(*.d.ts)` file generation
+ - **[Travis](https://travis-ci.org)** integration and **[Coveralls](https://coveralls.io/)** report
+ - (Optional) **Automatic releases and changelog**, using [Semantic release](https://github.com/semantic-release/semantic-release), [Commitizen](https://github.com/commitizen/cz-cli), [Conventional changelog](https://github.com/conventional-changelog/conventional-changelog) and [Husky](https://github.com/typicode/husky) (for the git hooks)
+
 ## Current Tasks
 With all of the items below we need to consider whether we want to maintain a single application or multiple applications. Now that we are doing PWA, SSR, etc it might make sense to maintian a single app and just break it into templates and pages.
 * Setup error boundries https://reactjs.org/docs/error-boundaries.html

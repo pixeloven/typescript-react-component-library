@@ -1,12 +1,12 @@
 import { Html } from "@server/views";
 import App from "@shared/App";
 import store from "@shared/store";
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
 import * as React from "react";
-import {renderToString} from "react-dom/server";
-import {Helmet} from "react-helmet";
+import { renderToString } from "react-dom/server";
+import { Helmet } from "react-helmet";
 import { Provider } from "react-redux";
-import {StaticContext, StaticRouter} from "react-router";
+import { StaticContext, StaticRouter } from "react-router";
 
 /**
  * Renderer middleware

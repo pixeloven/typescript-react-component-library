@@ -5,17 +5,17 @@ import { all, put, takeEvery } from "redux-saga/effects";
 function* incrementAsync() {
     yield delay(1000);
     yield put({ type: "INCREMENT" });
-  }
+}
 
 // Our watcher Saga: spawn a new incrementAsync task on each INCREMENT_ASYNC
 function* watchIncrementAsync() {
-  yield takeEvery("INCREMENT_ASYNC", incrementAsync);
+    yield takeEvery("INCREMENT_ASYNC", incrementAsync);
 }
 
 // single entry point to start all sagas at once
 export default function* rootSaga() {
-  yield all([
-    watchIncrementAsync(),
-    // add more sagas here
-  ]);
+    yield all([
+        watchIncrementAsync(),
+        // add more sagas here
+    ]);
 }

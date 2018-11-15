@@ -35,7 +35,6 @@
     "allowSyntheticDefaultImports": true
   },
   "typeRoots": [
-    "./lib/definitions",
     "./node_modules/@types",
   ],
   "exclude": [
