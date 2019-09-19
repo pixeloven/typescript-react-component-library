@@ -14,7 +14,7 @@
     "@pixeloven/docs": "^1.0.0",
     "@pixeloven/env": "^1.0.0",
     "@pixeloven/tasks": "^1.0.0",
-    "axios": "0.18.0",
+    "axios": "0.18.1",
     "classnames" :"2.2.6",
     "deepmerge": "2.2.1",
     "express": "4.16.4",
