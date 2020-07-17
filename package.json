@@ -20,7 +20,7 @@
     "express": "4.16.4",
     "express-winston": "3.0.1",
     "immutable": "3.8.2",
-    "lodash": "4.17.11",
+    "lodash": "4.17.19",
     "object-assign": "4.1.1",
     "promise": "8.0.2",
     "moment": "2.22.2",
